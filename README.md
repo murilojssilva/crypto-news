@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 CryptoNews - Notícias sobre Criptomoedas
 
-## Getting Started
+Bem-vindo ao **CryptoNews**, sua fonte confiável para as últimas notícias, tendências e análises sobre o mundo das criptomoedas. Fique atualizado com informações essenciais sobre Bitcoin, Ethereum e diversas altcoins!
 
-First, run the development server:
+## 🌟 Funcionalidades
+
+- 📰 **Últimas notícias**: Informações atualizadas em tempo real sobre criptomoedas e blockchain.
+- 📊 **Análises de mercado**: Dados sobre preços, tendências e previsões.
+- 🔔 **Notificações**: Receba alertas sobre eventos importantes.
+- 🌍 **Cobertura global**: Notícias de fontes confiáveis ao redor do mundo.
+
+## 🏗️ Tecnologias Utilizadas
+
+Este projeto foi desenvolvido utilizando as seguintes tecnologias:
+
+- [Next.js](https://nextjs.org/) - Framework React para aplicações web.
+- [Tailwind CSS](https://tailwindcss.com/) - Estilização moderna e flexível.
+- [React](https://reactjs.org/) - Biblioteca para criação da interface de usuário.
+- [Axios](https://axios-http.com/) - Requisições HTTP para busca de notícias.
+
+## 📦 Como Rodar o Projeto
+
+Para rodar o projeto localmente, siga os passos abaixo:
+
+### 1️⃣ Clone o repositório
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+ git clone https://github.com/seu-usuario/cryptonews.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2️⃣ Acesse a pasta do projeto
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+ cd cryptonews
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3️⃣ Instale as dependências
 
-## Learn More
+```bash
+ npm install
+ # ou
+ yarn install
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 4️⃣ Inicie o servidor de desenvolvimento
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+ npm run dev
+ # ou
+ yarn dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Acesse o projeto no navegador: **[http://localhost:3000](http://localhost:3000)**
 
-## Deploy on Vercel
+## 📷 Capturas de Tela
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Em breve... _(adicione screenshots do seu projeto aqui!)_
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📜 Licença
+
+Este projeto está licenciado sob a **MIT License**. Sinta-se livre para usá-lo e contribuir!
+
+---
+
+🔗 **Nos siga para mais atualizações:**
+
+- 🌐 Site Oficial: [cryptonews.com](https://cryptonews.com)
+- 🐦 Twitter: [@cryptonews_news](https://twitter.com/cryptonews_news)
+- 📢 Telegram: [CryptoNews News](https://t.me/cryptonews_news)
+
+🚀 **Fique ligado e acompanhe o futuro das criptomoedas com o CryptoNews!**
