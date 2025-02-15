@@ -2,9 +2,9 @@ import Link from 'next/link'
 import Footer from '../components/Footer'
 import { Header } from '../components/Header'
 
-export default function Blog() {
+export default function News() {
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col bg-gray-200'>
       <Header />
       <section className='p-8 bg-gray-200'>
         <div className='py-2'>
