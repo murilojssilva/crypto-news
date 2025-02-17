@@ -12,24 +12,23 @@ interface NewsPageItem {
   subtitle: string
 }
 
-export default function NewsPage({ params }: { params: { id: string } }) {
-  const [newsItem, setNewsItem] = useState<NewsPageItem | null>(null)
+interface NewsPageProps {
+  params: { id: string }
+}
 
-  const { id } = params
+export default function NewsPage({ params }: NewsPageProps) {
+  const [newsItem, setNewsItem] = useState<NewsPageItem | null>(null)
 
   useEffect(() => {
     fetch('/news.json')
       .then((res) => res.json())
       .then((data) => {
-        const item = data.find((n: NewsPageItem) => n.id === id)
-        if (item) {
-          setNewsItem(item)
-        } else {
-          setNewsItem(null)
-          return <Page404 />
-        }
+        const item = data.find((n: NewsPageItem) => n.id === params.id)
+        setNewsItem(item || null)
       })
-  }, [id])
+  }, [params.id])
+
+  if (!newsItem) return <Page404 />
 
   return (
     <div className='flex flex-col bg-gray-200'>
