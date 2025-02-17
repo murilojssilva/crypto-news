@@ -9,7 +9,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const date = new Date()
-    const options = {
+    const options: Intl.DateTimeFormatOptions = {
       weekday: 'long',
       day: '2-digit',
       month: 'short',
@@ -20,6 +20,7 @@ export default function Dashboard() {
       formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
     setCurrentDate(formattedDate)
   }, [])
+
   return (
     <div className='bg-gray-50 pb-4 h-screen flex'>
       <Sidebar />
