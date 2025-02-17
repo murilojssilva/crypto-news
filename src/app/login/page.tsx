@@ -56,7 +56,6 @@ export default function Login() {
           <div className='flex flex-col gap-4 w-full'>
             <form
               onSubmit={handleSubmit(handleLoginSubmit)}
-              action=''
               className='flex flex-col gap-2'
             >
               <div className='flex flex-col gap-2'>
@@ -68,7 +67,7 @@ export default function Login() {
                   id='email'
                   placeholder='Digite seu e-mail'
                   {...register('email')}
-                  errorsField={errors.email}
+                  errorsField={errors.email?.message ?? ''}
                 />
                 {errors.email && (
                   <span className='text-red-500'>{errors.email?.message}</span>
@@ -92,7 +91,7 @@ export default function Login() {
                   id='password'
                   placeholder='Digite sua senha'
                   {...register('password')}
-                  errorsField={errors.password}
+                  errorsField={errors.password?.message ?? ''}
                 />
                 {errors.password && (
                   <span className='text-red-500'>
