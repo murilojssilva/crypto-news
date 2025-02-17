@@ -6,16 +6,23 @@ import { Header } from '@/app/components/Header'
 import Footer from '@/app/components/Footer'
 import Link from 'next/link'
 
+interface NewsPageItem {
+  id: string
+  title: string
+  content: string
+  subtitle: string
+}
+
 export default function NewsPage({ params }: { params: { id: string } }) {
   const { id } = params
-  const [newsItem, setNewsItem] = useState<any>(null)
+  const [newsItem, setNewsItem] = useState<NewsPageItem | null>(null)
   const router = useRouter()
 
   useEffect(() => {
     fetch('/news.json')
       .then((res) => res.json())
       .then((data) => {
-        const item = data.find((n: any) => n.id === id)
+        const item = data.find((n: NewsPageItem) => n.id === id)
         setNewsItem(item)
       })
   }, [id, router])
