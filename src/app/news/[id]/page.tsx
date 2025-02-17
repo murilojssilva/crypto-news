@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 import Page404 from '@/app/404/page'
 import Footer from '@/app/components/Footer'
 import { Header } from '@/app/components/Header'
@@ -12,20 +13,24 @@ interface NewsPageItem {
   subtitle: string
 }
 
-export default function NewsPage({ params }: { params: { id: string } }) {
+export default function NewsPage() {
+  const { id } = useParams() as { id?: string }
+
   const [newsItem, setNewsItem] = useState<NewsPageItem | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    if (!id) return
+
     fetch('/news.json')
       .then((res) => res.json())
       .then((data) => {
-        const item = data.find((n: NewsPageItem) => n.id === params.id)
+        const item = data.find((n: NewsPageItem) => n.id === id)
         setNewsItem(item || null)
       })
-      .catch(() => setNewsItem(null))
+      .catch((error) => console.error('Erro ao buscar notícia:', error))
       .finally(() => setIsLoading(false))
-  }, [params.id])
+  }, [id])
 
   if (isLoading) {
     return (
