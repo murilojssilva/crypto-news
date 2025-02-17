@@ -6,14 +6,15 @@ export function Header() {
   return (
     <nav className='bg-gray-50'>
       <div className='max-w-screen-xl flex flex-row items-center justify-between mx-auto p-4'>
-        <div className='flex flex-row gap-2 items-center'>
+        <Link className='flex flex-row gap-2 items-center' href='/'>
           <Image src={logo} alt='CyptoNews' className='w-8 h-8' />
           <h1 className='text-blue-800 font-bold text-xl'>CryptoNews</h1>
-        </div>
+        </Link>
+
         <ul className='flex flex-row items-center gap-2 font-medium bg-gray-50 md:bg-transparent'>
           <li>
-            <Link href='/blog' className='text-blue-800 hover:text-blue-600'>
-              Blog
+            <Link href='/news' className='text-blue-800 hover:text-blue-600'>
+              Notícias
             </Link>
           </li>
           <li>

@@ -1,74 +1,56 @@
+'use client'
+
 import Link from 'next/link'
 import Footer from '../components/Footer'
 import { Header } from '../components/Header'
+import { useEffect, useState } from 'react'
+
+interface NewsItem {
+  id: string
+  title: string
+  content: string
+}
 
 export default function News() {
+  const [news, setNews] = useState<NewsItem[]>([])
+
+  useEffect(() => {
+    fetch('/news.json')
+      .then((response) => response.json())
+      .then((data) => setNews(data))
+  }, [])
+
   return (
     <div className='flex flex-col bg-gray-200'>
       <Header />
-      <section className='p-8 bg-gray-200'>
-        <div className='py-2'>
-          <div className='pb-4'>
-            <span className='text-xl items-center'>
-              <Link className='text-blue-800' href='/'>
-                Home
-              </Link>{' '}
-              <span className='text-gray-600'>→ </span>
-              <Link className='text-blue-800' href='news'>
-                Últimas Notícias
-              </Link>{' '}
-              <span className='text-gray-600'>→ Bitcoin em queda</span>
-            </span>
+
+      <div className='flex flex-row justify-between p-8'>
+        <h1 className='text-blue-800 font-bold text-2xl'>Últimas notícias</h1>
+      </div>
+      <section className='px-4 bg-gray-200'>
+        {!news ? (
+          <div className='flex items-center justify-center h-[42vh]'>
+            <p className='text-blue-800'>Carregando...</p>
           </div>
-          <h1 className='text-gray-700 font-bold text-2xl'>Bitcoin em queda</h1>
-          <h3 className='text-gray-500 font-light text-sm'>
-            Maior queda dos últimos 30 meses
-          </h3>
-        </div>
-        <article className='flex flex-col gap-4'>
-          <p className='text-gray-800 font-medium text-md'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-            dicta recusandae qui facere nostrum deleniti ea vitae facilis
-            quibusdam modi omnis temporibus quae perferendis officia veritatis
-            alias minus, ratione vel.
-          </p>
-          <p className='text-gray-800 font-medium text-md'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-            dicta recusandae qui facere nostrum deleniti ea vitae facilis
-            quibusdam modi omnis temporibus quae perferendis officia veritatis
-            alias minus, ratione vel.
-          </p>
-          <p className='text-gray-800 font-medium text-md'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-            dicta recusandae qui facere nostrum deleniti ea vitae facilis
-            quibusdam modi omnis temporibus quae perferendis officia veritatis
-            alias minus, ratione vel.
-          </p>
-          <p className='text-gray-800 font-medium text-md'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-            dicta recusandae qui facere nostrum deleniti ea vitae facilis
-            quibusdam modi omnis temporibus quae perferendis officia veritatis
-            alias minus, ratione vel.
-          </p>
-          <p className='text-gray-800 font-medium text-md'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-            dicta recusandae qui facere nostrum deleniti ea vitae facilis
-            quibusdam modi omnis temporibus quae perferendis officia veritatis
-            alias minus, ratione vel.
-          </p>
-          <p className='text-gray-800 font-medium text-md'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-            dicta recusandae qui facere nostrum deleniti ea vitae facilis
-            quibusdam modi omnis temporibus quae perferendis officia veritatis
-            alias minus, ratione vel.
-          </p>
-          <p className='text-gray-800 font-medium text-md'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore
-            dicta recusandae qui facere nostrum deleniti ea vitae facilis
-            quibusdam modi omnis temporibus quae perferendis officia veritatis
-            alias minus, ratione vel.
-          </p>
-        </article>
+        ) : (
+          news.map((item) => (
+            <article
+              key={item.id}
+              className='flex p-4 border-b border-gray-400'
+            >
+              <Link href={`/news/${item.id}`}>
+                <h2 className='text-gray-900 text-xl font-bold'>
+                  {item.title}
+                </h2>
+                <p className='text-gray-800 font-medium text-sm'>
+                  {item.content.length > 200
+                    ? item.content.slice(0, 200).trimEnd() + '…'
+                    : item.content}
+                </p>
+              </Link>
+            </article>
+          ))
+        )}
       </section>
       <Footer />
     </div>

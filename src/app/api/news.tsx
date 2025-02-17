@@ -4,7 +4,6 @@ export default function NewsPage() {
   const [news, setNews] = useState([])
 
   useEffect(() => {
-    // Carrega o JSON diretamente da pasta public
     fetch('/news.json')
       .then((response) => response.json())
       .then((data) => setNews(data))
