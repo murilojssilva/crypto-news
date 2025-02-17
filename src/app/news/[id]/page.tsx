@@ -1,10 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Header } from '@/app/components/Header'
+import Page404 from '@/app/404/page'
 import Footer from '@/app/components/Footer'
-import Link from 'next/link'
+import { Header } from '@/app/components/Header'
+import { useEffect, useState } from 'react'
 
 interface NewsPageItem {
   id: string
@@ -14,56 +13,53 @@ interface NewsPageItem {
 }
 
 export default function NewsPage({ params }: { params: { id: string } }) {
-  const { id } = params
   const [newsItem, setNewsItem] = useState<NewsPageItem | null>(null)
-  const router = useRouter()
+
+  const { id } = params
 
   useEffect(() => {
     fetch('/news.json')
       .then((res) => res.json())
       .then((data) => {
         const item = data.find((n: NewsPageItem) => n.id === id)
-        setNewsItem(item)
+        if (item) {
+          setNewsItem(item)
+        } else {
+          setNewsItem(null)
+          return <Page404 />
+        }
       })
-  }, [id, router])
+  }, [id])
 
   return (
-    <main className=''>
+    <div className='flex flex-col bg-gray-200'>
       <Header />
+
       {newsItem ? (
-        <main className='bg-gray-100 p-4' key={newsItem.id}>
-          <div className='py-2'>
-            <div className='pb-4'>
-              <span className='text-xl items-center'>
-                <Link className='text-blue-800' href='/'>
-                  {'Home '}
-                </Link>
-                <span className='text-gray-600'>→ </span>
-                <Link className='text-blue-800' href='news'>
-                  {'Últimas notícias '}
-                </Link>
-                <span className='text-gray-600'>→ {newsItem.title}</span>
-              </span>
+        <article className='bg-gray-100 p-8' key={newsItem.id}>
+          <div className='flex flex-col gap-8'>
+            <div>
+              <h1 className='text-blue-800 font-bold text-2xl'>
+                {newsItem.title}
+              </h1>
+              <h3 className='text-gray-500 font-light text-sm'>
+                {newsItem.subtitle}
+              </h3>
             </div>
-            <h1 className='text-gray-700 font-bold text-2xl'>
-              {newsItem.title}
-            </h1>
-            <h3 className='text-gray-500 font-light text-sm'>
-              {newsItem.subtitle}
-            </h3>
-          </div>
-          <article className='flex flex-col gap-4'>
-            <p className='text-gray-800 font-medium text-md'>
+            <p
+              className='flex flex-col gap-4 text-gray-800 font-medium text-md text-justify'
+              style={{ whiteSpace: 'pre-wrap', lineHeight: 1.75 }}
+            >
               {newsItem.content}
             </p>
-          </article>
-        </main>
+          </div>
+        </article>
       ) : (
-        <main className='bg-gray-100 h-[58vh] flex items-center justify-center'>
+        <div className='flex items-center justify-center h-[42vh]'>
           <p className='text-gray-800'>Carregando...</p>
-        </main>
+        </div>
       )}
       <Footer />
-    </main>
+    </div>
   )
 }

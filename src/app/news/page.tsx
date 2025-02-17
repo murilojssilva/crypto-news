@@ -28,7 +28,7 @@ export default function News() {
         <h1 className='text-blue-800 font-bold text-2xl'>Últimas notícias</h1>
       </div>
       <section className='px-4 bg-gray-200'>
-        {!news ? (
+        {news.length === 0 ? (
           <div className='flex items-center justify-center h-[42vh]'>
             <p className='text-blue-800'>Carregando...</p>
           </div>
