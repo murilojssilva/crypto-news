@@ -31,7 +31,7 @@ export default function NewsPage({ params }: { params: { id: string } }) {
     <main className=''>
       <Header />
       {newsItem ? (
-        <main className='bg-gray-100 p-4'>
+        <main className='bg-gray-100 p-4' key={newsItem.id}>
           <div className='py-2'>
             <div className='pb-4'>
               <span className='text-xl items-center'>
