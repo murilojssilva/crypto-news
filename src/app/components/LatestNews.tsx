@@ -11,11 +11,25 @@ interface NewsItem {
 
 export default function LatestNews() {
   const [news, setNews] = useState<NewsItem[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/news.json')
-      .then((response) => response.json())
-      .then((data) => setNews(data))
+    const fetchNews = async () => {
+      try {
+        const response = await fetch(
+          'https://crypto-news-server-d982fcfac1fc.herokuapp.com/posts'
+        )
+        const data = await response.json()
+        const fetchedNews = data.posts || []
+        setNews(fetchedNews)
+      } catch (error) {
+        console.error('Erro ao carregar notícias:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchNews()
   }, [])
 
   const latestNews = news.slice(-3)
@@ -29,12 +43,12 @@ export default function LatestNews() {
         </span>
       </div>
       <div className='flex flex-row items-center justify-center'>
-        {!news ? (
+        {loading ? (
           <div className='flex items-center justify-center h-[42vh]'>
             <p className='text-blue-800'>Carregando...</p>
           </div>
         ) : (
-          latestNews.map((item) => (
+          latestNews.map((item: NewsItem) => (
             <article key={item.id} className='p-8'>
               <h2 className='text-blue-800 text-sx font-bold text-justify'>
                 {item.title.length > 40

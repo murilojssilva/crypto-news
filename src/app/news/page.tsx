@@ -1,9 +1,6 @@
-'use client'
-
 import Link from 'next/link'
 import Footer from '../components/Footer'
 import { Header } from '../components/Header'
-import { useEffect, useState } from 'react'
 
 interface NewsItem {
   id: string
@@ -11,14 +8,17 @@ interface NewsItem {
   content: string
 }
 
-export default function News() {
-  const [news, setNews] = useState<NewsItem[]>([])
+export default async function News() {
+  const response = await fetch(
+    'https://crypto-news-server-d982fcfac1fc.herokuapp.com/posts',
+    {
+      cache: 'no-store',
+    }
+  )
 
-  useEffect(() => {
-    fetch('/news.json')
-      .then((response) => response.json())
-      .then((data) => setNews(data))
-  }, [])
+  const data = await response.json()
+
+  const news = data.posts || []
 
   return (
     <div className='flex flex-col bg-gray-200'>
@@ -30,10 +30,10 @@ export default function News() {
       <section className='px-4 bg-gray-200'>
         {news.length === 0 ? (
           <div className='flex items-center justify-center h-[42vh]'>
-            <p className='text-blue-800'>Carregando...</p>
+            <p className='text-blue-800'>Sem notícias disponíveis...</p>
           </div>
         ) : (
-          news.map((item) => (
+          news.map((item: NewsItem) => (
             <article
               key={item.id}
               className='flex p-4 border-b border-gray-400'
