@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <div className='flex flex-col h-screen bg-white'>
       <Header />
-      <div className='w-full p-4 flex flex-col md:flex-row items-center justify-between gap-32 max-w-screen-lg mx-auto'>
+      <div className='w-full p-4 flex flex-col md:flex-row items-center justify-around max-w-screen-lg mx-auto'>
         <div className='w-full md:w-1/2 flex justify-center'>
           <Image
             src={blockchainImage}
@@ -22,16 +22,16 @@ export default function Home() {
           />
         </div>
 
-        <article className='w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left justify-center gap-4'>
-          <h2 className='text-blue-800 text-xl md:text-2xl font-bold'>
-            Bem-vindo à CryptoNews
+        <article className='w-full flex flex-col items-center justify-center text-center gap-6 p-6 md:w-1/2'>
+          <h2 className='text-blue-600 text-2xl md:text-3xl font-extrabold leading-snug'>
+            Bem-vindo à <span className='text-blue-800'>CryptoNews</span>
           </h2>
-          <p className='text-base text-gray-800 text-justify'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus,
-            obcaecati est deserunt dolores.
+          <p className='text-lg text-gray-700 leading-relaxed'>
+            Fique por dentro das últimas tendências do mundo cripto, análises de
+            mercado e insights exclusivos.
           </p>
           <Link
-            className='bg-blue-800 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition'
+            className='bg-blue-800 text-white py-3 w-full rounded-xl hover:bg-blue-600 transition-all duration-300 font-semibold text-center'
             href='/about'
           >
             Conheça mais
@@ -39,7 +39,7 @@ export default function Home() {
         </article>
       </div>
       <LatestNews />
-      <section className='bg-gray-100 flex flex-row justify-between p-8 gap-16'>
+      <section className='flex flex-col md:flex-row bg-gray-100 justify-between p-8 gap-16'>
         <div className='flex flex-col items-center gap-4'>
           <Blocks size={64} color='blue' />
           <h2 className='font-bold text-blue-800'>Análise de projetos</h2>

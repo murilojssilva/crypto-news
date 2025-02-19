@@ -39,7 +39,7 @@ export default function LatestNews() {
         <div className='flex flex-row justify-between'>
           <h1 className='text-blue-800 font-bold text-2xl'>Últimas notícias</h1>
           <span className='text-blue-800 text-sx'>
-            <Link href='/news'>Ler todas</Link>
+            {news && <Link href='/news'>Ler todas</Link>}
           </span>
         </div>
         {loading ? (

@@ -66,17 +66,9 @@ export default function Footer() {
           </div>
         </div>
       </nav>
-      <div className='bg-gray-900 px-8 py-4 gap-2 flex flex-col'>
-        <h3>© 2025 CryptoNews. Todos os direitos reservados.</h3>
-        <p>
-          Desenvolvido por{' '}
-          <Link
-            className='font-bold'
-            href='https://linkedin.com/in/murilojssilva'
-          >
-            Murilo Silva
-          </Link>
-        </p>
+      <div className='bg-gray-900 px-8 py-4 gap-2 flex flex-row justify-between'>
+        <h3>. Todos os direitos reservados</h3>
+        <p>{new Date().getFullYear()} &copy; cryptonews.com.br</p>
       </div>
     </div>
   )
