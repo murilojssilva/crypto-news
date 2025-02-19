@@ -36,10 +36,10 @@ export default async function News() {
           news.map((item: NewsItem) => (
             <article
               key={item.id}
-              className='flex p-4 border-b border-gray-400'
+              className='flex p-4 border-b border-blue-800'
             >
               <Link href={`/news/${item.id}`}>
-                <h2 className='text-gray-900 text-xl font-bold'>
+                <h2 className='text-blue-800 text-sx font-bold text-justify'>
                   {item.title}
                 </h2>
                 <p className='text-gray-800 font-medium text-sm'>
