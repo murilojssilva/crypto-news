@@ -67,7 +67,7 @@ export default function Footer() {
         </div>
       </nav>
       <div className='bg-gray-900 px-8 py-4 gap-2 flex flex-row justify-between'>
-        <h3>. Todos os direitos reservados</h3>
+        <p>Todos os direitos reservados</p>
         <p>{new Date().getFullYear()} &copy; cryptonews.com.br</p>
       </div>
     </div>

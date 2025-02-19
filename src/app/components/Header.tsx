@@ -12,29 +12,29 @@ export function Header() {
         </Link>
 
         <ul className='flex flex-row items-center gap-2 font-medium bg-gray-50 md:bg-transparent'>
-          <li>
-            <Link href='/news' className='text-blue-800 hover:text-blue-600'>
+          <Link href='/news' className='text-blue-800 hover:text-blue-600'>
+            <li className='hover:bg-gray-200 rounded-md p-2 bg-gray-50'>
               Notícias
-            </Link>
-          </li>
-          <li>
-            <Link href='/about' className='text-blue-800 hover:text-blue-600'>
+            </li>
+          </Link>
+          <Link href='/about' className='text-blue-800 hover:text-blue-600'>
+            <li className='hover:bg-gray-200 rounded-md p-2 bg-gray-50'>
               Sobre
-            </Link>
-          </li>
-          <li>
-            <Link
-              href='https://t.me/crypto_newsbr'
-              className='text-blue-800 hover:text-blue-600'
-            >
+            </li>
+          </Link>
+          <Link
+            href='https://t.me/crypto_newsbr'
+            className='text-blue-800 hover:text-blue-600'
+          >
+            <li className='hover:bg-gray-200 rounded-md p-2 bg-gray-50'>
               Grupo Vip
-            </Link>
-          </li>
-          <li>
-            <Link href='/privacy' className='text-blue-800 hover:text-blue-600'>
+            </li>
+          </Link>
+          <Link href='/privacy' className='text-blue-800 hover:text-blue-600'>
+            <li className='hover:bg-gray-200 rounded-md p-2 bg-gray-50'>
               Privacidade
-            </Link>
-          </li>
+            </li>
+          </Link>
         </ul>
       </div>
     </nav>
