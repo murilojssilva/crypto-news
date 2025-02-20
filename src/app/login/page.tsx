@@ -118,7 +118,7 @@ export default function Login() {
               >
                 Criar conta
               </Link>
-              <button className='bg-blue-800 text-white px-8 py-4 rounded-xl hover:bg-blue-600'>
+              <button className='bg-blue-800 font-bold text-md text-white px-8 py-4 rounded-xl hover:bg-blue-600'>
                 Acessar
               </button>
             </div>
