@@ -14,7 +14,7 @@ export default function Home() {
     <div className='flex flex-col min-h-screen bg-white'>
       <div>
         <Header />
-        <section className='w-full p-4 flex flex-col md:flex-row items-center justify-around max-w-screen-lg mx-auto bg-white sm:flex-1'>
+        <section className='w-full p-4 flex flex-col md:flex-row items-center justify-around max-w-screen-lg mx-auto sm:flex-1'>
           <div className='w-full md:w-1/2 flex justify-center'>
             <Image
               src={blockchainImage}

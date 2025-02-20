@@ -52,16 +52,23 @@ export default function SignUp() {
     'password' | 'text'
   >('password')
   return (
-    <div className='flex flex-col'>
-      <div className='grid grid-cols-2 h-screen bg-gray-50'>
+    <div className='flex flex-col h-screen'>
+      <div className='grid grid-rows-[10vh_90vh] h-screen bg-gray-50 sm:grid-rows-[10vh_90vh] md:grid-cols-2 md:grid-rows-1 md:h-screen'>
         <div className='bg-blue-800 flex items-center justify-center'>
-          <Image src={logo} alt='BitWire' />
+          <Image
+            src={logo}
+            alt='BitWire'
+            className='w-20 h-20 sm:w-12 sm:h-12 md:w-60 md:h-60'
+          />
         </div>
-        <div className='flex items-center justify-around p-4 flex-col'>
-          <main className='flex flex-col gap-4'>
-            <span className='text-blue-800 text-4xl'>Bem vindo à BitWire</span>
+
+        <div className='flex flex-col items-center justify-center p-4 gap-16'>
+          <main className='flex flex-col gap-4 text-center md:text-left'>
+            <span className='text-blue-800 text-4xl font-bold'>
+              Bem vindo à BitWire
+            </span>
             <p className='text-cyan-600 text-sm'>
-              Crie seu cadastro para acessar a dashboard.
+              Crie seu cadastro para acessar a dashboard
             </p>
           </main>
           <div className='flex flex-col gap-4 w-full'>
@@ -70,7 +77,7 @@ export default function SignUp() {
               className='flex flex-col gap-2'
             >
               <div className='flex flex-col gap-2'>
-                <label className='text-cyan-600' htmlFor='name'>
+                <label className='text-blue-800' htmlFor='name'>
                   Nome
                 </label>
                 <Input
@@ -82,7 +89,7 @@ export default function SignUp() {
                 />
               </div>
               <div className='flex flex-col gap-2'>
-                <label className='text-cyan-600' htmlFor='email'>
+                <label className='text-blue-800' htmlFor='email'>
                   E-mail
                 </label>
                 <Input
@@ -95,7 +102,7 @@ export default function SignUp() {
               </div>
               <div className='flex flex-col gap-2 relative'>
                 <label
-                  className='text-cyan-600 flex flex-row justify-between'
+                  className='text-blue-800 flex flex-row justify-between'
                   htmlFor='password'
                 >
                   Senha
@@ -114,7 +121,7 @@ export default function SignUp() {
               </div>
               <div className='flex flex-col gap-2 relative'>
                 <label
-                  className='text-cyan-600 flex flex-row justify-between'
+                  className='text-blue-800 flex flex-row justify-between'
                   htmlFor='password'
                 >
                   Confirme sua senha
