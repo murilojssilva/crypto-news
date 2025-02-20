@@ -3,9 +3,9 @@ import { Header } from '../components/Header'
 
 export default function Privacy() {
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col min-h-screen bg-gray-200'>
       <Header />
-      <article className='flex flex-col gap-2 p-4 bg-gray-100'>
+      <article className='bg-gray-100 p-8 flex-1'>
         <h1 className='font-bold text-blue-800 text-2xl'>Privacidade</h1>
         <p className='text-gray-800'>
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Veritatis

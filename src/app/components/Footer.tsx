@@ -17,13 +17,16 @@ export default function Footer() {
             Mapa do site
           </h1>
           <ul className='flex flex-row sm:flex-col py-4 gap-2'>
-            <Link href='' className='text-blue-800 hover:text-blue-600'>
+            <Link href='/about' className='text-blue-800 hover:text-blue-600'>
               <li>Quem somos</li>
             </Link>
-            <Link href='' className='text-blue-800 hover:text-blue-600'>
+            <Link href='/privacy' className='text-blue-800 hover:text-blue-600'>
               <li>Privacidade</li>
             </Link>
-            <Link href='' className='text-blue-800 hover:text-blue-600'>
+            <Link
+              href='/use-terms'
+              className='text-blue-800 hover:text-blue-600'
+            >
               <li>Termos de uso</li>
             </Link>
           </ul>

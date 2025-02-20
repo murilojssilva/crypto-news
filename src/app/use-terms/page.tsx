@@ -1,12 +1,12 @@
 import Footer from '../components/Footer'
 import { Header } from '../components/Header'
 
-export default function About() {
+export default function UseTerms() {
   return (
     <div className='flex flex-col min-h-screen bg-gray-200'>
       <Header />
       <article className='bg-gray-100 p-8 flex-1'>
-        <h1 className='font-bold text-blue-800 text-2xl'>Sobre</h1>
+        <h1 className='font-bold text-blue-800 text-2xl'>Termos de uso</h1>
         <p className='text-gray-800'>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam
           amet dolorum sit excepturi architecto, voluptatibus officiis nobis
