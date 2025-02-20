@@ -34,7 +34,7 @@ export default function ForgotPassword() {
           <Image
             src={logo}
             alt='BitWire'
-            className='w-20 h-20 md:h-80 md:w-80'
+            className='w-12 h-12 md:h-80 md:w-80'
           />
         </div>
 
