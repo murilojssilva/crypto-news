@@ -58,7 +58,7 @@ export default function SignUp() {
           <Image
             src={logo}
             alt='BitWire'
-            className='w-20 h-20 sm:w-12 sm:h-12 md:w-60 md:h-60'
+            className='w-20 h-20 sm:w-12 sm:h-12 md:w-12 md:h-12'
           />
         </div>
 

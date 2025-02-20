@@ -47,11 +47,7 @@ export default function Login() {
     <div className='flex flex-col h-screen'>
       <div className='grid grid-rows-[10vh_90vh] h-screen bg-gray-50 sm:grid-rows-[10vh_90vh] md:grid-cols-2 md:grid-rows-1 md:h-screen'>
         <div className='bg-blue-800 flex items-center justify-center'>
-          <Image
-            src={logo}
-            alt='BitWire'
-            className='w-20 h-20 sm:w-12 sm:h-12 md:w-60 md:h-60'
-          />
+          <Image src={logo} alt='BitWire' className='w-20 h-20' />
         </div>
 
         <div className='flex flex-col items-center justify-center p-4 gap-16'>
