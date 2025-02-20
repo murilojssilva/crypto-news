@@ -7,8 +7,11 @@ import {
   XLogo,
 } from '@phosphor-icons/react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export default function Footer() {
+  const pathname = usePathname()
+
   return (
     <div className='flex flex-col'>
       <nav className='flex flex-col items-center justify-between sm:justify-between sm:flex-row bg-gray-50 p-8'>
@@ -18,16 +21,22 @@ export default function Footer() {
           </h1>
           <ul className='flex flex-row sm:flex-col py-4 gap-2'>
             <Link href='/about' className='text-blue-800 hover:text-blue-600'>
-              <li>Quem somos</li>
+              <li className={`${pathname === '/about' && 'underline'}`}>
+                Quem somos
+              </li>
             </Link>
             <Link href='/privacy' className='text-blue-800 hover:text-blue-600'>
-              <li>Privacidade</li>
+              <li className={`${pathname === '/privacy' && 'underline'}`}>
+                Privacidade
+              </li>
             </Link>
             <Link
               href='/use-terms'
               className='text-blue-800 hover:text-blue-600'
             >
-              <li>Termos de uso</li>
+              <li className={`${pathname === '/use-terms' && 'underline'}`}>
+                Termos de uso
+              </li>
             </Link>
           </ul>
         </div>

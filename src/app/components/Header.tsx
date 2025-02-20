@@ -5,9 +5,12 @@ import logo from '@/assets/images/bitwire.svg'
 import Link from 'next/link'
 import { useState } from 'react'
 import { List } from '@phosphor-icons/react'
+import { usePathname } from 'next/navigation'
 
 export function Header() {
   const [openMenu, setOpenMenu] = useState(false)
+
+  const pathname = usePathname()
   return (
     <div>
       <nav className='border-gray-200 bg-gray-50'>
@@ -36,13 +39,33 @@ export function Header() {
           >
             <ul className='flex flex-col sm:flex-row items-center gap-2 font-medium bg-gray-50 md:bg-transparent'>
               <Link href='/news' className='text-blue-800 hover:text-blue-600'>
-                <li className='hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold'>
+                <li
+                  className={`hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold ${
+                    pathname === '/news' ? 'bg-gray-300' : 'bg-transparent'
+                  }`}
+                >
                   Notícias
                 </li>
               </Link>
               <Link href='/about' className='text-blue-800 hover:text-blue-600'>
-                <li className='hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold'>
+                <li
+                  className={`hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold ${
+                    pathname === '/about' ? 'bg-gray-300' : 'bg-transparent'
+                  }`}
+                >
                   Sobre
+                </li>
+              </Link>
+              <Link
+                href='/privacy'
+                className='text-blue-800 hover:text-blue-600'
+              >
+                <li
+                  className={`hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold ${
+                    pathname === '/privacy' ? 'bg-gray-300' : 'bg-transparent'
+                  }`}
+                >
+                  Privacidade
                 </li>
               </Link>
               <Link
@@ -51,14 +74,6 @@ export function Header() {
               >
                 <li className='hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold'>
                   Grupo Vip
-                </li>
-              </Link>
-              <Link
-                href='/privacy'
-                className='text-blue-800 hover:text-blue-600'
-              >
-                <li className='hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold'>
-                  Privacidade
                 </li>
               </Link>
             </ul>

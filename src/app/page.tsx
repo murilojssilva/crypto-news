@@ -43,7 +43,7 @@ export default function Home() {
       <LatestNews />
       <section className='flex flex-col md:flex-row bg-gray-100 justify-between p-8 gap-16'>
         <div className='flex flex-col items-center gap-4'>
-          <Blocks size={64} color='blue' />
+          <Blocks size={64} color='#1565C0' />
           <h2 className='font-bold text-blue-800'>Análise de projetos</h2>
           <p className='text-gray-800 text-justify'>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
@@ -53,7 +53,7 @@ export default function Home() {
           </p>
         </div>
         <div className='flex flex-col items-center gap-4'>
-          <Coin size={64} color='blue' />
+          <Coin size={64} color='#1565C0' />
           <h2 className='font-bold text-blue-800'>
             Criptomoedas preferidas das baleias
           </h2>
@@ -65,7 +65,7 @@ export default function Home() {
           </p>
         </div>
         <div className='flex flex-col items-center gap-4'>
-          <Newspaper size={64} color='blue' />
+          <Newspaper size={64} color='#1565C0' />
           <h2 className='font-bold text-blue-800'>Notícias do mercado</h2>
           <p className='text-gray-800 text-justify'>
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iusto

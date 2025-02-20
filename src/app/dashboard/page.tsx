@@ -32,7 +32,7 @@ export default function Dashboard() {
               <span className='text-gray-800'>{currentDate}</span>
             </div>
             <div className='flex flex-row items-center gap-2'>
-              <Home color='blue' />
+              <Home color='#1565C0' />
               <span className='font-bold text-gray-800'>Dashboard</span>
             </div>
           </div>
