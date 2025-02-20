@@ -63,7 +63,7 @@ export default function SignUp() {
         </div>
 
         <div className='flex flex-col items-center justify-center p-4 gap-16'>
-          <main className='flex flex-col gap-4 text-center md:text-left'>
+          <main className='flex flex-col gap-4 text-center items-center md:text-left'>
             <span className='text-blue-800 text-4xl font-bold'>
               Bem vindo à BitWire
             </span>
