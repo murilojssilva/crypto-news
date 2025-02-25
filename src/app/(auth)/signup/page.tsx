@@ -3,35 +3,41 @@
 import Link from 'next/link'
 import logo from '@/assets/images/bitwire.svg'
 import Image from 'next/image'
-import Input from '../components/Form/Input'
+import Input from '../../components/Form/Input'
 import { useState } from 'react'
-import EyeButton from '../components/Form/EyeButton'
+import EyeButton from '../../components/Form/EyeButton'
 import * as zod from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import registerAction from './_actions/register'
+import { useRouter } from 'next/navigation'
+import { toast, ToastContainer } from 'react-toastify'
 
-const loginFormValidationsSchema = zod.object({
-  name: zod.string(),
-  email: zod.string().email('Digite um endereço de e-mail válido'),
-  password: zod
-    .string()
-    .nonempty('Digite uma senha')
-    .min(8, 'A senha deve ter, ao menos, 8 caracteres')
-    .regex(/[A-Z]/, 'A senha deve conter pelo menos uma letra maiúscula')
-    .regex(/[0-9]/, 'A senha deve conter pelo menos um número')
-    .regex(/[\W_]/, 'A senha deve conter pelo menos um caractere especial'),
-  passwordConfirmType: zod
-    .string()
-    .nonempty('Digite uma senha')
-    .min(8, 'A senha deve ter, ao menos, 8 caracteres')
-    .regex(/[A-Z]/, 'A senha deve conter pelo menos uma letra maiúscula')
-    .regex(/[0-9]/, 'A senha deve conter pelo menos um número')
-    .regex(/[\W_]/, 'A senha deve conter pelo menos um caractere especial'),
-})
+const loginFormValidationsSchema = zod
+  .object({
+    firstName: zod.string().nonempty('Digite seu nome'),
+    lastName: zod.string().nonempty('Digite seu sobrenome'),
+    email: zod.string().email('Digite um endereço de e-mail válido'),
+    password: zod
+      .string()
+      .min(8, 'A senha deve ter, ao menos, 8 caracteres')
+      .regex(/[A-Z]/, 'A senha deve conter pelo menos uma letra maiúscula')
+      .regex(/[0-9]/, 'A senha deve conter pelo menos um número')
+      .regex(/[\W_]/, 'A senha deve conter pelo menos um caractere especial'),
+    passwordConfirm: zod.string().nonempty('Confirme sua senha'),
+  })
+  .refine((data) => data.password === data.passwordConfirm, {
+    message: 'As senhas não coincidem',
+    path: ['passwordConfirm'],
+  })
 
 type NewSignUpFormData = zod.infer<typeof loginFormValidationsSchema>
 
 export default function SignUp() {
+  const router = useRouter()
+
+  const [loading, setLoading] = useState(false)
+
   const loginForm = useForm<NewSignUpFormData>({
     resolver: zodResolver(loginFormValidationsSchema),
   })
@@ -40,9 +46,28 @@ export default function SignUp() {
 
   const { errors } = formState
 
-  function handleLoginSubmit(data: NewSignUpFormData) {
-    console.log(data)
-    reset()
+  async function handleLoginSubmit(data: NewSignUpFormData) {
+    try {
+      setLoading(true)
+      const response = await registerAction({
+        email: data.email,
+        password: data.password,
+        lastName: data.lastName,
+        firstName: data.firstName,
+      })
+      setLoading(false)
+
+      if (response.success) {
+        reset()
+        toast.success(response.message)
+        router.push('/')
+      } else {
+        toast.error(response.message)
+      }
+    } catch (error) {
+      setLoading(false)
+      console.error('Error during registration:', error)
+    }
   }
 
   const [passwordType, setPasswordType] = useState<'password' | 'text'>(
@@ -71,22 +96,47 @@ export default function SignUp() {
               Crie seu cadastro para acessar a dashboard
             </p>
           </main>
+
           <div className='flex flex-col gap-4 w-full'>
             <form
               onSubmit={handleSubmit(handleLoginSubmit)}
               className='flex flex-col gap-2'
             >
               <div className='flex flex-col gap-2'>
-                <label className='text-blue-800' htmlFor='name'>
+                <label className='text-blue-800' htmlFor='firstName'>
                   Nome
                 </label>
                 <Input
-                  {...register('name')}
-                  errorsField={errors.name?.message ?? ''}
+                  {...register('firstName')}
+                  errorsField={errors.firstName?.message ?? ''}
                   type='text'
-                  id='name'
-                  placeholder='Digite seu e-mail'
+                  id='firstName'
+                  placeholder='Digite seu nome'
+                  name='firstName'
                 />
+                {errors.firstName && (
+                  <span className='text-red-500'>
+                    {errors.firstName?.message}
+                  </span>
+                )}
+              </div>
+              <div className='flex flex-col gap-2'>
+                <label className='text-blue-800' htmlFor='lastName'>
+                  Sobrenome
+                </label>
+                <Input
+                  {...register('lastName')}
+                  errorsField={errors.lastName?.message ?? ''}
+                  type='text'
+                  id='lastName'
+                  name='lastName'
+                  placeholder='Digite seu sobrenome'
+                />
+                {errors.lastName && (
+                  <span className='text-red-500'>
+                    {errors.lastName?.message}
+                  </span>
+                )}
               </div>
               <div className='flex flex-col gap-2'>
                 <label className='text-blue-800' htmlFor='email'>
@@ -96,9 +146,13 @@ export default function SignUp() {
                   type='email'
                   errorsField={errors.email?.message ?? ''}
                   {...register('email')}
+                  name='email'
                   id='email'
                   placeholder='Digite seu e-mail'
                 />
+                {errors.email && (
+                  <span className='text-red-500'>{errors.email?.message}</span>
+                )}
               </div>
               <div className='flex flex-col gap-2 relative'>
                 <label
@@ -111,9 +165,15 @@ export default function SignUp() {
                   type={passwordType}
                   errorsField={errors.password?.message ?? ''}
                   {...register('password')}
+                  name='password'
                   id='password'
                   placeholder='Digite sua senha'
                 />
+                {errors.password && (
+                  <span className='text-red-500'>
+                    {errors.password?.message}
+                  </span>
+                )}
                 <EyeButton
                   passwordType={passwordType}
                   setPasswordType={setPasswordType}
@@ -128,11 +188,18 @@ export default function SignUp() {
                 </label>
                 <Input
                   type={passwordConfirmType}
-                  {...register('passwordConfirmType')}
-                  errorsField={errors.passwordConfirmType?.message ?? ''}
-                  id='password-confirm'
+                  {...register('passwordConfirm')}
+                  errorsField={errors.passwordConfirm?.message ?? ''}
+                  id='passwordConfirm'
+                  name='passwordConfirm'
                   placeholder='Digite sua senha'
                 />
+                {errors.passwordConfirm && (
+                  <span className='text-red-500'>
+                    {errors.passwordConfirm?.message}
+                  </span>
+                )}
+
                 <EyeButton
                   passwordType={passwordConfirmType}
                   setPasswordType={setPasswordConfirmType}
@@ -145,14 +212,28 @@ export default function SignUp() {
                 >
                   Login
                 </Link>
-                <button className='bg-blue-800 font-bold text-md px-8 py-4 rounded-xl hover:bg-blue-600'>
-                  Criar conta
+                <button
+                  type='submit'
+                  className='bg-blue-800 font-bold text-md px-8 py-4 rounded-xl hover:bg-blue-600'
+                >
+                  {loading ? 'Carregando...' : 'Criar conta'}
                 </button>
               </div>
             </form>
           </div>
         </div>
       </div>
+      <ToastContainer
+        position='top-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

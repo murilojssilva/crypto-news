@@ -1,10 +1,18 @@
+/** @type {import('next').NextConfig} */
 module.exports = {
   async rewrites() {
     return [
       {
         source: '/api/:path*',
         destination:
-          'https://crypto-news-server-d982fcfac1fc.herokuapp.com/:path*', // Removido "posts/" para permitir chamadas dinâmicas
+          'https://crypto-news-server-d982fcfac1fc.herokuapp.com/:path*',
+        has: [
+          {
+            type: 'query',
+            key: 'excludeAuth',
+            value: 'true',
+          },
+        ],
       },
     ]
   },

@@ -8,6 +8,8 @@ import blockchainImage from '@/assets/images/blockchain.png'
 import Link from 'next/link'
 import { Coin } from '@phosphor-icons/react'
 import { Blocks, Newspaper } from 'lucide-react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function Home() {
   return (
@@ -76,6 +78,17 @@ export default function Home() {
         </div>
       </section>
       <Footer />
+      <ToastContainer
+        position='top-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

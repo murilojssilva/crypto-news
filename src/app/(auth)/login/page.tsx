@@ -6,10 +6,13 @@ import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 import * as zod from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 
 import logo from '@/assets/images/bitwire.svg'
-import Input from '../components/Form/Input'
-import EyeButton from '../components/Form/EyeButton'
+import Input from '../../components/Form/Input'
+import EyeButton from '../../components/Form/EyeButton'
+import loginAction from './_actions/login'
+import { toast, ToastContainer } from 'react-toastify'
 
 const loginFormValidationsSchema = zod.object({
   email: zod.string().email('Digite um endereço de e-mail válido'),
@@ -25,6 +28,9 @@ const loginFormValidationsSchema = zod.object({
 type NewLoginFormData = zod.infer<typeof loginFormValidationsSchema>
 
 export default function Login() {
+  const router = useRouter()
+
+  const [loading, setLoading] = useState(false)
   const {
     register,
     handleSubmit,
@@ -34,14 +40,31 @@ export default function Login() {
     resolver: zodResolver(loginFormValidationsSchema),
   })
 
-  function handleLoginSubmit(data: NewLoginFormData) {
-    console.log(data)
-    reset()
-  }
-
   const [passwordType, setPasswordType] = useState<'password' | 'text'>(
     'password'
   )
+
+  async function handleLoginSubmit(data: NewLoginFormData) {
+    try {
+      setLoading(true)
+      const response = await loginAction({
+        email: data.email,
+        password: data.password,
+      })
+      setLoading(false)
+
+      if (response.success) {
+        reset()
+        toast.success(response.message)
+        router.push('/')
+      } else {
+        toast.error(response.message)
+      }
+    } catch (error) {
+      setLoading(false)
+      console.error('Error during registration:', error)
+    }
+  }
 
   return (
     <div className='flex flex-col h-screen'>
@@ -78,6 +101,7 @@ export default function Login() {
                 placeholder='Digite seu e-mail'
                 {...register('email')}
                 errorsField={errors.email?.message ?? ''}
+                name='email'
               />
               {errors.email && (
                 <span className='text-red-500'>{errors.email?.message}</span>
@@ -103,6 +127,7 @@ export default function Login() {
                 placeholder='Digite sua senha'
                 {...register('password')}
                 errorsField={errors.password?.message ?? ''}
+                name='password'
               />
               {errors.password && (
                 <span className='text-red-500'>{errors.password?.message}</span>
@@ -122,12 +147,23 @@ export default function Login() {
                 Criar conta
               </Link>
               <button className='bg-blue-800 font-bold text-md text-white px-8 py-4 rounded-xl hover:bg-blue-600'>
-                Acessar
+                {loading ? 'Carregando...' : 'Acessar'}
               </button>
             </div>
           </form>
         </div>
       </div>
+      <ToastContainer
+        position='top-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }
