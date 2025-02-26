@@ -1,10 +1,10 @@
 'use client'
 
 import { Pen, Trash } from '@phosphor-icons/react'
-import Sidebar from '../components/Sidebar'
+import Sidebar from '../../components/Sidebar'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import HeaderDashboard from '../components/Dashboard/Header'
+import HeaderDashboard from '@/app/components/Dashboard/Header'
 
 interface NewsItem {
   id: string

@@ -1,7 +1,7 @@
 'use server'
 
-import db from '../../../../../lib/db'
 import bcrypt from 'bcryptjs'
+import db from '../../../../../lib/db'
 
 export default async function loginAction(data: {
   email: string

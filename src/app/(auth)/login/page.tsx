@@ -13,6 +13,7 @@ import Input from '../../components/Form/Input'
 import EyeButton from '../../components/Form/EyeButton'
 import loginAction from './_actions/login'
 import { toast, ToastContainer } from 'react-toastify'
+import { signIn } from 'next-auth/react'
 
 const loginFormValidationsSchema = zod.object({
   email: zod.string().email('Digite um endereço de e-mail válido'),
@@ -35,7 +36,6 @@ export default function Login() {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<NewLoginFormData>({
     resolver: zodResolver(loginFormValidationsSchema),
   })
@@ -44,25 +44,28 @@ export default function Login() {
     'password'
   )
 
-  async function handleLoginSubmit(data: NewLoginFormData) {
+  async function handleLoginSubmit(data) {
     try {
       setLoading(true)
-      const response = await loginAction({
+
+      // Chamada ao signIn no lado cliente
+      const response = await signIn('credentials', {
+        redirect: false,
         email: data.email,
         password: data.password,
       })
+
       setLoading(false)
 
-      if (response.success) {
-        reset()
-        toast.success(response.message)
-        router.push('/')
+      if (response?.error) {
+        toast.error('E-mail ou senha inválidos')
       } else {
-        toast.error(response.message)
+        toast.success('Login bem-sucedido')
+        router.push('/dashboard')
       }
     } catch (error) {
       setLoading(false)
-      console.error('Error during registration:', error)
+      console.error('Erro ao tentar autenticar o usuário', error)
     }
   }
 
