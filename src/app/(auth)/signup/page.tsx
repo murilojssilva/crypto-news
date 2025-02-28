@@ -64,7 +64,6 @@ export default function SignUp() {
       setLoading(false)
       console.error('Error during registration:', error)
 
-      // Verifica se o erro é uma instância de AxiosError
       if (error instanceof AxiosError && error.response?.data?.message) {
         toast.error(error.response.data.message)
       } else {

@@ -9,6 +9,7 @@ import { List } from '@phosphor-icons/react'
 import { logout } from '@/app/(auth)/(logout)/_actions/logout'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { signOut } from 'next-auth/react'
 
 export default function Sidebar() {
   const [openMenu, setOpenMenu] = useState(false)
@@ -31,7 +32,7 @@ export default function Sidebar() {
   }, [])
 
   const handleLogout = async () => {
-    await logout()
+    await signOut({ redirect: false })
     router.push('/login')
   }
 

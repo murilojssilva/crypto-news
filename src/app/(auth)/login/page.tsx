@@ -56,17 +56,14 @@ export default function LoginPage() {
         password: data.password,
       })
 
-      console.log('Resposta do signIn:', response)
-
       if (response?.error) {
         toast.error('E-mail ou senha inválidos')
         setLoading(false)
         return
       }
 
-      // Verifique se a resposta contém a URL para o redirecionamento correto
       if (response?.url) {
-        router.push('/dashboard') // Redirecionamento manual para o dashboard
+        router.push('/dashboard')
       } else {
         toast.error('Falha ao realizar o login. Tente novamente mais tarde.')
       }

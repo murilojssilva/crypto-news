@@ -1,10 +1,12 @@
 'use client'
 
-import { Pen, Trash } from '@phosphor-icons/react'
+import { Pen, Trash } from 'lucide-react'
 import Sidebar from '../../components/Sidebar'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import HeaderDashboard from '@/app/components/Dashboard/Header'
+import { useSession } from 'next-auth/react'
+import { useFormattedDate } from '@/hooks/useFormatted'
 
 interface NewsItem {
   id: string
@@ -13,23 +15,11 @@ interface NewsItem {
 }
 
 export default function Posts() {
-  const [currentDate, setCurrentDate] = useState('')
   const [news, setNews] = useState<NewsItem[]>([])
   const [loading, setLoading] = useState(true)
+  const { data: session } = useSession()
 
-  useEffect(() => {
-    const date = new Date()
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    }
-    let formattedDate = date.toLocaleDateString('pt-BR', options)
-    formattedDate =
-      formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
-    setCurrentDate(formattedDate)
-  }, [])
+  const currentDate = useFormattedDate()
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -54,7 +44,7 @@ export default function Posts() {
       <Sidebar />
       <div className='flex-1 flex flex-col'>
         <HeaderDashboard
-          name='User'
+          name={session?.user?.name as string}
           IconComponent={Pen}
           currentDate={currentDate}
           title='Posts'

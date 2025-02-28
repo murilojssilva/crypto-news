@@ -4,6 +4,8 @@ import { Home, Pen } from 'lucide-react'
 import Sidebar from '../components/Sidebar'
 import { useEffect, useState } from 'react'
 import HeaderDashboard from '../components/Dashboard/Header'
+import { useSession } from 'next-auth/react'
+import { useFormattedDate } from '@/hooks/useFormatted'
 
 interface NewsItem {
   id: string
@@ -15,46 +17,16 @@ export default function Dashboard() {
   const [news, setNews] = useState<NewsItem[]>([])
   const [loading, setLoading] = useState(true)
 
-  const [currentDate, setCurrentDate] = useState('')
+  const { data: session } = useSession()
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await fetch(
-          'https://crypto-news-server-d982fcfac1fc.herokuapp.com/posts'
-        )
-        const data = await response.json()
-        setNews(data.posts || [])
-      } catch (error) {
-        console.error('Erro ao buscar notícias:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchNews()
-  }, [])
-
-  useEffect(() => {
-    const date = new Date()
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: 'long',
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    }
-    let formattedDate = date.toLocaleDateString('pt-BR', options)
-    formattedDate =
-      formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)
-    setCurrentDate(formattedDate)
-  }, [])
+  const currentDate = useFormattedDate()
 
   return (
     <div className='bg-gray-50 pb-4 h-screen flex'>
       <Sidebar />
       <div className='flex-1'>
         <HeaderDashboard
-          name='Dashboard'
+          name={session?.user?.name as string}
           IconComponent={Home}
           currentDate={currentDate}
           title='Dashboard'

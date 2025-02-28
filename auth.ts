@@ -23,11 +23,17 @@ export const authConfig: NextAuthConfig = {
           where: { email: credentials.email },
         })
 
+        console.log('Usuário: ', user)
+
         if (!user || !bcrypt.compareSync(credentials.password, user.password)) {
           throw new Error('E-mail ou senha inválidos.')
         }
 
-        return { id: user.id, name: user.name, email: user.email }
+        return {
+          id: user.id,
+          name: user.firstName + ' ' + user.lastName,
+          email: user.email,
+        }
       },
     }),
   ],
@@ -52,8 +58,8 @@ export const authConfig: NextAuthConfig = {
       name: 'next-auth.session-token',
       options: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        path: '/dashboard',
+        secure: process.env.NODE_ENV === 'production', // Garante que seja seguro em produção
+        path: '/', // Ajuste para que seja acessível em toda a aplicação
         sameSite: 'lax',
       },
     },
