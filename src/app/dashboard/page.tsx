@@ -2,21 +2,11 @@
 
 import { Home, Pen } from 'lucide-react'
 import Sidebar from '../components/Sidebar'
-import { useEffect, useState } from 'react'
 import HeaderDashboard from '../components/Dashboard/Header'
 import { useSession } from 'next-auth/react'
 import { useFormattedDate } from '@/hooks/useFormatted'
 
-interface NewsItem {
-  id: string
-  title: string
-  content: string
-}
-
 export default function Dashboard() {
-  const [news, setNews] = useState<NewsItem[]>([])
-  const [loading, setLoading] = useState(true)
-
   const { data: session } = useSession()
 
   const currentDate = useFormattedDate()
@@ -41,9 +31,7 @@ export default function Dashboard() {
               </div>
               <div className='flex flex-row justify-between'>
                 <Pen color='black' />
-                <span className='text-blue-800 font-bold text-3xl'>
-                  {loading ? '...' : news.length}
-                </span>
+                <span className='text-blue-800 font-bold text-3xl'>9</span>
               </div>
             </div>
             <div className='border border-gray-500 p-4 rounded-md flex flex-col gap-3 justify-around'>
