@@ -9,9 +9,10 @@ import EyeButton from '../../components/Form/EyeButton'
 import * as zod from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import registerAction from './_actions/register'
 import { useRouter } from 'next/navigation'
 import { toast, ToastContainer } from 'react-toastify'
+import { api } from '@/lib/axios'
+import { AxiosError } from 'axios'
 
 const loginFormValidationsSchema = zod
   .object({
@@ -46,27 +47,31 @@ export default function SignUp() {
 
   const { errors } = formState
 
-  async function handleLoginSubmit(data: NewSignUpFormData) {
+  async function handleSignUpSubmit(data: NewSignUpFormData) {
     try {
       setLoading(true)
-      const response = await registerAction({
+      await api.post('/users', {
         email: data.email,
         password: data.password,
         lastName: data.lastName,
         firstName: data.firstName,
       })
-      setLoading(false)
 
-      if (response.success) {
-        reset()
-        toast.success(response.message)
-        router.push('/')
-      } else {
-        toast.error(response.message)
-      }
-    } catch (error) {
+      toast.success('Usuário registrado com sucesso')
+      reset()
+      router.push('/dashboard')
+    } catch (error: unknown) {
       setLoading(false)
       console.error('Error during registration:', error)
+
+      // Verifica se o erro é uma instância de AxiosError
+      if (error instanceof AxiosError && error.response?.data?.message) {
+        toast.error(error.response.data.message)
+      } else {
+        toast.error('Erro ao registrar usuário. Tente novamente mais tarde.')
+      }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -82,7 +87,7 @@ export default function SignUp() {
         <div className='bg-blue-800 flex items-center justify-center'>
           <Image
             src={logo}
-            alt='BitWire'
+            alt='CryptoNews'
             className='w-12 h-12 md:h-80 md:w-80'
           />
         </div>
@@ -90,7 +95,7 @@ export default function SignUp() {
         <div className='flex flex-col items-center justify-center p-4 gap-16'>
           <main className='flex flex-col gap-4 text-center items-center md:text-left'>
             <span className='text-blue-800 text-4xl font-bold'>
-              Bem vindo à BitWire
+              Bem vindo à CryptoNews
             </span>
             <p className='text-cyan-600 text-sm'>
               Crie seu cadastro para acessar a dashboard
@@ -99,7 +104,7 @@ export default function SignUp() {
 
           <div className='flex flex-col gap-4 w-full'>
             <form
-              onSubmit={handleSubmit(handleLoginSubmit)}
+              onSubmit={handleSubmit(handleSignUpSubmit)}
               className='flex flex-col gap-2'
             >
               <div className='flex flex-col gap-2'>

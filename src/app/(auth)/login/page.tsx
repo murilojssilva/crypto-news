@@ -1,71 +1,80 @@
 'use client'
-
-import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useForm } from 'react-hook-form'
-import * as zod from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
 
+import { signIn, useSession } from 'next-auth/react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as zod from 'zod'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { toast, ToastContainer } from 'react-toastify'
 import logo from '@/assets/images/bitwire.svg'
 import Input from '../../components/Form/Input'
 import EyeButton from '../../components/Form/EyeButton'
-import loginAction from './_actions/login'
-import { toast, ToastContainer } from 'react-toastify'
-import { signIn } from 'next-auth/react'
 
-const loginFormValidationsSchema = zod.object({
-  email: zod.string().email('Digite um endereço de e-mail válido'),
+const loginFormSchema = zod.object({
+  email: zod.string().email('Digite um e-mail válido'),
   password: zod
     .string()
-    .nonempty('Digite uma senha')
-    .min(8, 'A senha deve ter, ao menos, 8 caracteres')
-    .regex(/[A-Z]/, 'A senha deve conter pelo menos uma letra maiúscula')
-    .regex(/[0-9]/, 'A senha deve conter pelo menos um número')
-    .regex(/[\W_]/, 'A senha deve conter pelo menos um caractere especial'),
+    .min(8, 'A senha deve ter pelo menos 8 caracteres')
+    .regex(/[A-Z]/, 'A senha deve ter pelo menos uma letra maiúscula')
+    .regex(/[0-9]/, 'A senha deve ter pelo menos um número')
+    .regex(/[\W_]/, 'A senha deve ter pelo menos um caractere especial'),
 })
 
-type NewLoginFormData = zod.infer<typeof loginFormValidationsSchema>
+type LoginFormData = zod.infer<typeof loginFormSchema>
 
-export default function Login() {
+export default function LoginPage() {
   const router = useRouter()
 
+  const { data: session, status } = useSession()
   const [loading, setLoading] = useState(false)
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<NewLoginFormData>({
-    resolver: zodResolver(loginFormValidationsSchema),
-  })
-
   const [passwordType, setPasswordType] = useState<'password' | 'text'>(
     'password'
   )
 
-  async function handleLoginSubmit(data) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginFormSchema),
+  })
+
+  useEffect(() => {
+    console.log('Sessão no cliente:', session, 'Status:', status)
+  }, [session, status])
+
+  async function handleLoginSubmit(data: LoginFormData) {
     try {
       setLoading(true)
 
-      // Chamada ao signIn no lado cliente
       const response = await signIn('credentials', {
         redirect: false,
         email: data.email,
         password: data.password,
       })
 
-      setLoading(false)
+      console.log('Resposta do signIn:', response)
 
       if (response?.error) {
         toast.error('E-mail ou senha inválidos')
+        setLoading(false)
+        return
+      }
+
+      // Verifique se a resposta contém a URL para o redirecionamento correto
+      if (response?.url) {
+        router.push('/dashboard') // Redirecionamento manual para o dashboard
       } else {
-        toast.success('Login bem-sucedido')
-        router.push('/dashboard')
+        toast.error('Falha ao realizar o login. Tente novamente mais tarde.')
       }
     } catch (error) {
+      console.error('Erro no login:', error)
+      toast.error('Erro ao realizar o login. Tente novamente mais tarde.')
+    } finally {
       setLoading(false)
-      console.error('Erro ao tentar autenticar o usuário', error)
     }
   }
 
@@ -149,8 +158,11 @@ export default function Login() {
               >
                 Criar conta
               </Link>
-              <button className='bg-blue-800 font-bold text-md text-white px-8 py-4 rounded-xl hover:bg-blue-600'>
-                {loading ? 'Carregando...' : 'Acessar'}
+              <button
+                type='submit'
+                className='bg-blue-800 font-bold text-md text-white px-8 py-4 rounded-xl hover:bg-blue-600'
+              >
+                {loading ? 'Carregando...' : 'Entrar'}
               </button>
             </div>
           </form>
