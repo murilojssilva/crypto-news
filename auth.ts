@@ -4,8 +4,6 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import type { NextAuthOptions } from 'next-auth'
 import db from './lib/db'
 import bcrypt from 'bcryptjs'
-import { NextRequest, NextResponse } from 'next/server'
-import { NextApiRequest, NextApiResponse } from 'next'
 
 export const authConfig: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -68,15 +66,4 @@ export const authConfig: NextAuthOptions = {
   },
 }
 
-// Definir a função POST como parte do export de rotas
-export async function POST(req: NextRequest) {
-  try {
-    const nextApiReq = req as unknown as NextApiRequest
-    const nextApiRes = req as unknown as NextApiResponse
-
-    return await NextAuth(nextApiReq, nextApiRes, authConfig)
-  } catch (error) {
-    console.error(error)
-    return new NextResponse('Internal Server Error', { status: 500 })
-  }
-}
+export const { auth } = NextAuth(authConfig)
