@@ -1,11 +1,11 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import type { NextAuthConfig } from 'next-auth'
+import type { NextAuthOptions } from 'next-auth'
 import db from './lib/db'
 import bcrypt from 'bcryptjs'
 
-export const authConfig: NextAuthConfig = {
+export const authConfig: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
     CredentialsProvider({
@@ -58,8 +58,8 @@ export const authConfig: NextAuthConfig = {
       name: 'next-auth.session-token',
       options: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Garante que seja seguro em produção
-        path: '/', // Ajuste para que seja acessível em toda a aplicação
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
         sameSite: 'lax',
       },
     },
