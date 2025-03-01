@@ -6,9 +6,9 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
 
-    const { firstName, lastName, email, password } = data
+    const { firstName, lastName, email, password, updatedAt } = data
 
-    if (!email || !lastName || !firstName || !password) {
+    if (!email || !lastName || !firstName || !password || !updatedAt) {
       return NextResponse.json(
         { message: 'Todos os campos são obrigatórios' },
         { status: 400 }
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
         lastName,
         email,
         password: hashedPassword,
-        updatedAt: new Date(),
+        updatedAt,
       },
     })
 

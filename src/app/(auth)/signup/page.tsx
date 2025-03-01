@@ -55,6 +55,7 @@ export default function SignUp() {
         password: data.password,
         lastName: data.lastName,
         firstName: data.firstName,
+        updatedAt: new Date(),
       })
 
       toast.success('Usuário registrado com sucesso')
