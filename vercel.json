@@ -6,6 +6,6 @@
     }
   ],
   "env": {
-    "DATABASE_URL": "@database-url"
+    "DATABASE_URL": "file:./prisma/dev.db"
   }
 }
