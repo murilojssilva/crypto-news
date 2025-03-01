@@ -1,11 +1,11 @@
-import { prisma } from '@/lib/prisma'
+import { NextResponse } from 'next/server'
+import { sign } from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const data = await request.json()
-
     const { firstName, lastName, email, password, updatedAt } = data
 
     if (!email || !lastName || !firstName || !password || !updatedAt) {
@@ -37,16 +37,24 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    const token = sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET || 'secret',
+      { expiresIn: '7d' }
+    )
+
     const response = NextResponse.json({
       message: 'Usuário criado com sucesso!',
       user,
     })
 
-    response.headers.set(
+    response.headers.append(
       'Set-Cookie',
-      `@cryptonews:userId=${user.id}; Path=/; Max-Age=${
-        60 * 60 * 24 * 7 // 7 days
-      }; HttpOnly; Secure; SameSite=Strict`
+      `next-auth.session-token=${token}; Path=/; Max-Age=${
+        60 * 60 * 24 * 7
+      }; HttpOnly; Secure=${
+        process.env.NODE_ENV === 'production'
+      }; SameSite=Lax`
     )
 
     return response
@@ -54,19 +62,6 @@ export async function POST(request: NextRequest) {
     console.error('Erro ao criar o usuário:', error)
     return NextResponse.json(
       { message: 'Erro ao criar o usuário' },
-      { status: 500 }
-    )
-  }
-}
-
-export async function GET() {
-  try {
-    const users = await prisma.user.findMany()
-    return NextResponse.json(users)
-  } catch (error) {
-    console.error('Erro ao listar os usuários:', error)
-    return NextResponse.json(
-      { message: 'Erro ao listar os usuários' },
       { status: 500 }
     )
   }

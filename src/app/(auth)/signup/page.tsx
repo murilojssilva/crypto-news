@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import { toast, ToastContainer } from 'react-toastify'
 import { api } from '@/lib/axios'
 import { AxiosError } from 'axios'
+import { signIn } from 'next-auth/react'
 
 const loginFormValidationsSchema = zod
   .object({
@@ -50,16 +51,26 @@ export default function SignUp() {
   async function handleSignUpSubmit(data: NewSignUpFormData) {
     try {
       setLoading(true)
-      await api.post('/users', {
-        email: data.email,
-        password: data.password,
-        lastName: data.lastName,
-        firstName: data.firstName,
-        updatedAt: new Date(),
-      })
+      await api.post(
+        '/users',
+        {
+          email: data.email,
+          password: data.password,
+          lastName: data.lastName,
+          firstName: data.firstName,
+          updatedAt: new Date(),
+        },
+        { withCredentials: true }
+      )
 
       toast.success('Usuário registrado com sucesso')
+      await signIn('credentials', {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      })
       reset()
+
       router.push('/dashboard')
     } catch (error: unknown) {
       setLoading(false)
