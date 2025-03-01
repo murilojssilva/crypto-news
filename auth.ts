@@ -1,7 +1,6 @@
-import NextAuth from 'next-auth'
+import NextAuth, { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import type { NextAuthOptions } from 'next-auth'
 import db from './lib/db'
 import bcrypt from 'bcryptjs'
 
@@ -22,8 +21,6 @@ export const authConfig: NextAuthOptions = {
         const user = await db.user.findUnique({
           where: { email: credentials.email },
         })
-
-        console.log('Usuário: ', user)
 
         if (!user || !bcrypt.compareSync(credentials.password, user.password)) {
           throw new Error('E-mail ou senha inválidos.')
@@ -66,4 +63,4 @@ export const authConfig: NextAuthOptions = {
   },
 }
 
-export const { auth } = NextAuth(authConfig)
+export default NextAuth(authConfig)
