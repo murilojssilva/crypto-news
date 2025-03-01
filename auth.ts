@@ -4,6 +4,8 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import type { NextAuthOptions } from 'next-auth'
 import db from './lib/db'
 import bcrypt from 'bcryptjs'
+import { NextRequest, NextResponse } from 'next/server'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 export const authConfig: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -66,8 +68,15 @@ export const authConfig: NextAuthOptions = {
   },
 }
 
-// Atribua a função a uma variável
-const authHandler = (req: any, res: any) => NextAuth(req, res, authConfig)
-
-// Exporte a variável com a função
-export default authHandler
+// Adaptando para compatibilidade com Next.js 13+
+export async function POST(req: NextRequest, res: NextResponse) {
+  try {
+    // Cast de NextRequest e NextResponse para NextApiRequest e NextApiResponse
+    const nextApiReq = req as unknown as NextApiRequest
+    const nextApiRes = res as unknown as NextApiResponse
+    return await NextAuth(nextApiReq, nextApiRes, authConfig)
+  } catch (error) {
+    console.error(error)
+    return new NextResponse('Internal Server Error', { status: 500 })
+  }
+}
