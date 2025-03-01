@@ -7,11 +7,5 @@
   ],
   "env": {
     "DATABASE_URL": "@database-url"
-  },
-  "build": {
-    "env": {
-      "DATABASE_URL": "@database-url"
-    },
-    "command": "prisma generate && next build"
   }
 }
