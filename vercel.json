@@ -6,11 +6,11 @@
     }
   ],
   "env": {
-    "DATABASE_URL": "./prisma/dev.db"
+    "DATABASE_URL": "@database-url"
   },
   "build": {
     "env": {
-      "DATABASE_URL": "./prisma/dev.db"
+      "DATABASE_URL": "@database-url"
     },
     "command": "prisma generate && next build"
   }
