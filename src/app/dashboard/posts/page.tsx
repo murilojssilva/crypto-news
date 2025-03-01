@@ -1,7 +1,7 @@
 'use client'
 
 import { Pen, Trash } from 'lucide-react'
-import Sidebar from '../../components/Sidebar'
+import Sidebar from '@/app/components/Sidebar'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import HeaderDashboard from '@/app/components/Dashboard/Header'

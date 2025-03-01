@@ -4,6 +4,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import type { NextAuthOptions } from 'next-auth'
 import db from './lib/db'
 import bcrypt from 'bcryptjs'
+import { NextApiRequest, NextApiResponse } from 'next'
 
 export const authConfig: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -66,7 +67,7 @@ export const authConfig: NextAuthOptions = {
   },
 }
 
-export const {
-  handlers: { GET, POST },
-  auth,
-} = NextAuth(authConfig)
+const authHandler = (req: NextApiRequest, res: NextApiResponse) =>
+  NextAuth(req, res, authConfig)
+
+export default authHandler

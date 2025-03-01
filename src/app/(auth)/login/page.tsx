@@ -10,8 +10,8 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 import logo from '@/assets/images/bitwire.svg'
-import Input from '../../components/Form/Input'
-import EyeButton from '../../components/Form/EyeButton'
+import Input from '@/app/components/Form/Input'
+import EyeButton from '@/app/components/Form/EyeButton'
 
 const loginFormSchema = zod.object({
   email: zod.string().email('Digite um e-mail válido'),
