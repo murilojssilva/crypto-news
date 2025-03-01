@@ -68,12 +68,12 @@ export const authConfig: NextAuthOptions = {
   },
 }
 
-// Adaptando para compatibilidade com Next.js 13+
-export async function POST(req: NextRequest, res: NextResponse) {
+// Definir a função POST como parte do export de rotas
+export async function POST(req: NextRequest) {
   try {
-    // Cast de NextRequest e NextResponse para NextApiRequest e NextApiResponse
     const nextApiReq = req as unknown as NextApiRequest
-    const nextApiRes = res as unknown as NextApiResponse
+    const nextApiRes = req as unknown as NextApiResponse
+
     return await NextAuth(nextApiReq, nextApiRes, authConfig)
   } catch (error) {
     console.error(error)
