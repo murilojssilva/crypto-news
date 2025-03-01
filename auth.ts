@@ -4,7 +4,6 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import type { NextAuthOptions } from 'next-auth'
 import db from './lib/db'
 import bcrypt from 'bcryptjs'
-import { NextApiRequest, NextApiResponse } from 'next'
 
 export const authConfig: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -67,7 +66,8 @@ export const authConfig: NextAuthOptions = {
   },
 }
 
-const authHandler = (req: NextApiRequest, res: NextApiResponse) =>
-  NextAuth(req, res, authConfig)
+// Atribua a função a uma variável
+const authHandler = (req: any, res: any) => NextAuth(req, res, authConfig)
 
+// Exporte a variável com a função
 export default authHandler
