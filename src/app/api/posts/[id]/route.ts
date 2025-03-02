@@ -7,6 +7,7 @@ export async function GET(
 ) {
   try {
     const { id } = params
+
     const post = await prisma.post.findUnique({
       where: { id },
     })
