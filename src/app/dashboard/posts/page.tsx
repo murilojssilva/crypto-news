@@ -1,12 +1,13 @@
 'use client'
 
-import { Pen, Trash } from 'lucide-react'
+import { Pen, Plus, Trash } from 'lucide-react'
 import Sidebar from '@/app/components/Sidebar'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import HeaderDashboard from '@/app/components/Dashboard/Header'
 import { useSession } from 'next-auth/react'
 import { useFormattedDate } from '@/hooks/useFormatted'
+import { deletePost } from '@/lib/posts/[id]'
 
 interface NewsItem {
   id: string
@@ -16,7 +17,7 @@ interface NewsItem {
 
 export default function Posts() {
   const [news, setNews] = useState<NewsItem[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const { data: session } = useSession()
 
   const currentDate = useFormattedDate()
@@ -24,13 +25,19 @@ export default function Posts() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch(
-          'https://crypto-news-server-d982fcfac1fc.herokuapp.com/posts'
-        )
+        setLoading(true)
+        const response = await fetch('/api/posts')
         const data = await response.json()
-        setNews(data.posts || [])
+
+        if (Array.isArray(data)) {
+          setNews(data)
+        } else {
+          console.error('Formato inesperado da resposta:', data)
+          setNews([])
+        }
       } catch (error) {
-        console.error('Erro ao buscar notícias:', error)
+        console.error('Erro ao buscar posts:', error)
+        setNews([])
       } finally {
         setLoading(false)
       }
@@ -38,6 +45,23 @@ export default function Posts() {
 
     fetchNews()
   }, [])
+
+  const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm(
+      'Tem certeza que deseja excluir este post?'
+    )
+
+    if (confirmDelete) {
+      try {
+        await deletePost(id) // Usando a função deletePost
+        setNews((prevNews) => prevNews.filter((item) => item.id !== id))
+        alert('Post excluído com sucesso!')
+      } catch (error) {
+        alert('Erro ao excluir o post')
+        console.error('Erro ao excluir o post:', error)
+      }
+    }
+  }
 
   return (
     <div className='flex bg-gray-50 h-screen'>
@@ -51,6 +75,14 @@ export default function Posts() {
         />
 
         <section className='px-4 mb-4 flex-1 overflow-auto max-h-[100vh]'>
+          <div className='flex flex-row justify-center'>
+            <Link
+              className='bg-blue-800 flex flex-row justify-around p-2 w-[50%] m-3 rounded-xl'
+              href='/dashboard/posts/new'
+            >
+              <Plus /> Novo Post
+            </Link>
+          </div>
           {loading ? (
             <div className='flex items-center justify-center h-full'>
               <p className='text-blue-800'>Sem notícias disponíveis...</p>
@@ -72,10 +104,10 @@ export default function Posts() {
                   </p>
                 </Link>
                 <div className='flex flex-row gap-2'>
-                  <button>
+                  <Link href={`/dashboard/posts/edit/${item.id}`}>
                     <Pen size={24} color='grey' />
-                  </button>
-                  <button>
+                  </Link>
+                  <button onClick={() => handleDelete(item.id)}>
                     <Trash size={24} color='red' />
                   </button>
                 </div>
