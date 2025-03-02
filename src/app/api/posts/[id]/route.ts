@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-export async function GET(
-  req: Request,
-  context: { params: { id: string } } }
-) {
+export async function GET(req: Request, context: { params: { id: string } }) {
   try {
     const { id } = context.params
 
@@ -31,7 +28,7 @@ export async function GET(
 
 export async function DELETE(
   req: Request,
-  context: { params: { id: string } } }
+  context: { params: { id: string } }
 ) {
   try {
     const { id } = context.params
