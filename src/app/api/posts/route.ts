@@ -30,7 +30,7 @@ export async function POST(req: Request) {
         subtitle,
         content,
         published,
-        writtenBy: written_by, // Correção aqui
+        writtenBy: written_by,
       },
     })
 

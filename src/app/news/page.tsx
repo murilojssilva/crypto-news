@@ -1,6 +1,9 @@
+'use client'
+
 import Link from 'next/link'
 import Footer from '../components/Footer'
 import { Header } from '../components/Header'
+import { useEffect, useState } from 'react'
 
 interface NewsItem {
   id: string
@@ -8,27 +11,43 @@ interface NewsItem {
   content: string
 }
 
-export default async function News() {
-  const response = await fetch(
-    'https://crypto-news-server-d982fcfac1fc.herokuapp.com/posts',
-    {
-      cache: 'no-store',
+export default function News() {
+  const [news, setNews] = useState<NewsItem[]>([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch('/api/posts')
+        const data = await response.json()
+
+        if (Array.isArray(data)) {
+          setNews(data)
+        } else {
+          console.error('Formato inesperado da resposta:', data)
+          setNews([])
+        }
+      } catch (error) {
+        console.error('Erro ao buscar posts:', error)
+        setNews([])
+      } finally {
+        setLoading(false)
+      }
     }
-  )
 
-  const data = await response.json()
-
-  const news = data.posts || []
+    fetchNews()
+  }, [])
 
   return (
-    <div className='flex flex-col bg-gray-200'>
+    <div className='flex flex-col min-h-screen bg-gray-200'>
       <Header />
 
       <div className='flex flex-row justify-between p-8'>
         <h1 className='text-blue-800 font-bold text-2xl'>Últimas notícias</h1>
       </div>
-      <section className='px-4 bg-gray-200'>
-        {news.length === 0 ? (
+      <section className='px-4 bg-gray-200 flex-1'>
+        {loading ? (
           <div className='flex items-center justify-center h-[42vh]'>
             <p className='text-blue-800'>Sem notícias disponíveis...</p>
           </div>
