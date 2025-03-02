@@ -3,11 +3,13 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } } // Correção
 ) {
   try {
+    const { id } = context.params // Extraindo corretamente o ID
+
     const user = await prisma.user.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!user) {
