@@ -3,11 +3,10 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(
   req: Request,
-  context: { params: Record<string, string> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = context.params
-
+    const { id } = params
     const post = await prisma.post.findUnique({
       where: { id },
     })
@@ -31,10 +30,10 @@ export async function GET(
 
 export async function DELETE(
   req: Request,
-  context: { params: Record<string, string> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = context.params
+    const { id } = params
 
     const deletedPost = await prisma.post.delete({
       where: { id },
