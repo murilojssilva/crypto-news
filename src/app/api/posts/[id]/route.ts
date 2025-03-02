@@ -31,7 +31,7 @@ export async function GET(
 
 export async function DELETE(
   req: Request,
-  context: { params: { id: string } }
+  context: { params: Record<string, string> }
 ) {
   try {
     const { id } = context.params
