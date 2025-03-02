@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-export async function GET(req: Request, context: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: any }) {
   try {
-    const { id } = context.params
+    const { id } = params
 
     const post = await prisma.post.findUnique({
       where: { id },
@@ -26,12 +28,9 @@ export async function GET(req: Request, context: { params: { id: string } }) {
   }
 }
 
-export async function DELETE(
-  req: Request,
-  context: { params: { id: string } }
-) {
+export async function DELETE(req: Request, { params }: { params: any }) {
   try {
-    const { id } = context.params
+    const { id } = params
 
     const deletedPost = await prisma.post.delete({
       where: { id },
