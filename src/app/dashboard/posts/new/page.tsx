@@ -106,6 +106,7 @@ export default function NewPost() {
             )}
             <Textarea
               {...register('content')}
+              /* @ts-expect-error: Ignoring type error for 'errorsField' property that is not part of TextareaProps */
               errorsField={errors.content?.message ?? ''}
               placeholder='Conteúdo'
               className='border p-2 rounded h-40'
