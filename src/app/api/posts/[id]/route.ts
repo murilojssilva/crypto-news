@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-export async function GET(req: Request, context: { params: { id: string } }) {
+export async function GET(
+  req: Request,
+  context: { params: Record<string, string> }
+) {
   try {
     const { id } = context.params
 
