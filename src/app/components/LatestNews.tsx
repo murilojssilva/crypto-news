@@ -11,18 +11,24 @@ interface NewsItem {
 
 export default function LatestNews() {
   const [news, setNews] = useState<NewsItem[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch(
-          'https://crypto-news-server-d982fcfac1fc.herokuapp.com/posts'
-        )
+        setLoading(true)
+        const response = await fetch('/api/posts')
         const data = await response.json()
-        setNews(data.posts || [])
+
+        if (Array.isArray(data)) {
+          setNews(data)
+        } else {
+          console.error('Formato inesperado da resposta:', data)
+          setNews([])
+        }
       } catch (error) {
-        console.error('Erro ao buscar notícias:', error)
+        console.error('Erro ao buscar posts:', error)
+        setNews([])
       } finally {
         setLoading(false)
       }
