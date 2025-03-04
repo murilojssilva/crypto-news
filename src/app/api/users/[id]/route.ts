@@ -28,10 +28,7 @@ export async function GET(req: Request, { params }: { params: any }) {
   }
 }
 
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: Request, { params }: { params: any }) {
   try {
     const { id } = params
     const { firstName, lastName, updatedAt, password } = await req.json()
