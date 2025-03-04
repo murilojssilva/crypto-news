@@ -6,8 +6,9 @@ import { deletePost, getPostById } from '@/lib/posts/[id]'
 import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { useSession } from 'next-auth/react'
-import { EditPostFormData, NewPostFormData } from '@/app/schemas/NewPostSchema'
+import { NewPostFormData } from '@/app/schemas/NewPostSchema'
 import { NewsItemProps, PostProps } from '@/app/interfaces/PostInterface'
+import { EditPostFormData } from '@/app/schemas/EditPostSchema'
 
 interface PostsContextType {
   posts: PostProps[]

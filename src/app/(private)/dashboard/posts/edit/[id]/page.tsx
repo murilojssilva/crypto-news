@@ -5,10 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import Input from '@/app/components/Form/Input'
 import Textarea from '@/app/components/Form/Textarea'
-import {
-  EditPostFormData,
-  editPostFormValidationsSchema,
-} from '@/app/schemas/NewPostSchema'
 import { usePosts } from '@/context/PostContext'
 import { useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
@@ -21,6 +17,10 @@ import HeaderDashboard from '@/app/components/Dashboard/Header'
 import { useSession } from 'next-auth/react'
 import { useFormattedDate } from '@/hooks/useFormatted'
 import { Button } from '@/app/components/Dashboard/Button'
+import {
+  EditPostFormData,
+  editPostFormValidationsSchema,
+} from '@/app/schemas/EditPostSchema'
 
 export default function EditPost() {
   const {
@@ -88,7 +88,7 @@ export default function EditPost() {
   }
 
   return (
-    <div className='bg-gray-50 pb-4 h-screen flex'>
+    <div className='bg-gray-50 p-4 h-screen flex'>
       <Sidebar />
 
       <div className='flex-1'>

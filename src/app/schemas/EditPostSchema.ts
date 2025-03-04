@@ -1,6 +1,6 @@
 import * as zod from 'zod'
 
-export const newPostFormValidationsSchema = zod.object({
+export const editPostFormValidationsSchema = zod.object({
   title: zod
     .string()
     .max(100, 'Título não pode ter mais de 100 caracteres')
@@ -10,4 +10,4 @@ export const newPostFormValidationsSchema = zod.object({
   published: zod.boolean(),
 })
 
-export type NewPostFormData = zod.infer<typeof newPostFormValidationsSchema>
+export type EditPostFormData = zod.infer<typeof editPostFormValidationsSchema>

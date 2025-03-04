@@ -4,7 +4,6 @@ import Link from 'next/link'
 import Input from '@/app/components/Form/Input'
 import { useState } from 'react'
 import EyeButton from '@/app/components/Form/EyeButton'
-import * as zod from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
@@ -14,26 +13,10 @@ import { AxiosError } from 'axios'
 import { signIn } from 'next-auth/react'
 import { Button } from '@/app/components/Dashboard/Button'
 import { SignIn } from '@phosphor-icons/react'
-
-const loginFormValidationsSchema = zod
-  .object({
-    firstName: zod.string().nonempty('Digite seu nome'),
-    lastName: zod.string().nonempty('Digite seu sobrenome'),
-    email: zod.string().email('Digite um endereço de e-mail válido'),
-    password: zod
-      .string()
-      .min(8, 'A senha deve ter, ao menos, 8 caracteres')
-      .regex(/[A-Z]/, 'A senha deve conter pelo menos uma letra maiúscula')
-      .regex(/[0-9]/, 'A senha deve conter pelo menos um número')
-      .regex(/[\W_]/, 'A senha deve conter pelo menos um caractere especial'),
-    passwordConfirm: zod.string().nonempty('Confirme sua senha'),
-  })
-  .refine((data) => data.password === data.passwordConfirm, {
-    message: 'As senhas não coincidem',
-    path: ['passwordConfirm'],
-  })
-
-type NewSignUpFormData = zod.infer<typeof loginFormValidationsSchema>
+import {
+  loginFormValidationsSchema,
+  NewSignUpFormData,
+} from '@/app/schemas/SignUpSchema'
 
 export default function SignUp() {
   const router = useRouter()
