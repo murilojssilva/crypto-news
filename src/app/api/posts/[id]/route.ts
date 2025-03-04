@@ -48,3 +48,34 @@ export async function DELETE(req: Request, { params }: { params: any }) {
     )
   }
 }
+
+export async function PUT(req: Request, { params }: { params: any }) {
+  try {
+    const { id } = params
+    const { title, subtitle, content, published } = await req.json()
+
+    // Check if all required fields are provided
+    if (!title || !subtitle || !content) {
+      return NextResponse.json(
+        { error: 'Título, subtítulo e conteúdo são obrigatórios' },
+        { status: 400 }
+      )
+    }
+
+    const updatedPost = await prisma.post.update({
+      where: { id },
+      data: { title, subtitle, content, published },
+    })
+
+    return NextResponse.json({
+      message: 'Post atualizado com sucesso',
+      updatedPost,
+    })
+  } catch (error) {
+    console.error('Erro ao editar o post:', error)
+    return NextResponse.json(
+      { error: 'Erro ao editar o post' },
+      { status: 500 }
+    )
+  }
+}

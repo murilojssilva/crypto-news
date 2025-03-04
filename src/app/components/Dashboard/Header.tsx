@@ -1,8 +1,6 @@
-import { Icon } from '@phosphor-icons/react'
-
 interface HeaderProps {
   currentDate: string
-  IconComponent: Icon
+  IconComponent: React.ElementType
   name: string
   title: string
 }

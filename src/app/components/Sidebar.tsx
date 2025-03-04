@@ -78,13 +78,15 @@ export default function Sidebar() {
         <Link href='/dashboard/posts'>
           <button
             className={`flex flex-row items-center gap-3 text-sx p-2 rounded-xl hover:bg-gray-300 w-full ${
-              pathname === '/dashboard/posts'
+              pathname?.startsWith('/dashboard/posts')
                 ? `text-gray-800 font-bold ${openMenu && 'bg-gray-100'}`
                 : 'text-gray-600'
             }`}
           >
             <Pen
-              color={pathname === '/dashboard/posts' ? '#1565C0' : 'black'}
+              color={
+                pathname?.startsWith('/dashboard/posts') ? '#1565C0' : 'black'
+              }
             />
             {openMenu && 'Posts'}
           </button>

@@ -14,7 +14,5 @@ export const createPost = async (newPost: {
 }) => {
   const response = await axios.post('/api/posts', newPost)
 
-  console.log('Response: ', response.data)
-
   return response.data
 }
