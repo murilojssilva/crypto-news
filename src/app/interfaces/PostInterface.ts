@@ -24,6 +24,8 @@ export interface NewsItem {
   id: string
   title: string
   content: string
+  written_by: string
+  createdAt: string
 }
 
 export interface NewsPageItem {

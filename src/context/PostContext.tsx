@@ -7,11 +7,15 @@ import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { useSession } from 'next-auth/react'
 import { NewPostFormData } from '@/app/schemas/NewPostSchema'
-import { NewsItemProps, PostProps } from '@/app/interfaces/PostInterface'
+import {
+  NewsItem,
+  NewsItemProps,
+  PostProps,
+} from '@/app/interfaces/PostInterface'
 import { EditPostFormData } from '@/app/schemas/EditPostSchema'
 
 interface PostsContextType {
-  posts: PostProps[]
+  posts: PostProps[] | NewsItem[]
   loading: boolean
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
   error: string | null

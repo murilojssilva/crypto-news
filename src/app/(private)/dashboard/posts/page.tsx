@@ -8,12 +8,13 @@ import { useSession } from 'next-auth/react'
 import { useFormattedDate } from '@/hooks/useFormatted'
 import Sidebar from '@/app/components/Sidebar'
 import HeaderDashboard from '@/app/components/Dashboard/Header'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 export default function Posts() {
   const { posts, loading, handleDeletePost } = usePosts()
   const { data: session } = useSession()
   const currentDate = useFormattedDate()
-
   return (
     <div className='bg-gray-50 pb-4 h-screen flex'>
       <Sidebar />
@@ -43,8 +44,13 @@ export default function Posts() {
             posts.map((item: NewsItem) => (
               <article
                 key={item.id}
-                className='flex p-4 border-b border-blue-800 items-center justify-between'
+                className='flex p-4 border-b border-blue-800 items-center justify-between gap-4'
               >
+                <span className='text-blue-800 text-sx font-bold'>
+                  {format(new Date(item.createdAt), "dd/MM/yyyy 'às' HH:mm", {
+                    locale: ptBR,
+                  })}
+                </span>
                 <Link href={`/news/${item.id}`} className='flex-1'>
                   <h2 className='text-blue-800 text-sx font-bold'>
                     {item.title}
@@ -56,9 +62,28 @@ export default function Posts() {
                   </p>
                 </Link>
                 <div className='flex flex-row gap-2'>
-                  <Link href={`/dashboard/posts/edit/${item.id}`}>
-                    <Pen size={24} color='grey' />
+                  <Link
+                    href={
+                      item.written_by === session?.user.id
+                        ? '#'
+                        : `/dashboard/posts/edit/${item.id}`
+                    }
+                    className={
+                      item.written_by === session?.user.id
+                        ? 'pointer-events-none opacity-50'
+                        : ''
+                    }
+                  >
+                    <Pen
+                      size={24}
+                      color={`${
+                        item.written_by === session?.user.id
+                          ? 'gray'
+                          : '#1565C0'
+                      }`}
+                    />
                   </Link>
+
                   <button onClick={() => handleDeletePost(item.id)}>
                     <Trash size={24} color='red' />
                   </button>

@@ -88,7 +88,7 @@ export default function EditPost() {
   }
 
   return (
-    <div className='bg-gray-50 p-4 h-screen flex'>
+    <div className='bg-gray-50 pb-4 h-screen flex'>
       <Sidebar />
 
       <div className='flex-1'>
