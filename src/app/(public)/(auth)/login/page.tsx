@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import Input from '@/app/components/Form/Input'
 import EyeButton from '@/app/components/Form/EyeButton'
+import { Button } from '@/app/components/Dashboard/Button'
+import { LogIn } from 'lucide-react'
 
 const loginFormSchema = zod.object({
   email: zod.string().email('Digite um e-mail válido'),
@@ -143,12 +145,11 @@ export default function LoginPage() {
           >
             Criar conta
           </Link>
-          <button
+          <Button
+            IconComponent={LogIn}
             type='submit'
-            className='bg-blue-800 font-bold text-md text-white px-8 py-4 rounded-xl hover:bg-blue-600'
-          >
-            {loading ? 'Carregando...' : 'Entrar'}
-          </button>
+            text={loading ? 'Carregando...' : 'Entrar'}
+          />
         </div>
       </form>
     </main>

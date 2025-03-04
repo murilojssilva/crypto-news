@@ -6,6 +6,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
+import { Button } from '@/app/components/Dashboard/Button'
+import { usePosts } from '@/context/PostContext'
+import { Envelope } from '@phosphor-icons/react'
 
 const loginFormValidationsSchema = zod.object({
   email: zod.string().email('Digite um endereço de e-mail válido'),
@@ -21,6 +24,7 @@ export default function ForgotPassword() {
   const { register, handleSubmit, formState, reset } = loginForm
   const router = useRouter()
   const { errors } = formState
+  const { loading } = usePosts()
 
   function handleForgotPasswordSubmit(data: NewSignUpFormData) {
     try {
@@ -64,9 +68,12 @@ export default function ForgotPassword() {
             />
           </div>
 
-          <button className='bg-blue-800 font-bold text-md px-8 py-4 rounded-xl hover:bg-blue-600'>
-            Enviar e-mail
-          </button>
+          <Button
+            type='submit'
+            IconComponent={Envelope}
+            disabled={loading}
+            text='Enviar e-mail'
+          />
         </form>
       </section>
     </main>

@@ -12,6 +12,8 @@ import { toast } from 'react-toastify'
 import { api } from '@/lib/axios'
 import { AxiosError } from 'axios'
 import { signIn } from 'next-auth/react'
+import { Button } from '@/app/components/Dashboard/Button'
+import { SignIn } from '@phosphor-icons/react'
 
 const loginFormValidationsSchema = zod
   .object({
@@ -210,12 +212,11 @@ export default function SignUp() {
             >
               Login
             </Link>
-            <button
+            <Button
+              IconComponent={SignIn}
+              text={loading ? 'Carregando...' : 'Criar conta'}
               type='submit'
-              className='bg-blue-800 font-bold text-md px-8 py-4 rounded-xl hover:bg-blue-600'
-            >
-              {loading ? 'Carregando...' : 'Criar conta'}
-            </button>
+            />
           </div>
         </form>
       </div>

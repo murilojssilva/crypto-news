@@ -14,14 +14,19 @@ import { useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { getPostById } from '@/lib/posts/[id]'
-import RootLayout from '../../../layout'
-import { Pen } from 'lucide-react'
+
+import { Home, Save } from 'lucide-react'
+import Sidebar from '@/app/components/Sidebar'
+import HeaderDashboard from '@/app/components/Dashboard/Header'
+import { useSession } from 'next-auth/react'
+import { useFormattedDate } from '@/hooks/useFormatted'
+import { Button } from '@/app/components/Dashboard/Button'
 
 export default function EditPost() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty, isValid },
+    formState: { errors },
     setValue,
   } = useForm<EditPostFormData>({
     resolver: zodResolver(editPostFormValidationsSchema),
@@ -30,6 +35,8 @@ export default function EditPost() {
   const { id } = useParams()
   const router = useRouter()
   const { loading, setLoading, fetchPosts } = usePosts()
+  const { data: session } = useSession()
+  const currentDate = useFormattedDate()
 
   useEffect(() => {
     if (id) {
@@ -81,56 +88,68 @@ export default function EditPost() {
   }
 
   return (
-    <RootLayout title='Perfil' IconComponent={Pen}>
-      <section className='p-6 grid gap-4'>
-        <h2 className='text-4xl text-bold text-blue-800'>Editar post</h2>
-        <form
-          onSubmit={handleSubmit(handleEditPostSubmit)}
-          className='flex flex-col gap-8'
-        >
-          <Input
-            {...register('title')}
-            errorsField={errors.title?.message ?? ''}
-            type='text'
-            placeholder='Título'
-            className='border p-2 rounded'
-          />
-          {errors.title && (
-            <span className='text-red-500'>{errors.title?.message}</span>
-          )}
-          <Input
-            {...register('subtitle')}
-            errorsField={errors.subtitle?.message ?? ''}
-            type='text'
-            placeholder='Subtítulo'
-            className='border p-2 rounded'
-          />
-          {errors.subtitle && (
-            <span className='text-red-500'>{errors.subtitle?.message}</span>
-          )}
-          <Textarea
-            {...register('content')}
-            placeholder='Conteúdo'
-            className='border p-2 rounded h-40'
-          />
-          {errors.content && (
-            <span className='text-red-500'>{errors.content.message}</span>
-          )}
+    <div className='bg-gray-50 pb-4 h-screen flex'>
+      <Sidebar />
 
-          <label className='text-sm text-bold text-blue-800 flex items-center gap-2 font-bold'>
-            <input type='checkbox' {...register('published')} />
-            Publicar post
-          </label>
+      <div className='flex-1'>
+        <HeaderDashboard
+          name={session?.user?.name as string}
+          IconComponent={Home}
+          currentDate={currentDate}
+          title='Editar Post'
+        />
 
-          <button
-            type='submit'
-            className='bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600'
-            disabled={loading || !isDirty || !isValid}
+        <section className='p-6 grid gap-4'>
+          <h2 className='text-4xl text-bold text-blue-800'>Editar post</h2>
+          <form
+            onSubmit={handleSubmit(handleEditPostSubmit)}
+            className='flex flex-col gap-8'
           >
-            {loading ? 'Publicando...' : 'Salvar alterações'}
-          </button>
-        </form>
-      </section>
-    </RootLayout>
+            <Input
+              {...register('title')}
+              errorsField={errors.title?.message ?? ''}
+              type='text'
+              placeholder='Título'
+              className='border p-2 rounded'
+            />
+            {errors.title && (
+              <span className='text-red-500'>{errors.title?.message}</span>
+            )}
+            <Input
+              {...register('subtitle')}
+              errorsField={errors.subtitle?.message ?? ''}
+              type='text'
+              placeholder='Subtítulo'
+              className='border p-2 rounded'
+            />
+            {errors.subtitle && (
+              <span className='text-red-500'>{errors.subtitle?.message}</span>
+            )}
+            <Textarea
+              {...register('content')}
+              /* @ts-expect-error: Ignoring type error for 'errorsField' property that is not part of TextareaProps */
+              errorsField={errors.subtitle?.message ?? ''}
+              placeholder='Conteúdo'
+              className='border p-2 rounded h-40'
+            />
+            {errors.content && (
+              <span className='text-red-500'>{errors.content.message}</span>
+            )}
+
+            <label className='text-sm text-bold text-blue-800 flex items-center gap-2 font-bold'>
+              <input type='checkbox' {...register('published')} />
+              Publicar post
+            </label>
+
+            <Button
+              type='submit'
+              disabled={loading}
+              IconComponent={Save}
+              text={loading ? 'Publicando...' : 'Salvar alterações'}
+            />
+          </form>
+        </section>
+      </div>
+    </div>
   )
 }
