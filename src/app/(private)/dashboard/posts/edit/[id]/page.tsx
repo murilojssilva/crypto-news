@@ -21,6 +21,7 @@ import {
   EditPostFormData,
   editPostFormValidationsSchema,
 } from '@/app/schemas/EditPostSchema'
+import { Title } from '@/app/components/Dashboard/Title'
 
 export default function EditPost() {
   const {
@@ -49,6 +50,8 @@ export default function EditPost() {
           setValue('subtitle', data.subtitle)
           setValue('content', data.content)
           setValue('published', data.published)
+
+          localStorage.setItem(`post-${id}`, JSON.stringify(data))
         } catch (error) {
           console.log(error)
           toast.error(
@@ -60,7 +63,15 @@ export default function EditPost() {
       }
       fetchPost()
     }
-  }, [id, setValue])
+  }, [])
+
+  useEffect(() => {
+    const savedPost = localStorage.getItem(`post-${id}`)
+    if (savedPost) {
+      const parsedData = JSON.parse(savedPost)
+      setValue('content', parsedData.content)
+    }
+  }, [])
 
   const handleEditPostSubmit = async (data: EditPostFormData) => {
     try {
@@ -100,54 +111,57 @@ export default function EditPost() {
         />
 
         <section className='p-6 grid gap-4'>
-          <h2 className='text-4xl text-bold text-blue-800'>Editar post</h2>
-          <form
-            onSubmit={handleSubmit(handleEditPostSubmit)}
-            className='flex flex-col gap-8'
-          >
-            <Input
-              {...register('title')}
-              errorsField={errors.title?.message ?? ''}
-              type='text'
-              placeholder='Título'
-              className='border p-2 rounded'
-            />
-            {errors.title && (
-              <span className='text-red-500'>{errors.title?.message}</span>
-            )}
-            <Input
-              {...register('subtitle')}
-              errorsField={errors.subtitle?.message ?? ''}
-              type='text'
-              placeholder='Subtítulo'
-              className='border p-2 rounded'
-            />
-            {errors.subtitle && (
-              <span className='text-red-500'>{errors.subtitle?.message}</span>
-            )}
-            <Textarea
-              {...register('content')}
-              /* @ts-expect-error: Ignoring type error for 'errorsField' property that is not part of TextareaProps */
-              errorsField={errors.subtitle?.message ?? ''}
-              placeholder='Conteúdo'
-              className='border p-2 rounded h-40'
-            />
-            {errors.content && (
-              <span className='text-red-500'>{errors.content.message}</span>
-            )}
+          <Title title='Editar post' />
+          <div className='flex flex-col gap-8 w-full'>
+            <form
+              onSubmit={handleSubmit(handleEditPostSubmit)}
+              className='flex flex-col gap-8'
+            >
+              <Input
+                {...register('title')}
+                errorsField={errors.title?.message ?? ''}
+                type='text'
+                placeholder='Título'
+                className='border p-2 rounded'
+              />
+              {errors.title && (
+                <span className='text-red-500'>{errors.title?.message}</span>
+              )}
+              <Input
+                {...register('subtitle')}
+                errorsField={errors.subtitle?.message ?? ''}
+                type='text'
+                placeholder='Subtítulo'
+                className='border p-2 rounded'
+              />
+              {errors.subtitle && (
+                <span className='text-red-500'>{errors.subtitle?.message}</span>
+              )}
+              <Textarea
+                {...register('content')}
+                typeof='text'
+                /* @ts-expect-error: Ignoring type error for 'errorsField' property that is not part of TextareaProps */
+                errorsField={errors.subtitle?.message ?? ''}
+                placeholder='Conteúdo'
+                className='border p-2 rounded h-40'
+              />
+              {errors.content && (
+                <span className='text-red-500'>{errors.content.message}</span>
+              )}
 
-            <label className='text-sm text-bold text-blue-800 flex items-center gap-2 font-bold'>
-              <input type='checkbox' {...register('published')} />
-              Publicar post
-            </label>
+              <label className='text-bold text-blue-800 flex items-center gap-2 font-bold text-md'>
+                <input type='checkbox' {...register('published')} />
+                Publicar post
+              </label>
 
-            <Button
-              type='submit'
-              disabled={loading}
-              IconComponent={Save}
-              text={loading ? 'Publicando...' : 'Salvar alterações'}
-            />
-          </form>
+              <Button
+                type='submit'
+                disabled={loading}
+                IconComponent={Save}
+                text={loading ? 'Publicando...' : 'Salvar alterações'}
+              />
+            </form>
+          </div>
         </section>
       </div>
     </div>

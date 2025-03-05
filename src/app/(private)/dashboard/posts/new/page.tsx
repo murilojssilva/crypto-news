@@ -15,6 +15,7 @@ import HeaderDashboard from '@/app/components/Dashboard/Header'
 import { useSession } from 'next-auth/react'
 import { useFormattedDate } from '@/hooks/useFormatted'
 import { Button } from '@/app/components/Dashboard/Button'
+import { Title } from '@/app/components/Dashboard/Title'
 
 export default function NewPost() {
   const {
@@ -44,7 +45,7 @@ export default function NewPost() {
         />
 
         <section className='p-6 grid gap-4'>
-          <h2 className='text-4xl text-bold text-blue-800'>Novo post</h2>
+          <Title title='Novo post' />
           <form
             onSubmit={handleSubmit(handleNewPostSubmit)}
             className='flex flex-col gap-8'
@@ -80,7 +81,7 @@ export default function NewPost() {
               <span className='text-red-500'>{errors.content?.message}</span>
             )}
 
-            <label className='text-sm text-bold text-blue-800 flex items-center gap-2 font-bold'>
+            <label className='text-bold text-blue-800 flex items-center gap-2 font-bold text-md'>
               <input type='checkbox' {...register('published')} />
               Publicar post
             </label>

@@ -19,6 +19,7 @@ import {
   EditProfileFormData,
   editProfileFormValidationsSchema,
 } from '@/app/schemas/EditProfileSchema'
+import { Title } from '@/app/components/Dashboard/Title'
 
 export default function Profile() {
   const { data: session } = useSession()
@@ -111,116 +112,122 @@ export default function Profile() {
           currentDate={currentDate}
           title='Perfil'
         />
-        <section className='p-6 grid gap-4'>
-          <h2 className='text-4xl text-bold text-blue-800'>Perfil</h2>
+        <section className='p-6 min-h-screen flex flex-col gap-4'>
+          <Title title='Perfil' />
+
           <div className='flex flex-col gap-8 w-full'>
             <form
               onSubmit={handleSubmit(handleEditProfile)}
-              className='flex flex-col gap-2'
+              className='flex flex-col gap-8'
             >
-              <div className='flex flex-col gap-2'>
-                <label className='text-blue-800' htmlFor='firstName'>
-                  Nome
-                </label>
-                <Input
-                  {...register('firstName')}
-                  errorsField={errors.firstName?.message ?? ''}
-                  type='text'
-                  id='firstName'
-                  placeholder='Digite seu nome'
-                  name='firstName'
-                />
-                {errors.firstName && (
-                  <span className='text-red-500'>
-                    {errors.firstName?.message}
-                  </span>
-                )}
-              </div>
-              <div className='flex flex-col gap-2'>
-                <label className='text-blue-800' htmlFor='lastName'>
-                  Sobrenome
-                </label>
-                <Input
-                  {...register('lastName')}
-                  errorsField={errors.lastName?.message ?? ''}
-                  type='text'
-                  id='lastName'
-                  name='lastName'
-                  placeholder='Digite seu sobrenome'
-                />
-                {errors.lastName && (
-                  <span className='text-red-500'>
-                    {errors.lastName?.message}
-                  </span>
-                )}
-              </div>
-              <div className='flex flex-col gap-2'>
-                <label className='text-blue-800' htmlFor='email'>
-                  E-mail
-                </label>
-                <Input
-                  type='email'
-                  disabled
-                  errorsField={errors.email?.message ?? ''}
-                  {...register('email')}
-                  name='email'
-                  id='email'
-                  placeholder='Digite seu e-mail'
-                />
-                {errors.email && (
-                  <span className='text-red-500'>{errors.email?.message}</span>
-                )}
-              </div>
-              <div className='flex flex-col gap-2 relative'>
-                <label
-                  className='text-blue-800 flex flex-row justify-between'
-                  htmlFor='password'
-                >
-                  Nova senha
-                </label>
-                <Input
-                  type={passwordType}
-                  errorsField={errors.password?.message ?? ''}
-                  {...register('password')}
-                  name='password'
-                  id='password'
-                  placeholder='Digite sua senha'
-                />
-                {errors.password && (
-                  <span className='text-red-500'>
-                    {errors.password?.message}
-                  </span>
-                )}
-                <EyeButton
-                  passwordType={passwordType}
-                  setPasswordType={setPasswordType}
-                />
-              </div>
-              <div className='flex flex-col gap-2 relative'>
-                <label
-                  className='text-blue-800 flex flex-row justify-between'
-                  htmlFor='password'
-                >
-                  Confirme a nova senha
-                </label>
-                <Input
-                  type={passwordConfirmType}
-                  {...register('passwordConfirm')}
-                  errorsField={errors.passwordConfirm?.message ?? ''}
-                  id='passwordConfirm'
-                  name='passwordConfirm'
-                  placeholder='Digite sua senha'
-                />
-                {errors.passwordConfirm && (
-                  <span className='text-red-500'>
-                    {errors.passwordConfirm?.message}
-                  </span>
-                )}
+              <div className='flex flex-col gap-4'>
+                <div className='flex flex-col gap-2'>
+                  <label className='text-blue-800' htmlFor='firstName'>
+                    Nome
+                  </label>
+                  <Input
+                    {...register('firstName')}
+                    errorsField={errors.firstName?.message ?? ''}
+                    type='text'
+                    id='firstName'
+                    placeholder='Digite seu nome'
+                    name='firstName'
+                  />
+                  {errors.firstName && (
+                    <span className='text-red-500'>
+                      {errors.firstName?.message}
+                    </span>
+                  )}
+                </div>
+                <div className='flex flex-col gap-2'>
+                  <label className='text-blue-800' htmlFor='lastName'>
+                    Sobrenome
+                  </label>
+                  <Input
+                    {...register('lastName')}
+                    errorsField={errors.lastName?.message ?? ''}
+                    type='text'
+                    id='lastName'
+                    name='lastName'
+                    placeholder='Digite seu sobrenome'
+                  />
+                  {errors.lastName && (
+                    <span className='text-red-500'>
+                      {errors.lastName?.message}
+                    </span>
+                  )}
+                </div>
+                <div className='flex flex-col gap-2'>
+                  <label className='text-blue-800' htmlFor='email'>
+                    E-mail
+                  </label>
+                  <Input
+                    type='email'
+                    disabled
+                    readOnly
+                    errorsField={errors.email?.message ?? ''}
+                    {...register('email')}
+                    name='email'
+                    id='email'
+                    placeholder='Digite seu e-mail'
+                  />
+                  {errors.email && (
+                    <span className='text-red-500'>
+                      {errors.email?.message}
+                    </span>
+                  )}
+                </div>
+                <div className='flex flex-col gap-2 relative'>
+                  <label
+                    className='text-blue-800 flex flex-row justify-between'
+                    htmlFor='password'
+                  >
+                    Nova senha
+                  </label>
+                  <Input
+                    type={passwordType}
+                    errorsField={errors.password?.message ?? ''}
+                    {...register('password')}
+                    name='password'
+                    id='password'
+                    placeholder='Digite sua senha'
+                  />
+                  {errors.password && (
+                    <span className='text-red-500'>
+                      {errors.password?.message}
+                    </span>
+                  )}
+                  <EyeButton
+                    passwordType={passwordType}
+                    setPasswordType={setPasswordType}
+                  />
+                </div>
+                <div className='flex flex-col gap-2 relative'>
+                  <label
+                    className='text-blue-800 flex flex-row justify-between'
+                    htmlFor='password'
+                  >
+                    Confirme a nova senha
+                  </label>
+                  <Input
+                    type={passwordConfirmType}
+                    {...register('passwordConfirm')}
+                    errorsField={errors.passwordConfirm?.message ?? ''}
+                    id='passwordConfirm'
+                    name='passwordConfirm'
+                    placeholder='Digite sua senha'
+                  />
+                  {errors.passwordConfirm && (
+                    <span className='text-red-500'>
+                      {errors.passwordConfirm?.message}
+                    </span>
+                  )}
 
-                <EyeButton
-                  passwordType={passwordConfirmType}
-                  setPasswordType={setPasswordConfirmType}
-                />
+                  <EyeButton
+                    passwordType={passwordConfirmType}
+                    setPasswordType={setPasswordConfirmType}
+                  />
+                </div>
               </div>
 
               <Button

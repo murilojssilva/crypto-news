@@ -1,13 +1,11 @@
 import clsx from 'clsx'
-import { TextareaHTMLAttributes, useState } from 'react'
+import { TextareaHTMLAttributes } from 'react'
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   errorMessage?: string
 }
 
 export default function Textarea({ errorMessage, ...props }: TextareaProps) {
-  const [text, setText] = useState('')
-
   const applyFormat = (format: string) => {
     const textarea = document.getElementById(
       'custom-textarea'
@@ -17,7 +15,7 @@ export default function Textarea({ errorMessage, ...props }: TextareaProps) {
 
     const start = textarea.selectionStart
     const end = textarea.selectionEnd
-    const selectedText = text.substring(start, end)
+    const selectedText = textarea.value.substring(start, end)
 
     if (!selectedText) return
 
@@ -31,15 +29,19 @@ export default function Textarea({ errorMessage, ...props }: TextareaProps) {
       formattedText = `__${selectedText}__`
     }
 
-    const newText =
-      text.substring(0, start) + formattedText + text.substring(end)
-    setText(newText)
+    textarea.value =
+      textarea.value.substring(0, start) +
+      formattedText +
+      textarea.value.substring(end)
 
     setTimeout(() => {
       textarea.selectionStart = start
       textarea.selectionEnd = start + formattedText.length
       textarea.focus()
     }, 0)
+
+    // Disparar o evento de mudança para atualizar o react-hook-form
+    textarea.dispatchEvent(new Event('input', { bubbles: true }))
   }
 
   return (
@@ -68,7 +70,15 @@ export default function Textarea({ errorMessage, ...props }: TextareaProps) {
         </button>
         <button
           type='button'
-          onClick={() => setText('')}
+          onClick={() => {
+            const textarea = document.getElementById(
+              'custom-textarea'
+            ) as HTMLTextAreaElement
+            if (textarea) {
+              textarea.value = ''
+              textarea.dispatchEvent(new Event('input', { bubbles: true }))
+            }
+          }}
           className='px-3 py-1 text-white bg-red-600 rounded text-sm'
         >
           Limpar
@@ -78,8 +88,6 @@ export default function Textarea({ errorMessage, ...props }: TextareaProps) {
       <textarea
         id='custom-textarea'
         {...props}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
         className={clsx(
           'border border-gray-400 p-2 rounded w-full text-gray-800 placeholder:text-gray-400 outline-none focus:border-blue-800 resize-none',
           {

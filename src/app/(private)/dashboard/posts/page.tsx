@@ -1,5 +1,6 @@
 'use client'
 
+import ReactMarkdown from 'react-markdown'
 import { Pen, Plus, Trash } from 'lucide-react'
 import Link from 'next/link'
 import { usePosts } from '@/context/PostContext'
@@ -10,6 +11,7 @@ import Sidebar from '@/app/components/Sidebar'
 import HeaderDashboard from '@/app/components/Dashboard/Header'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { Title } from '@/app/components/Dashboard/Title'
 
 export default function Posts() {
   const { posts, loading, handleDeletePost } = usePosts()
@@ -27,13 +29,14 @@ export default function Posts() {
           title='Posts'
         />
 
-        <section className='px-4 mb-4 flex-1 overflow-auto max-h-[100vh]'>
-          <div className='flex flex-row justify-center p-8'>
+        <section className='p-6 grid gap-4'>
+          <div className='flex flex-row justify-between'>
+            <Title title='Minhas postagens' />
             <Link
-              className='bg-blue-800 font-bold text-md text-white px-8 py-4 rounded-xl hover:bg-blue-600 flex items-center gap-2'
               href='/dashboard/posts/new'
+              className='text-gray-100 px-6 text-sx flex flex-row items-center gap-2 bg-blue-800 hover:bg-blue-600 rounded-xl'
             >
-              <Plus /> Novo Post
+              <Plus size={20} /> Novo Post
             </Link>
           </div>
           {loading ? (
@@ -41,55 +44,51 @@ export default function Posts() {
               <p className='text-blue-800'>Sem notícias disponíveis...</p>
             </div>
           ) : (
-            posts.map((item: NewsItem) => (
-              <article
-                key={item.id}
-                className='flex p-4 border-b border-blue-800 items-center justify-between gap-4'
-              >
-                <span className='text-blue-800 text-sx font-bold'>
-                  {format(new Date(item.createdAt), "dd/MM/yyyy 'às' HH:mm", {
-                    locale: ptBR,
-                  })}
-                </span>
-                <Link href={`/news/${item.id}`} className='flex-1'>
-                  <h2 className='text-blue-800 text-sx font-bold'>
-                    {item.title}
-                  </h2>
-                  <p className='text-gray-800 font-medium text-sm'>
-                    {item.content.length > 200
-                      ? item.content.slice(0, 200).trimEnd() + '…'
-                      : item.content}
-                  </p>
-                </Link>
-                <div className='flex flex-row gap-2'>
+            posts
+              .filter((item: NewsItem) => item.writtenBy === session?.user.id)
+              .map((item: NewsItem) => (
+                <article
+                  key={item.id}
+                  className='flex p-4 bg-gray-200 items-start justify-between gap-4 rounded-xl'
+                >
                   <Link
-                    href={
-                      item.written_by === session?.user.id
-                        ? '#'
-                        : `/dashboard/posts/edit/${item.id}`
-                    }
-                    className={
-                      item.written_by === session?.user.id
-                        ? 'pointer-events-none opacity-50'
-                        : ''
-                    }
+                    href={`/news/${item.id}`}
+                    className='flex-1 flex flex-col'
                   >
-                    <Pen
-                      size={24}
-                      color={`${
-                        item.written_by === session?.user.id
-                          ? 'gray'
-                          : '#1565C0'
-                      }`}
-                    />
+                    <h2 className='text-blue-800 text-2xl font-bold'>
+                      {item.title}
+                    </h2>
+                    <span className='text-gray-500 text-ms font-normal'>
+                      {item.subtitle}
+                    </span>
+                    <span className='text-blue-800 text-sx font-bold'>
+                      {format(
+                        new Date(item.createdAt),
+                        "dd/MM/yyyy 'às' HH:mm",
+                        {
+                          locale: ptBR,
+                        }
+                      )}
+                    </span>
+                    <p className='text-gray-800 font-medium text-sm'>
+                      <ReactMarkdown>
+                        {item.content.length > 200
+                          ? item.content.slice(0, 200).trimEnd() + '…'
+                          : item.content}
+                      </ReactMarkdown>
+                    </p>
                   </Link>
+                  <div className='flex flex-row gap-2 '>
+                    <Link href={`/dashboard/posts/edit/${item.id}`}>
+                      <Pen size={24} color='#1565C0' />
+                    </Link>
 
-                  <button onClick={() => handleDeletePost(item.id)}>
-                    <Trash size={24} color='red' />
-                  </button>
-                </div>
-              </article>
-            ))
+                    <button onClick={() => handleDeletePost(item.id)}>
+                      <Trash size={24} color='red' />
+                    </button>
+                  </div>
+                </article>
+              ))
           )}
         </section>
       </div>

@@ -17,9 +17,9 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { title, subtitle, content, published, written_by } = await req.json()
+    const { title, subtitle, content, published, writtenBy } = await req.json()
 
-    if (!title || !content || !written_by) {
+    if (!title || !content || !writtenBy) {
       return NextResponse.json(
         { error: 'Campos obrigatórios ausentes' },
         { status: 400 }
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
         subtitle,
         content,
         published,
-        writtenBy: written_by,
+        writtenBy: writtenBy,
       },
     })
 

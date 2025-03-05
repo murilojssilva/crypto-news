@@ -1,10 +1,15 @@
 'use client'
 
+import ReactMarkdown from 'react-markdown'
+
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { getUserById } from '@/lib/users/[id]'
 import { usePosts } from '@/context/PostContext'
 import { NewsItemProps } from '@/app/interfaces/PostInterface'
+import { Title } from '@/app/components/Dashboard/Title'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 
 interface UserItem {
   id: string
@@ -61,19 +66,26 @@ export default function NewsPage() {
           <article className='p-8'>
             <div className='flex flex-col gap-8'>
               <div>
-                <h1 className='text-blue-800 font-bold text-2xl'>
-                  {post.title}
-                </h1>
-                <h3 className='text-gray-500 font-light text-sm'>
-                  {Object.keys(user).length > 0 &&
-                    `${post.subtitle}, por ${user.firstName} ${user.lastName}`}
+                <Title title={post.title} />
+                <h3 className='text-gray-800 font-light text-md'>
+                  {post.subtitle}
                 </h3>
+                <span className='text-gray-500 font-light text-sm'>
+                  {Object.keys(user).length > 0 &&
+                    `${format(
+                      new Date(post.createdAt),
+                      "dd/MM/yyyy 'às' HH:mm",
+                      {
+                        locale: ptBR,
+                      }
+                    )}, por ${user.firstName} ${user.lastName}`}
+                </span>
               </div>
               <p
                 className='text-gray-800 font-medium text-md text-justify'
                 style={{ whiteSpace: 'pre-wrap', lineHeight: 1.75 }}
               >
-                {post.content}
+                <ReactMarkdown>{post.content}</ReactMarkdown>
               </p>
             </div>
           </article>
