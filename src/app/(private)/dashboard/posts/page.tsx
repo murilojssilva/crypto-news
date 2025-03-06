@@ -17,6 +17,8 @@ export default function Posts() {
   const { posts, loading, handleDeletePost } = usePosts()
   const { data: session } = useSession()
   const currentDate = useFormattedDate()
+
+  const skeletons = Array(3).fill('')
   return (
     <div className='bg-gray-50 pb-4 h-screen flex'>
       <Sidebar />
@@ -40,8 +42,13 @@ export default function Posts() {
             </Link>
           </div>
           {loading ? (
-            <div className='flex items-center justify-center h-full'>
-              <p className='text-blue-800'>Sem notícias disponíveis...</p>
+            <div className='flex items-center justify-center h-full flex-col'>
+              {skeletons.map((_, index) => (
+                <div
+                  key={index}
+                  className='flex p-16 w-full bg-gray-200 items-start justify-between my-2 rounded-xl '
+                />
+              ))}
             </div>
           ) : (
             posts

@@ -16,6 +16,7 @@ import { useSession } from 'next-auth/react'
 import { useFormattedDate } from '@/hooks/useFormatted'
 import { Button } from '@/app/components/Dashboard/Button'
 import { Title } from '@/app/components/Dashboard/Title'
+import { Loading } from '@/app/components/Form/Loading'
 
 export default function NewPost() {
   const {
@@ -54,6 +55,8 @@ export default function NewPost() {
               {...register('title')}
               errorsField={errors.title?.message ?? ''}
               type='text'
+              disabled={loading}
+              readOnly={loading}
               placeholder='Título'
               className='border p-2 rounded'
             />
@@ -64,6 +67,8 @@ export default function NewPost() {
               {...register('subtitle')}
               errorsField={errors.subtitle?.message ?? ''}
               type='text'
+              disabled={loading}
+              readOnly={loading}
               placeholder='Subtítulo'
               className='border p-2 rounded'
             />
@@ -75,6 +80,8 @@ export default function NewPost() {
               /* @ts-expect-error: Ignoring type error for 'errorsField' property that is not part of TextareaProps */
               errorsField={errors.content?.message ?? ''}
               placeholder='Conteúdo'
+              disabled={loading}
+              readOnly={loading}
               className='border p-2 rounded h-40'
             />
             {errors.content && (
@@ -89,8 +96,8 @@ export default function NewPost() {
             <Button
               type='submit'
               disabled={loading}
-              IconComponent={Plus}
-              text={loading ? 'Publicando...' : 'Criar post'}
+              IconComponent={loading ? Loading : Plus}
+              text={loading ? '' : 'Criar post'}
             />
           </form>
         </section>

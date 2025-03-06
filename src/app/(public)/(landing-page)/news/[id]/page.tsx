@@ -57,7 +57,7 @@ export default function NewsPage() {
 
   return (
     <main className='flex flex-col flex-1'>
-      {!loading ? (
+      {loading ? (
         <section className='p-4 items-center justify-center gap-4'>
           <Skeleton
             baseColor='#e0e0e0'

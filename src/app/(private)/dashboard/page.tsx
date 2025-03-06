@@ -30,7 +30,7 @@ export default function Dashboard() {
         />
         <section className='p-6 grid gap-4'>
           <Title title='Dashboard' />
-          {!loading ? (
+          {loading ? (
             <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
               {skeletons.map((_, index) => (
                 <div

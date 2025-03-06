@@ -22,6 +22,7 @@ import {
   editPostFormValidationsSchema,
 } from '@/app/schemas/EditPostSchema'
 import { Title } from '@/app/components/Dashboard/Title'
+import { Loading } from '@/app/components/Form/Loading'
 
 export default function EditPost() {
   const {
@@ -50,8 +51,6 @@ export default function EditPost() {
           setValue('subtitle', data.subtitle)
           setValue('content', data.content)
           setValue('published', data.published)
-
-          localStorage.setItem(`post-${id}`, JSON.stringify(data))
         } catch (error) {
           console.log(error)
           toast.error(
@@ -121,6 +120,8 @@ export default function EditPost() {
                 {...register('title')}
                 errorsField={errors.title?.message ?? ''}
                 type='text'
+                disabled={loading}
+                readOnly={loading}
                 placeholder='Título'
                 className='border p-2 rounded'
               />
@@ -129,6 +130,8 @@ export default function EditPost() {
               )}
               <Input
                 {...register('subtitle')}
+                disabled={loading}
+                readOnly={loading}
                 errorsField={errors.subtitle?.message ?? ''}
                 type='text'
                 placeholder='Subtítulo'
@@ -140,6 +143,8 @@ export default function EditPost() {
               <Textarea
                 {...register('content')}
                 typeof='text'
+                disabled={loading}
+                readOnly={loading}
                 /* @ts-expect-error: Ignoring type error for 'errorsField' property that is not part of TextareaProps */
                 errorsField={errors.subtitle?.message ?? ''}
                 placeholder='Conteúdo'
@@ -157,8 +162,8 @@ export default function EditPost() {
               <Button
                 type='submit'
                 disabled={loading}
-                IconComponent={Save}
-                text={loading ? 'Publicando...' : 'Salvar alterações'}
+                IconComponent={loading ? Loading : Save}
+                text={loading ? '' : 'Salvar alterações'}
               />
             </form>
           </div>

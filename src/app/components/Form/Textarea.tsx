@@ -5,7 +5,11 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   errorMessage?: string
 }
 
-export default function Textarea({ errorMessage, ...props }: TextareaProps) {
+export default function Textarea({
+  errorMessage,
+  disabled,
+  ...props
+}: TextareaProps) {
   const applyFormat = (format: string) => {
     const textarea = document.getElementById(
       'custom-textarea'
@@ -92,6 +96,7 @@ export default function Textarea({ errorMessage, ...props }: TextareaProps) {
           'border border-gray-400 p-2 rounded w-full text-gray-800 placeholder:text-gray-400 outline-none focus:border-blue-800 resize-none',
           {
             'border-red-500 focus:border-red-500': !!errorMessage,
+            'bg-gray-300 cursor-not-allowed ': !!disabled,
           }
         )}
         rows={5}
