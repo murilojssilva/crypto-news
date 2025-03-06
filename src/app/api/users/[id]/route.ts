@@ -3,6 +3,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
+import { Prisma } from '@prisma/client'
 
 export async function GET(req: Request, { params }: { params: any }) {
   try {
@@ -22,6 +23,21 @@ export async function GET(req: Request, { params }: { params: any }) {
     return NextResponse.json(user)
   } catch (error) {
     console.error('Erro ao buscar o usuário:', error)
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      return NextResponse.json(
+        { error: 'Erro de requisição do Prisma: ' + error.message },
+        { status: 500 }
+      )
+    }
+
+    if (error instanceof Prisma.PrismaClientInitializationError) {
+      return NextResponse.json(
+        { error: 'Erro de requisição do Prisma: ' + error.message },
+        { status: 500 }
+      )
+    }
+
     return NextResponse.json(
       { error: 'Erro ao buscar o usuário' },
       { status: 500 }
