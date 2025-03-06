@@ -3,10 +3,12 @@ import { TextareaHTMLAttributes } from 'react'
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   errorMessage?: string
+  errorsField: string
 }
 
 export default function Textarea({
   errorMessage,
+  errorsField,
   disabled,
   ...props
 }: TextareaProps) {
@@ -103,7 +105,13 @@ export default function Textarea({
       />
 
       {errorMessage && (
-        <p className='text-red-500 text-sm mt-1'>{errorMessage}</p>
+        <p
+          className={clsx('text-red-500 text-sm mt-1', {
+            'border-red-500 focus:border-red-500': !!errorsField,
+          })}
+        >
+          {errorMessage}
+        </p>
       )}
     </div>
   )

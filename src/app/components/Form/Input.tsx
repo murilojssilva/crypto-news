@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { InputHTMLAttributes } from 'react'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  errorsField: string // mantém, está correto
+  errorsField: string
 }
 
 export default function Input({ errorsField, disabled, ...props }: InputProps) {

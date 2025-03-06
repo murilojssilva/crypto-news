@@ -145,7 +145,6 @@ export default function EditPost() {
                 typeof='text'
                 disabled={loading}
                 readOnly={loading}
-                /* @ts-expect-error: Ignoring type error for 'errorsField' property that is not part of TextareaProps */
                 errorsField={errors.subtitle?.message ?? ''}
                 placeholder='Conteúdo'
                 className='border p-2 rounded h-40'
