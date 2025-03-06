@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(req: Request, { params }: { params: any }) {
   try {
-    const { id } = params
+    const { id } = await params
 
     const post = await prisma.post.findUnique({
       where: { id },

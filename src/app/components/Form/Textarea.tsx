@@ -33,6 +33,10 @@ export default function Textarea({
       formattedText = `*${selectedText}*`
     } else if (format === 'underline') {
       formattedText = `__${selectedText}__`
+    } else if (format === 'increase-size') {
+      formattedText = `# ${selectedText}`
+    } else if (format === 'list') {
+      formattedText = `* ${selectedText}`
     }
 
     textarea.value =
@@ -73,6 +77,20 @@ export default function Textarea({
           className='px-3 py-1 text-white bg-gray-700 rounded text-sm'
         >
           <u>U</u>
+        </button>
+        <button
+          type='button'
+          onClick={() => applyFormat('increase-size')}
+          className='px-3 py-1 text-white bg-gray-700 rounded text-sm'
+        >
+          <u>A</u>
+        </button>
+        <button
+          type='button'
+          onClick={() => applyFormat('list')}
+          className='px-3 py-1 text-white bg-gray-700 rounded text-sm'
+        >
+          <u>*</u>
         </button>
         <button
           type='button'

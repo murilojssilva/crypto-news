@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs'
 
 export async function GET(req: Request, { params }: { params: any }) {
   try {
-    const { id } = params
+    const { id } = await params
 
     const user = await prisma.user.findUnique({
       where: { id },
