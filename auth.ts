@@ -22,16 +22,22 @@ export const authConfig: NextAuthOptions = {
           where: { email: credentials.email },
         })
 
-        if (
-          !user ||
-          !(await bcrypt.compare(credentials.password, user.password))
-        ) {
-          throw new Error('E-mail ou senha inválidos.')
+        if (!user) {
+          throw new Error('Usuário não encontrado.')
+        }
+
+        const isValidPassword = await bcrypt.compare(
+          credentials.password,
+          user.password
+        )
+
+        if (!isValidPassword) {
+          throw new Error('Senha incorreta. Verifique e tente novamente.')
         }
 
         return {
           id: user.id,
-          name: user.firstName + ' ' + user.lastName,
+          name: `${user.firstName} ${user.lastName}`,
           email: user.email,
         }
       },

@@ -57,7 +57,8 @@ export default function LoginPage() {
       })
 
       if (response?.error) {
-        toast.error('E-mail ou senha inválidos')
+        console.error('Erro no login:', response.error)
+        toast.error(response.error) // Exibe a mensagem vinda do authorize
         setLoading(false)
         return
       }
