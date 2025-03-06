@@ -30,7 +30,7 @@ export async function GET(req: Request, { params }: { params: any }) {
 
 export async function PUT(req: Request, { params }: { params: any }) {
   try {
-    const { id } = params
+    const { id } = await params
     const { firstName, lastName, updatedAt, password } = await req.json()
 
     if (!firstName || !lastName) {

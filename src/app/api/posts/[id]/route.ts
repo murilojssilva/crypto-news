@@ -30,7 +30,7 @@ export async function GET(req: Request, { params }: { params: any }) {
 
 export async function DELETE(req: Request, { params }: { params: any }) {
   try {
-    const { id } = params
+    const { id } = await params
 
     const deletedPost = await prisma.post.delete({
       where: { id },
@@ -51,7 +51,7 @@ export async function DELETE(req: Request, { params }: { params: any }) {
 
 export async function PUT(req: Request, { params }: { params: any }) {
   try {
-    const { id } = params
+    const { id } = await params
     const { title, subtitle, content, published } = await req.json()
 
     // Check if all required fields are provided
