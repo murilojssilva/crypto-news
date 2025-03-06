@@ -36,3 +36,7 @@ export interface NewsPageItem {
   subtitle: string
   writtenBy: string
 }
+
+export interface LatestNewsProps {
+  count: number
+}

@@ -10,6 +10,8 @@ import { NewsItemProps } from '@/app/interfaces/PostInterface'
 import { Title } from '@/app/components/Dashboard/Title'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import 'react-loading-skeleton/dist/skeleton.css'
+import Skeleton from 'react-loading-skeleton'
 
 interface UserItem {
   id: string
@@ -55,11 +57,19 @@ export default function NewsPage() {
 
   return (
     <main className='flex flex-col flex-1'>
-      {loading ? (
-        <section className='px-4 bg-gray-200 flex items-center justify-center'>
-          <div className='flex items-center justify-center h-[50vh]'>
-            <p className='text-blue-800 text-lg font-semibold'>Carregando...</p>
-          </div>
+      {!loading ? (
+        <section className='p-4 items-center justify-center gap-4'>
+          <Skeleton
+            baseColor='#e0e0e0'
+            highlightColor='#bdbdbd'
+            className='flex items-center justify-center h-[10vh]'
+          />
+
+          <Skeleton
+            baseColor='#e0e0e0'
+            highlightColor='#bdbdbd'
+            className='flex items-center justify-center my-8 h-[35vh]'
+          />
         </section>
       ) : (
         <section className='px-4 bg-gray-200'>

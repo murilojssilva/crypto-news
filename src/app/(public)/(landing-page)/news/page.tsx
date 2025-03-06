@@ -1,7 +1,8 @@
 'use client'
 
+import { usePosts } from '@/context/PostContext'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import Skeleton from 'react-loading-skeleton'
 
 interface NewsItem {
   id: string
@@ -10,45 +11,28 @@ interface NewsItem {
 }
 
 export default function News() {
-  const [news, setNews] = useState<NewsItem[]>([])
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        setLoading(true)
-        const response = await fetch('/api/posts')
-        const data = await response.json()
-
-        if (Array.isArray(data)) {
-          setNews(data)
-        } else {
-          console.error('Formato inesperado da resposta:', data)
-          setNews([])
-        }
-      } catch (error) {
-        console.error('Erro ao buscar posts:', error)
-        setNews([])
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchNews()
-  }, [])
+  const { posts, loading } = usePosts()
+  const skeletons = Array(3).fill('')
 
   return (
     <main className='flex flex-col flex-1'>
       <div className='flex flex-row justify-between p-8'>
         <h1 className='text-blue-800 font-bold text-2xl'>Últimas notícias</h1>
       </div>
-      <section className='px-4 bg-gray-200'>
+      <section className='p-4 bg-gray-200'>
         {loading ? (
-          <div className='flex items-center justify-center h-[42vh]'>
-            <p className='text-blue-800'>Sem notícias disponíveis...</p>
+          <div className='grid gap-4'>
+            {skeletons.map((_, index) => (
+              <Skeleton
+                key={index}
+                baseColor='#e0e0e0'
+                highlightColor='#bdbdbd'
+                className='flex items-center justify-center h-[10vh]'
+              />
+            ))}
           </div>
         ) : (
-          news.map((item: NewsItem) => (
+          posts.map((item: NewsItem) => (
             <article
               key={item.id}
               className='flex p-4 border-b border-blue-800'

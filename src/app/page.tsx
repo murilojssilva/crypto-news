@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import { Header } from './components/Header'
 import LatestNews from './components/LatestNews'
 import blockchainImage from '@/assets/images/blockchain.png'
+import 'react-loading-skeleton/dist/skeleton.css'
 import Link from 'next/link'
 import { Coin } from '@phosphor-icons/react'
 import { Blocks, Newspaper } from 'lucide-react'
@@ -42,7 +43,7 @@ export default function Home() {
           </article>
         </section>
       </div>
-      <LatestNews />
+      <LatestNews count={5} />
       <section className='flex flex-col md:flex-row bg-gray-100 justify-between p-8 gap-16'>
         <div className='flex flex-col items-center gap-4'>
           <Blocks size={64} color='#1565C0' />
