@@ -10,7 +10,7 @@ export const createPost = async (newPost: {
   subtitle?: string
   content: string
   published: boolean
-  writtenBy: string
+  userId: string
 }) => {
   const response = await axios.post('/api/posts', newPost)
 

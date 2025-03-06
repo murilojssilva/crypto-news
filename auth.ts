@@ -22,7 +22,10 @@ export const authConfig: NextAuthOptions = {
           where: { email: credentials.email },
         })
 
-        if (!user || !bcrypt.compareSync(credentials.password, user.password)) {
+        if (
+          !user ||
+          !(await bcrypt.compare(credentials.password, user.password))
+        ) {
           throw new Error('E-mail ou senha inválidos.')
         }
 
@@ -40,11 +43,19 @@ export const authConfig: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.id = user.id
+      if (user) {
+        token.id = user.id
+        token.email = user.email
+        token.name = user.name
+      }
       return token
     },
     async session({ session, token }) {
-      if (session.user) session.user.id = token.id
+      if (session.user) {
+        session.user.id = token.id
+        session.user.email = token.email
+        session.user.name = token.name
+      }
       return session
     },
   },

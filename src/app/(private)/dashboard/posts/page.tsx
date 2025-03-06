@@ -52,7 +52,7 @@ export default function Posts() {
             </div>
           ) : (
             posts
-              .filter((item: NewsItem) => item.writtenBy === session?.user.id)
+              .filter((item: NewsItem) => item.userId === session?.user.id)
               .map((item: NewsItem) => (
                 <article
                   key={item.id}

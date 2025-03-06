@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id        String  @id @default(uuid())
+  id        String  @id @default(cuid())
   firstName String
   lastName  String
   email     String  @unique
@@ -28,9 +28,8 @@ model Post {
   published Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  writtenBy String   @map("userId")
-
-  user      User     @relation(fields: [writtenBy], references: [id], onDelete: Cascade)
+  userId    String   @map("userId")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("posts")
 }

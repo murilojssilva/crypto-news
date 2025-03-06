@@ -72,9 +72,8 @@ export default function Dashboard() {
                   <Pen color='black' />
                   <span className='text-blue-800 font-bold text-3xl'>
                     {
-                      posts.filter(
-                        (item) => item.writtenBy === session?.user.id
-                      ).length
+                      posts.filter((item) => item.userId === session?.user.id)
+                        .length
                     }
                   </span>
                 </div>
@@ -89,9 +88,8 @@ export default function Dashboard() {
                   <Pen color='black' />
                   <span className='text-blue-800 font-bold text-3xl'>
                     {
-                      posts.filter(
-                        (item) => item.writtenBy !== session?.user.id
-                      ).length
+                      posts.filter((item) => item.userId !== session?.user.id)
+                        .length
                     }
                   </span>
                 </div>

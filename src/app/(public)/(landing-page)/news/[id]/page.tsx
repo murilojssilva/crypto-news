@@ -39,11 +39,11 @@ export default function NewsPage() {
   }, [id])
 
   useEffect(() => {
-    if (post?.writtenBy) {
+    if (post?.userId) {
       const fetchUser = async () => {
         try {
           setLoading(true)
-          const data = await getUserById(post.writtenBy)
+          const data = await getUserById(post.userId)
           setUser(data)
         } catch (error) {
           console.log(error)

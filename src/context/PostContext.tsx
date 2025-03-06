@@ -80,7 +80,7 @@ export const PostsProvider = ({ children }: { children: React.ReactNode }) => {
         subtitle: data.subtitle,
         content: data.content,
         published: data.published,
-        writtenBy: session?.user?.id as string,
+        userId: session?.user?.id as string,
       })
       toast.success('Postagem publicada com sucesso!')
       router.push('/dashboard/posts')

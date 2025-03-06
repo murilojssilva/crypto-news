@@ -4,7 +4,7 @@ export interface PostProps {
   subtitle?: string
   content: string
   published: boolean
-  writtenBy: string
+  userId: string
   createdAt: string
   updatedAt: string
 }
@@ -15,7 +15,7 @@ export interface NewsItemProps {
   subtitle?: string
   content: string
   published: boolean
-  writtenBy: string
+  userId: string
   createdAt: string
   updatedAt: string
 }
@@ -25,7 +25,7 @@ export interface NewsItem {
   title: string
   subtitle?: string
   content: string
-  writtenBy: string
+  userId: string
   createdAt: string
   published: boolean
 }
@@ -35,7 +35,7 @@ export interface NewsPageItem {
   title: string
   content: string
   subtitle: string
-  writtenBy: string
+  userId: string
 }
 
 export interface LatestNewsProps {
