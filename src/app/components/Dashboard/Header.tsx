@@ -1,21 +1,27 @@
+import { GetServerSideProps } from 'next'
+import { getServerSession } from 'next-auth'
+import { authConfig } from '../../../../auth'
+
 interface HeaderProps {
   currentDate: string
   IconComponent: React.ElementType
-  name: string
   title: string
+  name: string | null
 }
 
 export default function HeaderDashboard({
   currentDate,
   IconComponent,
-  name,
   title,
+  name,
 }: HeaderProps) {
   return (
     <div className='p-4 mt-2 border-b border-gray-300'>
       <div className='flex items-center justify-between w-full'>
         <div>
-          <h1 className='text-blue-800 font-bold'>Olá, {name}</h1>
+          <h1 className='text-blue-800'>
+            Olá, <span className='font-bold'>{name}</span>
+          </h1>
           <span className='text-gray-800'>{currentDate}</span>
         </div>
         <div className='flex flex-row items-center gap-2'>
@@ -25,4 +31,14 @@ export default function HeaderDashboard({
       </div>
     </div>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const session = await getServerSession(req, res, authConfig)
+
+  return {
+    props: {
+      name: session?.user?.name || 'Visitante',
+    },
+  }
 }

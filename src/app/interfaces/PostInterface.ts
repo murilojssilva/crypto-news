@@ -27,6 +27,7 @@ export interface NewsItem {
   content: string
   writtenBy: string
   createdAt: string
+  published: boolean
 }
 
 export interface NewsPageItem {

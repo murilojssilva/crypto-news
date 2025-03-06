@@ -12,6 +12,7 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import 'react-loading-skeleton/dist/skeleton.css'
 import Skeleton from 'react-loading-skeleton'
+import { AlertTriangle } from 'lucide-react'
 
 interface UserItem {
   id: string
@@ -21,7 +22,7 @@ interface UserItem {
 
 export default function NewsPage() {
   const { fetchPostById, loading, setLoading } = usePosts()
-  const [post, setPost] = useState<NewsItemProps>({} as NewsItemProps)
+  const [post, setPost] = useState<NewsItemProps | null>(null)
   const [user, setUser] = useState<UserItem>({} as UserItem)
 
   const { id } = useParams()
@@ -71,7 +72,7 @@ export default function NewsPage() {
             className='flex items-center justify-center my-8 h-[35vh]'
           />
         </section>
-      ) : (
+      ) : post ? (
         <section className='px-4 bg-gray-200'>
           <article className='p-8'>
             <div className='flex flex-col gap-8'>
@@ -91,15 +92,22 @@ export default function NewsPage() {
                     )}, por ${user.firstName} ${user.lastName}`}
                 </span>
               </div>
-              <p
+              <div
                 className='text-gray-800 font-medium text-md text-justify'
                 style={{ whiteSpace: 'pre-wrap', lineHeight: 1.75 }}
               >
                 <ReactMarkdown>{post.content}</ReactMarkdown>
-              </p>
+              </div>
             </div>
           </article>
         </section>
+      ) : (
+        <div className='flex flex-col items-center justify-center gap-4 flex-1'>
+          <AlertTriangle color='red' size={64} />
+          <p className='text-gray-800 text-2xl font-bold text-justify'>
+            Reportagem não encontrada
+          </p>
+        </div>
       )}
     </main>
   )

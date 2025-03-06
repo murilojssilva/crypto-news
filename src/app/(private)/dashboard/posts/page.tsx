@@ -36,7 +36,7 @@ export default function Posts() {
             <Title title='Minhas postagens' />
             <Link
               href='/dashboard/posts/new'
-              className='text-gray-100 px-6 text-sx flex flex-row items-center gap-2 bg-blue-800 hover:bg-blue-600 rounded-xl'
+              className='text-gray-100 px-6 text-sm whitespace-nowrap flex flex-row items-center gap-2 bg-blue-800 hover:bg-blue-600 rounded-xl'
             >
               <Plus size={20} /> Novo Post
             </Link>
@@ -77,13 +77,13 @@ export default function Posts() {
                         }
                       )}
                     </span>
-                    <p className='text-gray-800 font-medium text-sm'>
+                    <div className='text-gray-800 font-medium text-sm'>
                       <ReactMarkdown>
                         {item.content.length > 200
                           ? item.content.slice(0, 200).trimEnd() + '…'
                           : item.content}
                       </ReactMarkdown>
-                    </p>
+                    </div>
                   </Link>
                   <div className='flex flex-row gap-2 '>
                     <Link href={`/dashboard/posts/edit/${item.id}`}>

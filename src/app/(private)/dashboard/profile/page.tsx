@@ -132,6 +132,8 @@ export default function Profile() {
                     id='firstName'
                     placeholder='Digite seu nome'
                     name='firstName'
+                    disabled={loading}
+                    readOnly={loading}
                   />
                   {errors.firstName && (
                     <span className='text-red-500'>
@@ -150,6 +152,8 @@ export default function Profile() {
                     id='lastName'
                     name='lastName'
                     placeholder='Digite seu sobrenome'
+                    disabled={loading}
+                    readOnly={loading}
                   />
                   {errors.lastName && (
                     <span className='text-red-500'>
@@ -191,6 +195,8 @@ export default function Profile() {
                     name='password'
                     id='password'
                     placeholder='Digite sua senha'
+                    disabled={loading}
+                    readOnly={loading}
                   />
                   {errors.password && (
                     <span className='text-red-500'>
@@ -216,6 +222,8 @@ export default function Profile() {
                     id='passwordConfirm'
                     name='passwordConfirm'
                     placeholder='Digite sua senha'
+                    disabled={loading}
+                    readOnly={loading}
                   />
                   {errors.passwordConfirm && (
                     <span className='text-red-500'>
