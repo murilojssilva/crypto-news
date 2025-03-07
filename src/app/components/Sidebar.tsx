@@ -76,7 +76,7 @@ export default function Sidebar() {
             {openMenu && 'Dashboard'}
           </button>
         </Link>
-        {session?.user.role === 'admin' && (
+        {session?.user.role !== 'costumer' && (
           <Link href='/dashboard/posts'>
             <button
               className={`flex flex-row items-center gap-3 text-sx p-2 rounded-xl hover:bg-gray-300 w-full ${
