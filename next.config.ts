@@ -24,7 +24,7 @@ module.exports = {
         headers: [
           {
             key: 'Access-Control-Allow-Origin',
-            value: '*',
+            value: 'https://crypto-news-eta.vercel.app',
           },
           {
             key: 'Access-Control-Allow-Methods',
