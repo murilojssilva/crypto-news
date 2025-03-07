@@ -114,7 +114,7 @@ export default function Profile() {
           currentDate={currentDate}
           title='Perfil'
         />
-        <section className='p-6 min-h-screen flex flex-col gap-4'>
+        <section className='px-6 pt-6 max-h-screen flex flex-col gap-4'>
           <Title title='Perfil' />
 
           <div className='flex flex-col gap-8 w-full'>
@@ -199,7 +199,7 @@ export default function Profile() {
                     <option value=''>Selecione uma opção</option>
                     <option value='admin'>Administrador</option>
                     <option value='editor'>Editor</option>
-                    <option value='cliente'>Cliente</option>
+                    <option value='costumer'>Cliente</option>
                   </select>
                   {errors.role && (
                     <span className='text-red-500'>{errors.role?.message}</span>

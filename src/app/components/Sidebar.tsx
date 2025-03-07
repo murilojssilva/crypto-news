@@ -8,12 +8,13 @@ import Link from 'next/link'
 import { List } from '@phosphor-icons/react'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 
 export default function Sidebar() {
   const [openMenu, setOpenMenu] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
+  const { data: session } = useSession()
 
   useEffect(() => {
     const handleResize = () => {
@@ -75,22 +76,24 @@ export default function Sidebar() {
             {openMenu && 'Dashboard'}
           </button>
         </Link>
-        <Link href='/dashboard/posts'>
-          <button
-            className={`flex flex-row items-center gap-3 text-sx p-2 rounded-xl hover:bg-gray-300 w-full ${
-              pathname?.startsWith('/dashboard/posts')
-                ? `text-gray-800 font-bold ${openMenu && 'bg-gray-100'}`
-                : 'text-gray-600'
-            }`}
-          >
-            <Pen
-              color={
-                pathname?.startsWith('/dashboard/posts') ? '#1565C0' : 'black'
-              }
-            />
-            {openMenu && 'Posts'}
-          </button>
-        </Link>
+        {session?.user.role === 'admin' && (
+          <Link href='/dashboard/posts'>
+            <button
+              className={`flex flex-row items-center gap-3 text-sx p-2 rounded-xl hover:bg-gray-300 w-full ${
+                pathname?.startsWith('/dashboard/posts')
+                  ? `text-gray-800 font-bold ${openMenu && 'bg-gray-100'}`
+                  : 'text-gray-600'
+              }`}
+            >
+              <Pen
+                color={
+                  pathname?.startsWith('/dashboard/posts') ? '#1565C0' : 'black'
+                }
+              />
+              {openMenu && 'Posts'}
+            </button>
+          </Link>
+        )}
         <Link href='/dashboard/profile'>
           <button
             className={`flex flex-row items-center gap-3 text-sx p-2 rounded-xl hover:bg-gray-300 w-full ${

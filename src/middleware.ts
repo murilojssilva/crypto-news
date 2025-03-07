@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
@@ -7,9 +9,21 @@ export function middleware(request: NextRequest) {
 
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
     if (!sessionToken) {
-      // Redireciona para a página de login se não estiver autenticado
       const loginUrl = new URL('/login', request.url)
       return NextResponse.redirect(loginUrl)
+    }
+
+    if (request.nextUrl.pathname.startsWith('/dashboard/posts')) {
+      const session = request.cookies.get('next-auth.session-token') as any
+
+      if (session) {
+        const userRole = session?.user?.role
+
+        if (userRole !== 'admin') {
+          const dashboardUrl = new URL('/dashboard', request.url)
+          return NextResponse.redirect(dashboardUrl)
+        }
+      }
     }
   }
 
