@@ -6,6 +6,6 @@
     }
   ],
   "env": {
-    "DATABASE_URL": "file:./dev.db"
+    "DATABASE_URL": "mysql://root:wgoGzUMeYuZiZbBcFQpqChXgSdQirZQn@crossover.proxy.rlwy.net:18873/railway"
   }
 }
