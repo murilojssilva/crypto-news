@@ -12,6 +12,7 @@ import Input from '@/app/components/Form/Input'
 import EyeButton from '@/app/components/Form/EyeButton'
 import { Button } from '@/app/components/Dashboard/Button'
 import { LogIn } from 'lucide-react'
+import { Loading } from '@/app/components/Form/Loading'
 
 const loginFormSchema = zod.object({
   email: zod.string().email('Digite um e-mail válido'),
@@ -147,9 +148,9 @@ export default function LoginPage() {
             Criar conta
           </Link>
           <Button
-            IconComponent={LogIn}
+            IconComponent={loading ? Loading : LogIn}
             type='submit'
-            text={loading ? 'Carregando...' : 'Entrar'}
+            text={loading ? '' : 'Entrar'}
           />
         </div>
       </form>

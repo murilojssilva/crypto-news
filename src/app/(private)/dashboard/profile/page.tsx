@@ -20,6 +20,7 @@ import {
   editProfileFormValidationsSchema,
 } from '@/app/schemas/EditProfileSchema'
 import { Title } from '@/app/components/Dashboard/Title'
+import { Loading } from '@/app/components/Form/Loading'
 
 export default function Profile() {
   const { data: session } = useSession()
@@ -263,8 +264,8 @@ export default function Profile() {
               </div>
 
               <Button
-                IconComponent={Save}
-                text={loading ? 'Carregando...' : 'Editar perfil'}
+                IconComponent={loading ? Loading : Save}
+                text={loading ? '' : 'Editar perfil'}
                 type='submit'
               />
             </form>

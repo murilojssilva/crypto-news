@@ -17,6 +17,7 @@ import {
   loginFormValidationsSchema,
   NewSignUpFormData,
 } from '@/app/schemas/SignUpSchema'
+import { Loading } from '@/app/components/Form/Loading'
 
 export default function SignUp() {
   const router = useRouter()
@@ -197,8 +198,8 @@ export default function SignUp() {
               Login
             </Link>
             <Button
-              IconComponent={SignIn}
-              text={loading ? 'Carregando...' : 'Criar conta'}
+              IconComponent={loading ? Loading : SignIn}
+              text={loading ? '' : 'Criar conta'}
               type='submit'
             />
           </div>

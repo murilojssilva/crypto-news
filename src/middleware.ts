@@ -19,7 +19,7 @@ export function middleware(request: NextRequest) {
       if (session) {
         const userRole = session?.user?.role
 
-        if (userRole !== 'admin') {
+        if (userRole === 'costumer') {
           const dashboardUrl = new URL('/dashboard', request.url)
           return NextResponse.redirect(dashboardUrl)
         }

@@ -29,7 +29,7 @@ export default function Sidebar() {
     return () => {
       window.removeEventListener('resize', handleResize)
     }
-  }, [])
+  }, [session?.user])
 
   const handleLogout = async () => {
     await signOut({ redirect: false })
