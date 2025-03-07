@@ -194,7 +194,7 @@ export default function Profile() {
                     aria-invalid={!!errors.role}
                     {...register('role')}
                     name='role'
-                    className='p-2 rounded-md border border-gray-500 text-md text-gray-800 pr-8 cursor-not-allowed bg-gray-300'
+                    className='p-2 rounded-md border border-gray-500 text-md text-gray-900 pr-8 cursor-not-allowed bg-gray-300'
                   >
                     <option value=''>Selecione uma opção</option>
                     <option value='admin'>Administrador</option>

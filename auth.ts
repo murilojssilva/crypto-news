@@ -71,10 +71,10 @@ export const authConfig: NextAuthOptions = {
     sessionToken: {
       name: 'next-auth.session-token',
       options: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        path: '/',
-        sameSite: 'lax',
+        //httpOnly: true,
+        //secure: process.env.NODE_ENV === 'production',
+        //path: '/',
+        //sameSite: 'lax',
       },
     },
   },
