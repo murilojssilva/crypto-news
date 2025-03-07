@@ -5,6 +5,7 @@ export const loginFormValidationsSchema = zod
     firstName: zod.string().nonempty('Digite seu nome'),
     lastName: zod.string().nonempty('Digite seu sobrenome'),
     email: zod.string().email('Digite um endereço de e-mail válido'),
+    role: zod.string().min(1, 'Selecione o seu cargo'),
     password: zod
       .string()
       .min(8, 'A senha deve ter, ao menos, 8 caracteres')
