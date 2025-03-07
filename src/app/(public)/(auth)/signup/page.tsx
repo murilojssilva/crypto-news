@@ -42,6 +42,7 @@ export default function SignUp() {
           lastName: data.lastName,
           firstName: data.firstName,
           updatedAt: new Date(),
+          role: 'costumer',
         },
         { withCredentials: true }
       )
