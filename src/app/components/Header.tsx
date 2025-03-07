@@ -6,8 +6,10 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { List } from '@phosphor-icons/react'
 import { usePathname } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 export function Header() {
+  const { data: session } = useSession()
   const [openMenu, setOpenMenu] = useState(false)
 
   const pathname = usePathname()
@@ -76,6 +78,25 @@ export function Header() {
                   Grupo Vip
                 </li>
               </Link>
+              {session?.user ? (
+                <Link
+                  href='/dashboard'
+                  className='text-blue-800 hover:text-blue-600'
+                >
+                  <li className='hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold'>
+                    Dashboard
+                  </li>
+                </Link>
+              ) : (
+                <Link
+                  href='/login'
+                  className='text-blue-800 hover:text-blue-600'
+                >
+                  <li className='hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold'>
+                    Login
+                  </li>
+                </Link>
+              )}
             </ul>
           </div>
         </div>

@@ -48,7 +48,7 @@ export async function GET(req: Request, { params }: { params: any }) {
 export async function PUT(req: Request, { params }: { params: any }) {
   try {
     const { id } = await params
-    const { firstName, lastName, updatedAt, password } = await req.json()
+    const { firstName, lastName, updatedAt, password, role } = await req.json()
 
     if (!firstName || !lastName) {
       return NextResponse.json(
@@ -57,7 +57,12 @@ export async function PUT(req: Request, { params }: { params: any }) {
       )
     }
 
-    const updateData: Record<string, any> = { firstName, lastName, updatedAt }
+    const updateData: Record<string, any> = {
+      firstName,
+      lastName,
+      updatedAt,
+      role,
+    }
 
     if (password) {
       updateData.password = await bcrypt.hash(password, 10)

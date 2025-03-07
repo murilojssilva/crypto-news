@@ -27,11 +27,11 @@ export default function Profile() {
 
   const [loading, setLoading] = useState(false)
 
-  const loginForm = useForm<EditProfileFormData>({
+  const editProfileForm = useForm<EditProfileFormData>({
     resolver: zodResolver(editProfileFormValidationsSchema),
   })
 
-  const { register, handleSubmit, formState, setValue } = loginForm
+  const { register, handleSubmit, formState, setValue } = editProfileForm
 
   const { errors } = formState
 
@@ -44,6 +44,7 @@ export default function Profile() {
         lastName: data.lastName,
         firstName: data.firstName,
         updatedAt: new Date(),
+        role: data.role,
       }
 
       if (data.password) {
@@ -90,6 +91,7 @@ export default function Profile() {
           setValue('firstName', data.firstName)
           setValue('lastName', data.lastName)
           setValue('email', data.email)
+          setValue('role', data.role)
         } catch (error) {
           console.log(error)
           toast.error(
@@ -101,7 +103,7 @@ export default function Profile() {
       }
       fetchPost()
     }
-  }, [session?.user.id, setValue])
+  }, [session?.user, setValue])
   return (
     <div className='bg-gray-50 pb-4 h-screen flex'>
       <Sidebar />
@@ -179,6 +181,28 @@ export default function Profile() {
                     <span className='text-red-500'>
                       {errors.email?.message}
                     </span>
+                  )}
+                </div>
+                <div className='flex flex-col gap-2'>
+                  <label className='text-blue-800' htmlFor='roles'>
+                    Cargo
+                  </label>
+                  <select
+                    id='role'
+                    contentEditable={false}
+                    disabled
+                    aria-invalid={!!errors.role}
+                    {...register('role')}
+                    name='role'
+                    className='p-2 rounded-md border border-gray-500 text-md text-gray-800 pr-8 cursor-not-allowed bg-gray-300'
+                  >
+                    <option value=''>Selecione uma opção</option>
+                    <option value='admin'>Administrador</option>
+                    <option value='editor'>Editor</option>
+                    <option value='cliente'>Cliente</option>
+                  </select>
+                  {errors.role && (
+                    <span className='text-red-500'>{errors.role?.message}</span>
                   )}
                 </div>
                 <div className='flex flex-col gap-2 relative'>

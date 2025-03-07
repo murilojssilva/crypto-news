@@ -1,20 +1,14 @@
 import { GetServerSideProps } from 'next'
 import { getServerSession } from 'next-auth'
 import { authConfig } from '../../../../auth'
-
-interface HeaderProps {
-  currentDate: string
-  IconComponent: React.ElementType
-  title: string
-  name: string | null
-}
+import { HeaderDashboardProps } from '@/app/interfaces/Dashboard'
 
 export default function HeaderDashboard({
   currentDate,
   IconComponent,
   title,
   name,
-}: HeaderProps) {
+}: HeaderDashboardProps) {
   return (
     <div className='p-4 mt-2 border-b border-gray-300'>
       <div className='flex items-center justify-between w-full'>

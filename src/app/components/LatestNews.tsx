@@ -47,13 +47,13 @@ export default function LatestNews({ count = 3 }: LatestNewsProps) {
                 <h2 className='text-blue-800 text-sx font-bold text-justify'>
                   {item.title}
                 </h2>
-                <p className='text-gray-800 font-medium text-sm'>
+                <div className='text-gray-800 font-medium text-sm'>
                   <ReactMarkdown>
                     {item.content.length > 200
                       ? item.content.slice(0, 200).trimEnd() + '…'
                       : item.content}
                   </ReactMarkdown>
-                </p>
+                </div>
               </Link>
             </article>
           ))

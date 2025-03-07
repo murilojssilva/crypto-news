@@ -6,9 +6,9 @@ import { prisma } from '@/lib/prisma'
 export async function POST(request: Request) {
   try {
     const data = await request.json()
-    const { firstName, lastName, email, password, updatedAt } = data
+    const { firstName, lastName, email, password, updatedAt, role } = data
 
-    if (!email || !lastName || !firstName || !password || !updatedAt) {
+    if (!email || !lastName || !firstName || !password || !updatedAt || !role) {
       return NextResponse.json(
         { message: 'Todos os campos são obrigatórios' },
         { status: 400 }
@@ -34,6 +34,7 @@ export async function POST(request: Request) {
         lastName,
         email,
         password: hashedPassword,
+        role,
       },
     })
 
