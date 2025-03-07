@@ -1,4 +1,4 @@
-import { DefaultSession } from 'next-auth'
+import { DefaultSession, AdapterUser } from 'next-auth'
 
 declare module 'next-auth' {
   interface Session {
@@ -6,5 +6,9 @@ declare module 'next-auth' {
       id: unknown
       role: unknown
     } & DefaultSession['user']
+  }
+
+  interface User extends AdapterUser {
+    role: string
   }
 }
