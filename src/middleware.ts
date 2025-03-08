@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
   const session = await sessionResponse.json()
 
   if (request.nextUrl.pathname.startsWith('/dashboard/posts')) {
-    if (session.user.role !== 'costumer') {
+    if (session.user.role === 'costumer') {
       const dashboardUrl = new URL('/dashboard', request.url)
       return NextResponse.redirect(dashboardUrl)
     }

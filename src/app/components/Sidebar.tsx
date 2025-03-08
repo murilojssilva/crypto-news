@@ -14,7 +14,7 @@ export default function Sidebar() {
   const [openMenu, setOpenMenu] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,6 +35,9 @@ export default function Sidebar() {
     await signOut({ redirect: false })
     router.push('/login')
   }
+
+  if (status === 'loading')
+    return <div className='flex flex-col h-screen bg-gray-200 w-[10vh]' />
 
   return (
     <div
