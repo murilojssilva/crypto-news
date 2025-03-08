@@ -49,10 +49,8 @@ export default function Home() {
           <Blocks size={64} color='#1565C0' />
           <h2 className='font-bold text-blue-800'>Análise de projetos</h2>
           <p className='text-gray-800 text-justify'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa
-            reprehenderit unde quis dicta, libero debitis excepturi
-            perspiciatis, quia, in fugiat ratione beatae officiis quod? Non
-            assumenda commodi placeat voluptatem fuga.
+            Análises e insights sobre novos projetos no mercado de criptomoedas,
+            com foco em tendências e potenciais oportunidades de investimento.
           </p>
         </div>
         <div className='flex flex-col items-center gap-4'>
@@ -61,20 +59,16 @@ export default function Home() {
             Criptomoedas preferidas das baleias
           </h2>
           <p className='text-gray-800 text-justify'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis
-            quibusdam earum, commodi officia, ex id officiis nemo eius repellat
-            asperiores perferendis expedita hic possimus itaque quaerat eveniet
-            molestiae ratione eum?
+            Descubra quais criptomoedas estão sendo adquiridas pelas baleias do
+            mercado e como isso pode influenciar o mercado financeiro.
           </p>
         </div>
         <div className='flex flex-col items-center gap-4'>
           <Newspaper size={64} color='#1565C0' />
           <h2 className='font-bold text-blue-800'>Notícias do mercado</h2>
           <p className='text-gray-800 text-justify'>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Iusto
-            nesciunt ab voluptate soluta nemo, ipsum vero perspiciatis ullam eos
-            non veniam quas mollitia nam officia vitae dignissimos repellat
-            cupiditate ducimus.
+            Fique por dentro das últimas notícias e atualizações sobre o mercado
+            financeiro, incluindo eventos e tendências no setor de criptomoedas.
           </p>
         </div>
       </section>
