@@ -3,7 +3,7 @@
 import 'react-toastify/dist/ReactToastify.css'
 import Skeleton from 'react-loading-skeleton'
 
-import { Home, Pen, DollarSign, Newspaper, Crown } from 'lucide-react'
+import { Home, Pen, DollarSign, Newspaper } from 'lucide-react'
 import HeaderDashboard from '@/app/components/Dashboard/Header'
 import Sidebar from '@/app/components/Sidebar'
 import { useSession } from 'next-auth/react'
@@ -51,13 +51,6 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className='grid grid-cols-2 xl:grid-cols-4 md:grid-cols-3 gap-x-4 gap-y-8'>
-              {session?.user.role === 'admin' && (
-                <Card
-                  text='Total de usuários'
-                  value={users.length}
-                  icon={<Crown color='black' />}
-                />
-              )}
               {session?.user.role === 'admin' && (
                 <Card
                   text='Total de clientes'
