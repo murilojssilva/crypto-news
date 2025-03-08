@@ -3,13 +3,15 @@
 import 'react-toastify/dist/ReactToastify.css'
 import Skeleton from 'react-loading-skeleton'
 
-import { Home, Pen } from 'lucide-react'
+import { Home, Pen, DollarSign, Newspaper } from 'lucide-react'
 import HeaderDashboard from '@/app/components/Dashboard/Header'
 import Sidebar from '@/app/components/Sidebar'
 import { useSession } from 'next-auth/react'
 import { useFormattedDate } from '@/hooks/useFormatted'
 import { usePosts } from '@/context/PostContext'
 import { Title } from '@/app/components/Dashboard/Title'
+import { useUsers } from '@/context/UserContext'
+import { Card } from '@/app/components/Dashboard/Card'
 
 export default function Dashboard() {
   const { data: session } = useSession()
@@ -17,6 +19,7 @@ export default function Dashboard() {
   const skeletons = Array(8).fill('')
 
   const { posts, loading } = usePosts()
+  const { users } = useUsers()
   return (
     <div className='flex bg-gray-50 pb-4 h-screen '>
       <Sidebar />
@@ -48,52 +51,42 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className='grid grid-cols-2 xl:grid-cols-4 md:grid-cols-3 gap-x-4 gap-y-8'>
-              <div className='border border-gray-500 p-4 rounded-md flex flex-col gap-3 justify-around'>
-                <div>
-                  <h3 className='text-gray-800 text-xl font-bold'>
-                    Total de posts
-                  </h3>
-                </div>
-                <div className='flex flex-row justify-between'>
-                  <Pen color='black' />
-                  <span className='text-blue-800 font-bold text-3xl'>
-                    {posts.length}
-                  </span>
-                </div>
-              </div>
+              {session?.user.role === 'admin' && (
+                <Card
+                  text='Total de clientes'
+                  value={
+                    users.filter((item) => item.role === 'costumer').length
+                  }
+                  icon={<DollarSign color='black' />}
+                />
+              )}
 
-              <div className='border border-gray-500 p-4 rounded-md flex flex-col gap-3 justify-around'>
-                <div>
-                  <h3 className='text-gray-800 text-xl font-bold'>
-                    Meus posts
-                  </h3>
-                </div>
-                <div className='flex flex-row justify-between'>
-                  <Pen color='black' />
-                  <span className='text-blue-800 font-bold text-3xl'>
-                    {
-                      posts.filter((item) => item.userId === session?.user.id)
-                        .length
-                    }
-                  </span>
-                </div>
-              </div>
-              <div className='border border-gray-500 p-4 rounded-md flex flex-col gap-3 justify-around'>
-                <div>
-                  <h3 className='text-gray-800 text-xl font-bold'>
-                    Outros posts
-                  </h3>
-                </div>
-                <div className='flex flex-row justify-between'>
-                  <Pen color='black' />
-                  <span className='text-blue-800 font-bold text-3xl'>
-                    {
-                      posts.filter((item) => item.userId !== session?.user.id)
-                        .length
-                    }
-                  </span>
-                </div>
-              </div>
+              {session?.user.role === 'admin' && (
+                <Card
+                  text='Total de editores'
+                  value={users.filter((item) => item.role === 'editor').length}
+                  icon={<Pen color='black' />}
+                />
+              )}
+
+              {session?.user.role !== 'costumer' && (
+                <Card
+                  text='Total de posts'
+                  value={posts.length}
+                  icon={<Newspaper color='black' />}
+                />
+              )}
+
+              {session?.user.role !== 'costumer' && (
+                <Card
+                  text='Meus posts'
+                  value={
+                    posts.filter((item) => item.userId === session?.user.id)
+                      .length
+                  }
+                  icon={<Newspaper color='black' />}
+                />
+              )}
             </div>
           )}
         </section>

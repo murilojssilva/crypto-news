@@ -33,7 +33,15 @@ export default function Posts() {
 
         <section className='p-6 grid gap-4'>
           <div className='flex flex-row justify-between'>
-            <Title title='Minhas postagens' />
+            <Title
+              title={
+                session?.user.role === 'editor'
+                  ? 'Minhas postagens'
+                  : session?.user.role === 'admin'
+                  ? 'Todas as postagens'
+                  : ''
+              }
+            />
             <Link
               href='/dashboard/posts/new'
               className='text-gray-100 px-6 text-sm whitespace-nowrap flex flex-row items-center gap-2 bg-blue-800 hover:bg-blue-600 rounded-xl'
@@ -52,7 +60,12 @@ export default function Posts() {
             </div>
           ) : (
             posts
-              .filter((item: NewsItem) => item.userId === session?.user.id)
+              .filter((item: NewsItem) => {
+                if (session?.user.role === 'editor') {
+                  return item.userId === session?.user.id
+                }
+                return true
+              })
               .map((item: NewsItem) => (
                 <article
                   key={item.id}
@@ -86,13 +99,17 @@ export default function Posts() {
                     </div>
                   </Link>
                   <div className='flex flex-row gap-2 '>
-                    <Link href={`/dashboard/posts/edit/${item.id}`}>
-                      <Pen size={24} color='#1565C0' />
-                    </Link>
+                    {item.userId === session?.user.id && (
+                      <Link href={`/dashboard/posts/edit/${item.id}`}>
+                        <Pen size={24} color='#1565C0' />
+                      </Link>
+                    )}
 
-                    <button onClick={() => handleDeletePost(item.id)}>
-                      <Trash size={24} color='red' />
-                    </button>
+                    {item.userId === session?.user.id && (
+                      <button onClick={() => handleDeletePost(item.id)}>
+                        <Trash size={24} color='red' />
+                      </button>
+                    )}
                   </div>
                 </article>
               ))

@@ -1,9 +1,7 @@
 import axios from 'axios'
 
 export const getPostById = async (id: string) => {
-  console.log('ID do post getPostById: ', id)
   const response = await axios.get(`/api/posts/${id}`)
-  console.log('Response: ', response)
   return response.data
 }
 

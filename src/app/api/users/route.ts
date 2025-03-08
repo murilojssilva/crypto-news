@@ -3,6 +3,18 @@ import { sign } from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
 
+export async function GET() {
+  try {
+    const users = await prisma.post.findMany({
+      orderBy: { createdAt: 'desc' },
+    })
+    return NextResponse.json(users)
+  } catch (error) {
+    console.error('Erro ao buscar users:', error)
+    return NextResponse.json({ error: 'Erro ao buscar users' }, { status: 500 })
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const data = await request.json()
