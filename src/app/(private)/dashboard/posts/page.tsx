@@ -31,7 +31,7 @@ export default function Posts() {
           title='Posts'
         />
 
-        <section className='p-6 grid gap-4'>
+        <section className='px-6 pt-6 md:max-h-screen max-h-[calc(100vh-8rem)] flex flex-col gap-4 overflow-y-auto'>
           <div className='flex flex-row justify-between items-center'>
             <Title
               title={

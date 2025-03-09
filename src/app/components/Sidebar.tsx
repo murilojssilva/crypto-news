@@ -42,7 +42,7 @@ export default function Sidebar() {
   return (
     <div
       className={`flex flex-col gap-4 h-screen bg-gray-200 items-center ${
-        openMenu ? 'w-[24vh]' : 'w-[10vh]'
+        openMenu ? 'w-[24vh]' : 'w-[16vh]'
       } sticky top-0`}
     >
       <div
