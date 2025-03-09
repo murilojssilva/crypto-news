@@ -32,7 +32,7 @@ export default function Posts() {
         />
 
         <section className='p-6 grid gap-4'>
-          <div className='flex flex-row justify-between'>
+          <div className='flex flex-row justify-between items-center'>
             <Title
               title={
                 session?.user.role === 'editor'
@@ -44,7 +44,7 @@ export default function Posts() {
             />
             <Link
               href='/dashboard/posts/new'
-              className='text-gray-100 px-6 text-sm whitespace-nowrap flex flex-row items-center gap-2 bg-blue-800 hover:bg-blue-600 rounded-xl'
+              className='text-gray-100 p-2 text-sm whitespace-nowrap flex flex-row items-center gap-2 bg-blue-800 hover:bg-blue-600 rounded-xl'
             >
               <Plus size={20} /> Novo Post
             </Link>
