@@ -3,5 +3,9 @@ interface TitleProps {
 }
 
 export function Title({ title }: TitleProps) {
-  return <h2 className='text-4xl text-blue-800 font-extrabold '>{title}</h2>
+  return (
+    <h2 className='text-sm sm:text-4xl text-blue-800 font-extrabold '>
+      {title}
+    </h2>
+  )
 }

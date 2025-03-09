@@ -75,13 +75,11 @@ export default function Posts() {
                     href={`/news/${item.id}`}
                     className='flex-1 flex flex-col'
                   >
-                    <h2 className='text-blue-800 text-2xl font-bold'>
-                      {item.title}
-                    </h2>
-                    <span className='text-gray-500 text-ms font-normal'>
+                    <Title title={item.title} />
+                    <span className='text-gray-500 text-xs md:text-ms font-normal'>
                       {item.subtitle}
                     </span>
-                    <span className='text-blue-800 text-sx font-bold'>
+                    <span className='text-blue-800 text-xs md:text-sx font-bold'>
                       {format(
                         new Date(item.createdAt),
                         "dd/MM/yyyy 'às' HH:mm",
@@ -90,10 +88,10 @@ export default function Posts() {
                         }
                       )}
                     </span>
-                    <div className='text-gray-800 font-medium text-sm'>
+                    <div className='text-gray-800 font-medium text-sm md:text-md'>
                       <ReactMarkdown>
-                        {item.content.length > 200
-                          ? item.content.slice(0, 200).trimEnd() + '…'
+                        {item.content.length > 50
+                          ? item.content.slice(0, 50).trimEnd() + '…'
                           : item.content}
                       </ReactMarkdown>
                     </div>

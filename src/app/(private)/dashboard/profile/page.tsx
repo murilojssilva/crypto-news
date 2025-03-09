@@ -115,7 +115,7 @@ export default function Profile() {
           currentDate={currentDate}
           title='Perfil'
         />
-        <section className='px-6 pt-6 max-h-screen flex flex-col gap-4'>
+        <section className='px-6 pt-6 md:max-h-screen max-h-[calc(100vh-8rem)] flex flex-col gap-4 overflow-y-auto'>
           <Title title='Perfil' />
 
           <div className='flex flex-col gap-8 w-full'>
@@ -236,7 +236,7 @@ export default function Profile() {
                 <div className='flex flex-col gap-2 relative'>
                   <label
                     className='text-blue-800 flex flex-row justify-between'
-                    htmlFor='password'
+                    htmlFor='passwordConfirm'
                   >
                     Confirme a nova senha
                   </label>
