@@ -90,8 +90,8 @@ export default function Posts() {
                     </span>
                     <div className='text-gray-800 font-medium text-sm md:text-md'>
                       <ReactMarkdown>
-                        {item.content.length > 50
-                          ? item.content.slice(0, 50).trimEnd() + '…'
+                        {item.content.length > 185
+                          ? item.content.slice(0, 185).trimEnd() + '…'
                           : item.content}
                       </ReactMarkdown>
                     </div>

@@ -41,8 +41,8 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`flex flex-col h-screen bg-gray-200 ${
-        openMenu ? 'w-[30vh]' : 'w-[10vh]'
+      className={`flex flex-col h-screen bg-gray-200 items-center ${
+        openMenu ? 'w-[30vh]' : 'w-[18%]'
       } sticky top-0`}
     >
       <div
@@ -50,12 +50,16 @@ export default function Sidebar() {
           openMenu ? 'flex-row' : 'flex-col'
         } gap-2 items-center justify-between p-8`}
       >
-        <Image src={logo} alt='CryptoNews' className='w-10 h-10' />
+        <Image
+          src={logo}
+          alt='CryptoNews'
+          className='w-12 h-12 md:w-10 md:h-10'
+        />
         <div className='hidden md:flex justify-start'>
           <button
             data-collapse-toggle='navbar-hamburger'
             type='button'
-            className='inline-flex items-center justify-center w-10 h-10 text-sm rounded-lg border border-blue-800 bg-gray-100 ms:hidden'
+            className='inline-flex items-center justify-center w-12 h-12 md:w-10 md:h-10 text-sm rounded-lg border border-blue-800 bg-gray-100 ms:hidden'
             aria-controls='navbar-hamburger'
             aria-expanded={openMenu}
             onClick={() => setOpenMenu(!openMenu)}
