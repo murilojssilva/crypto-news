@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { sign } from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
+import { UserCreateProps } from '@/app/interfaces/UserInterface'
 
 export async function GET() {
   try {
@@ -18,9 +19,19 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const data = await request.json()
-    const { firstName, lastName, email, password, updatedAt, role } = data
+    const { firstName, lastName, email, password, updatedAt, role, plan } = data
 
-    if (!email || !lastName || !firstName || !password || !updatedAt || !role) {
+    console.log(data)
+
+    if (
+      !email ||
+      !lastName ||
+      !firstName ||
+      !password ||
+      !updatedAt ||
+      !role ||
+      !plan
+    ) {
       return NextResponse.json(
         { message: 'Todos os campos são obrigatórios' },
         { status: 400 }
@@ -47,7 +58,14 @@ export async function POST(request: Request) {
         email,
         password: hashedPassword,
         role,
-      },
+        plan: 'free',
+        ...(plan === 'premium' && {
+          startPremium: new Date() as string | Date,
+          endPremium: new Date(
+            new Date().setDate(new Date().getDate() + 30)
+          ) as string | Date,
+        }),
+      } as UserCreateProps,
     })
 
     const token = sign(

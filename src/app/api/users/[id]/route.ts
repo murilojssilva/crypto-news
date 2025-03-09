@@ -48,7 +48,8 @@ export async function GET(req: Request, { params }: { params: any }) {
 export async function PUT(req: Request, { params }: { params: any }) {
   try {
     const { id } = await params
-    const { firstName, lastName, updatedAt, password, role } = await req.json()
+    const { firstName, lastName, updatedAt, password, role, plan } =
+      await req.json()
 
     if (!firstName || !lastName) {
       return NextResponse.json(
@@ -62,6 +63,14 @@ export async function PUT(req: Request, { params }: { params: any }) {
       lastName,
       updatedAt,
       role,
+      plan,
+    }
+
+    if (plan === 'premium') {
+      updateData.startPremium = new Date()
+      updateData.endPremium = new Date(
+        new Date().setDate(new Date().getDate() + 30)
+      )
     }
 
     if (password) {

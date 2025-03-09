@@ -6,6 +6,7 @@ export const editProfileFormValidationsSchema = zod
     lastName: zod.string().nonempty('Digite seu sobrenome'),
     email: zod.string().email('Digite um endereço de e-mail válido'),
     role: zod.string().min(1, 'Selecione o seu cargo'),
+    plan: zod.string().min(1, 'Selecione o seu plano'),
     password: zod
       .string()
       .min(8, 'A senha deve ter, ao menos, 8 caracteres')

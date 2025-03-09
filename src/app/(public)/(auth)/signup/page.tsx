@@ -44,6 +44,7 @@ export default function SignUp() {
           firstName: data.firstName,
           updatedAt: new Date(),
           role: 'costumer',
+          plan: 'free',
         },
         { withCredentials: true }
       )

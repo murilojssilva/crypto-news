@@ -39,7 +39,7 @@ export default function NewPost() {
 
       <div className='flex-1'>
         <HeaderDashboard
-          name={session?.user?.name as string}
+          firstName={session?.user?.name as string}
           IconComponent={Pen}
           currentDate={currentDate}
           title='Novo Post'

@@ -8,7 +8,7 @@ interface CardProps {
 
 export function Card({ text, value, icon }: CardProps) {
   return (
-    <div className='border border-gray-500 p-4 rounded-md flex flex-col gap-3 justify-around'>
+    <div className='border border-gray-300 bg-gray-100 p-4 rounded-md flex flex-col gap-3 justify-around'>
       <div>
         <h3 className='text-gray-800 text-xl font-bold'>{text}</h3>
       </div>

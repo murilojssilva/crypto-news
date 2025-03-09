@@ -103,7 +103,7 @@ export default function EditPost() {
 
       <div className='flex-1'>
         <HeaderDashboard
-          name={session?.user?.name as string}
+          firstName={session?.user?.name as string}
           IconComponent={Home}
           currentDate={currentDate}
           title='Editar Post'

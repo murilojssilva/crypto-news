@@ -7,14 +7,14 @@ export default function HeaderDashboard({
   currentDate,
   IconComponent,
   title,
-  name,
+  firstName,
 }: HeaderDashboardProps) {
   return (
     <div className='p-4 mt-2 border-b border-gray-300'>
       <div className='flex items-center justify-between w-full'>
         <div>
           <h1 className='text-blue-800'>
-            Olá, <span className='font-bold'>{name}</span>
+            Olá, <span className='font-bold'>{firstName}</span>
           </h1>
           <span className='text-gray-800'>{currentDate}</span>
         </div>
@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
   return {
     props: {
-      name: session?.user?.name || 'Visitante',
+      firstName: session?.user.firstName,
     },
   }
 }

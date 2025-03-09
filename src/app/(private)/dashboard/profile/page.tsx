@@ -46,6 +46,7 @@ export default function Profile() {
         firstName: data.firstName,
         updatedAt: new Date(),
         role: data.role,
+        plan: data.plan,
       }
 
       if (data.password) {
@@ -93,6 +94,7 @@ export default function Profile() {
           setValue('lastName', data.lastName)
           setValue('email', data.email)
           setValue('role', data.role)
+          setValue('plan', data.plan)
         } catch (error) {
           console.log(error)
           toast.error(
@@ -110,12 +112,12 @@ export default function Profile() {
       <Sidebar />
       <div className='flex-1'>
         <HeaderDashboard
-          name={session?.user?.name as string}
+          firstName={session?.user?.name as string}
           IconComponent={User}
           currentDate={currentDate}
           title='Perfil'
         />
-        <section className='px-6 pt-6 md:max-h-screen max-h-[calc(100vh-8rem)] flex flex-col gap-4 overflow-y-auto'>
+        <section className='px-6 pt-6 max-h-[calc(100vh-6rem)] flex flex-col gap-4 overflow-y-auto'>
           <Title title='Perfil' />
 
           <div className='flex flex-col gap-8 w-full'>
@@ -201,6 +203,27 @@ export default function Profile() {
                     <option value='admin'>Administrador</option>
                     <option value='editor'>Editor</option>
                     <option value='costumer'>Cliente</option>
+                  </select>
+                  {errors.role && (
+                    <span className='text-red-500'>{errors.role?.message}</span>
+                  )}
+                </div>
+                <div className='flex flex-col gap-2'>
+                  <label className='text-blue-800' htmlFor='roles'>
+                    Plano
+                  </label>
+                  <select
+                    id='plan'
+                    contentEditable={false}
+                    disabled
+                    aria-invalid={!!errors.plan}
+                    {...register('plan')}
+                    name='plan'
+                    className='p-2 rounded-md border border-gray-500 text-md text-gray-900 pr-8 cursor-not-allowed bg-gray-300'
+                  >
+                    <option value=''>Selecione uma opção</option>
+                    <option value='free'>Gratuito</option>
+                    <option value='premium'>Premium</option>
                   </select>
                   {errors.role && (
                     <span className='text-red-500'>{errors.role?.message}</span>
