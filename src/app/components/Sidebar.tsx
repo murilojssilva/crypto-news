@@ -41,25 +41,20 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`flex flex-col h-screen bg-gray-200 items-center ${
-        openMenu ? 'w-[30vh]' : 'w-[18%]'
+      className={`flex flex-col gap-4 h-screen bg-gray-200 items-center ${
+        openMenu ? 'w-[24vh]' : 'w-[10vh]'
       } sticky top-0`}
     >
       <div
         className={`flex ${
           openMenu ? 'flex-row' : 'flex-col'
-        } gap-2 items-center justify-between p-8`}
+        } gap-8 items-center justify-between p-8`}
       >
-        <Image
-          src={logo}
-          alt='CryptoNews'
-          className='w-12 h-12 md:w-10 md:h-10'
-        />
         <div className='hidden md:flex justify-start'>
           <button
             data-collapse-toggle='navbar-hamburger'
             type='button'
-            className='inline-flex items-center justify-center w-12 h-12 md:w-10 md:h-10 text-sm rounded-lg border border-blue-800 bg-gray-100 ms:hidden'
+            className='flex items-center justify-center w-10 h-10 text-sm rounded-lg border border-blue-800 bg-gray-100'
             aria-controls='navbar-hamburger'
             aria-expanded={openMenu}
             onClick={() => setOpenMenu(!openMenu)}
@@ -69,7 +64,18 @@ export default function Sidebar() {
           </button>
         </div>
       </div>
-
+      <div className='flex flex-col justify-center items-center gap-4'>
+        <Image
+          src={logo}
+          alt='CryptoNews'
+          className='md:w-10 md:h-10 w-6 h-6'
+        />
+        <span
+          className={`text-blue-800 font-bold text-xl ${!openMenu && 'hidden'}`}
+        >
+          CryptoNews
+        </span>
+      </div>
       <div className='flex-1 flex flex-col gap-2 px-5'>
         <Link href='/dashboard'>
           <button
@@ -116,11 +122,10 @@ export default function Sidebar() {
           </button>
         </Link>
       </div>
-
-      <div className='p-5'>
+      <div className='py-8'>
         <button
           onClick={handleLogout}
-          className='flex flex-row items-center gap-3 text-sx p-2 rounded-xl text-gray-800 hover:bg-gray-300 w-full'
+          className='flex flex-row items-center gap-3 text-sx p-2 rounded-xl text-red-500 hover:bg-gray-300 w-full'
         >
           <LogOutIcon color='red' /> {openMenu && 'Sair'}
         </button>
