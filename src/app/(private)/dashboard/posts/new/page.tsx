@@ -45,7 +45,7 @@ export default function NewPost() {
           title='Novo Post'
         />
 
-        <section className='p-6 grid gap-4'>
+        <section className='px-6 pt-6 flex flex-col gap-4 overflow-y-auto'>
           <Title title='Novo post' />
           <form
             onSubmit={handleSubmit(handleNewPostSubmit)}

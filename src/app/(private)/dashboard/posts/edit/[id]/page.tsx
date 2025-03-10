@@ -109,7 +109,7 @@ export default function EditPost() {
           title='Editar Post'
         />
 
-        <section className='p-6 grid gap-4'>
+        <section className='px-6 pt-6 flex flex-col gap-4 overflow-y-auto'>
           <Title title='Editar post' />
           <div className='flex flex-col gap-8 w-full'>
             <form
