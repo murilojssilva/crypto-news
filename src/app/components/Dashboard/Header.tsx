@@ -9,22 +9,23 @@ export default function HeaderDashboard({
   title,
   firstName,
 }: HeaderDashboardProps) {
-  return (
-    <div className='p-4 mt-2 border-b border-gray-300'>
-      <div className='flex items-center justify-between w-full'>
-        <div>
-          <h1 className='text-blue-800'>
-            Olá, <span className='font-bold'>{firstName}</span>
-          </h1>
-          <span className='text-gray-800'>{currentDate}</span>
-        </div>
-        <div className='flex flex-row items-center gap-2'>
-          <IconComponent color='#1565C0' />
-          <span className='font-bold text-gray-800'>{title}</span>
+  if (firstName)
+    return (
+      <div className='p-4 mt-2 border-b border-gray-300'>
+        <div className='flex items-center justify-between w-full'>
+          <div>
+            <h1 className='text-blue-800'>
+              Olá, <span className='font-bold'>{firstName}</span>
+            </h1>
+            <span className='text-gray-800'>{currentDate}</span>
+          </div>
+          <div className='flex flex-row items-center gap-2'>
+            <IconComponent color='#1565C0' />
+            <span className='font-bold text-gray-800'>{title}</span>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
@@ -32,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
   return {
     props: {
-      firstName: session?.user.firstName,
+      firstName: session?.user.name,
     },
   }
 }

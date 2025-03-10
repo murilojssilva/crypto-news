@@ -8,13 +8,17 @@ declare module 'next-auth' {
       plan: unknown
       firstName: unknown
       lastName: unknown
+      endPremium: unknown
     } & DefaultSession['user']
   }
 
   interface User extends AdapterUser {
+    id: string
+    email: string
     role: string
     plan: string
     firstName: string
     lastName: string
+    endPremium: Date | null
   }
 }

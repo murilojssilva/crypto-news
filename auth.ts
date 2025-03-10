@@ -43,6 +43,7 @@ export const authConfig: NextAuthOptions = {
           plan: user.plan,
           firstName: user.firstName,
           lastName: user.lastName,
+          endPremium: user.endPremium,
         }
       },
     }),
@@ -61,6 +62,11 @@ export const authConfig: NextAuthOptions = {
         token.plan = user.plan
         token.firstName = user.firstName
         token.lastName = user.lastName
+        token.endPremium = user.endPremium
+      }
+
+      if (token.endPremium && new Date(token.endPremium as Date) < new Date()) {
+        token.plan = 'free'
       }
       return token
     },
@@ -71,6 +77,9 @@ export const authConfig: NextAuthOptions = {
         session.user.name = token.name
         session.user.role = token.role
         session.user.plan = token.plan
+        session.user.firstName = token.firstName
+        session.user.lastName = token.lastName
+        session.user.endPremium = token.endPremium
       }
       return session
     },
