@@ -51,21 +51,21 @@ export default function Dashboard() {
   }
 
   return (
-    <div className='flex bg-gray-50 pb-4 h-screen '>
+    <div className='bg-gray-50 pb-4 h-screen flex'>
       <Sidebar />
 
-      <div className='flex-1'>
+      <div className='flex-1 overflow-auto'>
         <HeaderDashboard
           firstName={session?.user?.firstName as string}
           IconComponent={Home}
           currentDate={currentDate}
           title='Dashboard'
         />
-        <section className='p-6 md:max-h-[calc(100vh-4rem)] max-h-[calc(100vh-10rem)] flex flex-col gap-4 overflow-y-auto'>
+        <section className='p-6  flex flex-col gap-4 overflow-y-auto'>
           <section className=''>
             <Title title='Dashboard' />
             {loading ? (
-              <div className='py-4 grid grid-cols-2 md:grid-cols-4 gap-4'>
+              <div className='py-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 md:grid-cols-3 gap-4'>
                 {skeletons.map((_, index) => (
                   <div
                     key={index}
@@ -81,7 +81,7 @@ export default function Dashboard() {
                 ))}
               </div>
             ) : (
-              <div className='py-4 grid grid-cols-2 xl:grid-cols-4 md:grid-cols-3 gap-x-4 gap-y-8'>
+              <div className='py-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 md:grid-cols-3 gap-x-4 gap-y-8'>
                 {session?.user.role === 'admin' && (
                   <Card
                     text='Total de clientes'
@@ -205,51 +205,64 @@ export default function Dashboard() {
           )}
         </section>
         {session?.user.role === 'admin' && (
-          <section className='grid gap-4 px-6 pt-6 max-w-[calc(100vw-6rem)] overflow-x-auto'>
+          <section className='px-4 pt-4 md:px-6 md:pt-6 w-full overflow-x-auto'>
             <h2 className='text-blue-800 font-semibold text-lg mt-2'>
               Usuários cadastrados
             </h2>
-            <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-              <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
-                <tr className='*:px-4 *:py-3'>
-                  <th scope='col'>Nome</th>
-                  <th scope='col'>Sobrenome</th>
-                  <th scope='col'>E-mail</th>
-                  <th scope='col'>Cargo</th>
-                  <th scope='col'>Data de criação</th>
-                  <th scope='col'>Data de atualização</th>
-                  <th scope='col'>Plano</th>
-                  <th scope='col'>Início do Premium</th>
-                  <th scope='col'>Fim do Premium</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr
-                    key={user.id}
-                    className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200'
-                  >
-                    <td className='px-6 py-4'>{user.firstName}</td>
-                    <td className='px-6 py-4'>{user.lastName}</td>
-                    <td className='px-6 py-4'>{user.email}</td>
-                    <td className='px-6 py-4'>{formatUserRole(user.role)}</td>
-                    <td className='px-6 py-4'>
-                      {formatDate(user.createdAt as Date)}
-                    </td>
-                    <td className='px-6 py-4'>
-                      {formatDate(user.updatedAt as Date)}
-                    </td>
-                    <td className='px-6 py-4'>{formatUserPlan(user.plan)}</td>
-                    <td className='px-6 py-4'>
-                      {formatDate(user.startPremium as Date)}
-                    </td>
-                    <td className='px-6 py-4'>
-                      {formatDate(user.endPremium as Date)}
-                    </td>
+
+            <div className='w-full overflow-x-auto bg-white shadow-md rounded-lg mt-4'>
+              <table className='w-full min-w-[800px] text-sm text-left text-gray-800'>
+                <thead className='text-xs text-gray-700 uppercase bg-gray-300'>
+                  <tr className='*:px-4 *:py-3'>
+                    <th scope='col'>Nome</th>
+                    <th scope='col'>Sobrenome</th>
+                    <th scope='col'>E-mail</th>
+                    <th scope='col'>Cargo</th>
+                    <th scope='col'>Data de criação</th>
+                    <th scope='col'>Data de atualização</th>
+                    <th scope='col'>Plano</th>
+                    <th scope='col'>Início do Premium</th>
+                    <th scope='col'>Fim do Premium</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {users.map((user) => (
+                    <tr
+                      key={user.id}
+                      className='bg-gray-200 border-b border-gray-300 text-gray-700'
+                    >
+                      <td className='px-4 py-3 whitespace-nowrap'>
+                        {user.firstName}
+                      </td>
+                      <td className='px-4 py-3 whitespace-nowrap'>
+                        {user.lastName}
+                      </td>
+                      <td className='px-4 py-3 whitespace-nowrap'>
+                        {user.email}
+                      </td>
+                      <td className='px-4 py-3 whitespace-nowrap'>
+                        {formatUserRole(user.role)}
+                      </td>
+                      <td className='px-4 py-3 whitespace-nowrap'>
+                        {formatDate(user.createdAt)}
+                      </td>
+                      <td className='px-4 py-3 whitespace-nowrap'>
+                        {formatDate(user.updatedAt)}
+                      </td>
+                      <td className='px-4 py-3 whitespace-nowrap'>
+                        {formatUserPlan(user.plan)}
+                      </td>
+                      <td className='px-4 py-3 whitespace-nowrap'>
+                        {formatDate(user.startPremium as Date)}
+                      </td>
+                      <td className='px-4 py-3 whitespace-nowrap'>
+                        {formatDate(user.endPremium as Date)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
         )}
       </div>

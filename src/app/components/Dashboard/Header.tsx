@@ -4,7 +4,6 @@ import { authConfig } from '../../../../auth'
 import { HeaderDashboardProps } from '@/app/interfaces/Dashboard'
 
 export default function HeaderDashboard({
-  currentDate,
   IconComponent,
   title,
   firstName,
@@ -17,7 +16,6 @@ export default function HeaderDashboard({
             <h1 className='text-blue-800'>
               Olá, <span className='font-bold'>{firstName}</span>
             </h1>
-            <span className='text-gray-800'>{currentDate}</span>
           </div>
           <div className='flex flex-row items-center gap-2'>
             <IconComponent color='#1565C0' />

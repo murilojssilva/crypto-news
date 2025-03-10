@@ -110,14 +110,14 @@ export default function Profile() {
   return (
     <div className='bg-gray-50 pb-4 h-screen flex'>
       <Sidebar />
-      <div className='flex-1'>
+      <div className='flex-1 overflow-auto'>
         <HeaderDashboard
-          firstName={session?.user?.name as string}
+          firstName={session?.user?.firstName as string}
           IconComponent={User}
           currentDate={currentDate}
           title='Perfil'
         />
-        <section className='px-6 pt-6 max-h-[calc(100vh-6rem)] flex flex-col gap-4 overflow-y-auto'>
+        <section className='px-6 pt-6 flex flex-col gap-4 overflow-y-auto'>
           <Title title='Perfil' />
 
           <div className='flex flex-col gap-8 w-full'>

@@ -37,9 +37,9 @@ export default function NewPost() {
     <div className='bg-gray-50 pb-4 h-screen flex'>
       <Sidebar />
 
-      <div className='flex-1'>
+      <div className='flex-1 overflow-auto'>
         <HeaderDashboard
-          firstName={session?.user?.name as string}
+          firstName={session?.user?.firstName as string}
           IconComponent={Pen}
           currentDate={currentDate}
           title='Novo Post'

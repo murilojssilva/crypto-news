@@ -23,15 +23,15 @@ export default function Posts() {
     <div className='bg-gray-50 pb-4 h-screen flex'>
       <Sidebar />
 
-      <div className='flex-1'>
+      <div className='flex-1 overflow-auto'>
         <HeaderDashboard
-          firstName={session?.user?.name as string}
+          firstName={session?.user?.firstName as string}
           IconComponent={Pen}
           currentDate={currentDate}
           title='Posts'
         />
 
-        <section className='px-6 pt-6 md:max-h-screen max-h-[calc(100vh-8rem)] flex flex-col gap-4 overflow-y-auto'>
+        <section className='px-6 pt-6 md:max-h-screen flex flex-col gap-4 overflow-y-auto'>
           <div className='flex flex-row justify-between items-center'>
             <Title
               title={
@@ -46,7 +46,8 @@ export default function Posts() {
               href='/dashboard/posts/new'
               className='text-gray-100 p-2 text-sm whitespace-nowrap flex flex-row items-center gap-2 bg-blue-800 hover:bg-blue-600 rounded-xl'
             >
-              <Plus size={20} /> Novo Post
+              <Plus size={20} fontWeight={'bold'} />{' '}
+              <span className='hidden md:block'>Novo Post</span>
             </Link>
           </div>
           {loading ? (
