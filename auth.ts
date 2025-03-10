@@ -66,6 +66,13 @@ export const authConfig: NextAuthOptions = {
       }
 
       if (token.endPremium && new Date(token.endPremium as Date) < new Date()) {
+        await db.user.update({
+          where: { id: token.id as string },
+          data: {
+            plan: 'free',
+          },
+        })
+
         token.plan = 'free'
       }
       return token
