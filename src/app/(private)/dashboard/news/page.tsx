@@ -1,7 +1,13 @@
 'use client'
 
 import ReactMarkdown from 'react-markdown'
-import { Calendar, Pen, Plus, Trash } from 'lucide-react'
+import {
+  Calendar,
+  BookmarkPlus,
+  BookmarkMinus,
+  Filter,
+  Newspaper,
+} from 'lucide-react'
 import Link from 'next/link'
 import { usePosts } from '@/context/PostContext'
 import { NewsItem } from '@/app/interfaces/PostInterface'
@@ -12,11 +18,18 @@ import HeaderDashboard from '@/app/components/Dashboard/Header'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Title } from '@/app/components/Dashboard/Title'
+import { useState } from 'react'
 
-export default function Posts() {
-  const { posts, loading, handleDeletePost } = usePosts()
+export default function DashboardNews() {
+  const { posts, loading } = usePosts()
   const { data: session } = useSession()
   const currentDate = useFormattedDate()
+  const [isFavorited, setIsFavorited] = useState(false)
+
+  async function handleFavoriteNews(id: string) {
+    setIsFavorited(!isFavorited)
+    console.log(id)
+  }
 
   const skeletons = Array(3).fill('')
   return (
@@ -26,29 +39,17 @@ export default function Posts() {
       <div className='flex-1 overflow-auto'>
         <HeaderDashboard
           firstName={session?.user?.firstName as string}
-          IconComponent={Pen}
+          IconComponent={Newspaper}
           currentDate={currentDate}
-          title='Posts'
+          title='Notícias'
         />
 
         <section className='px-6 pt-6 md:max-h-screen flex flex-col gap-4 overflow-y-auto'>
           <div className='flex flex-row justify-between items-center'>
-            <Title
-              title={
-                session?.user.role === 'editor'
-                  ? 'Minhas postagens'
-                  : session?.user.role === 'admin'
-                  ? 'Todas as postagens'
-                  : ''
-              }
-            />
-            <Link
-              href='/dashboard/posts/new'
-              className='text-gray-100 p-2 text-sm whitespace-nowrap flex flex-row items-center gap-2 bg-blue-800 hover:bg-blue-600 rounded-xl'
-            >
-              <Plus size={20} fontWeight={'bold'} />{' '}
-              <span className='hidden md:block'>Novo Post</span>
-            </Link>
+            <Title title='Últimas notícias' />
+            <span className='p-2 rounded-xl cursor-pointer text-blue-800 hover:bg-blue-800 hover:text-gray-50'>
+              <Filter size={20} />
+            </span>
           </div>
           {loading ? (
             <div className='flex items-center justify-center h-full flex-col'>
@@ -109,20 +110,22 @@ export default function Posts() {
                   </Link>
                   <div className='flex flex-row gap-2 '>
                     {item.userId === session?.user.id && (
-                      <Link
-                        className='hover:bg-blue-800 text-blue-800 hover:text-gray-200 rounded-xl p-2'
-                        href={`/dashboard/posts/edit/${item.id}`}
-                      >
-                        <Pen size={24} />
-                      </Link>
-                    )}
-
-                    {item.userId === session?.user.id && (
                       <button
-                        className='hover:bg-red-500 text-red-500 hover:text-gray-200 rounded-xl p-2'
-                        onClick={() => handleDeletePost(item.id)}
+                        className={`rounded-xl p-2
+                          ${
+                            isFavorited
+                              ? 'hover:bg-blue-200 text-blue-800 hover:text-blue-800'
+                              : 'hover:bg-red-200 text-red-500 hover:text-red-500'
+                          }
+                          
+                          `}
+                        onClick={() => handleFavoriteNews(item.id)}
                       >
-                        <Trash size={24} />
+                        {isFavorited ? (
+                          <BookmarkPlus size={24} />
+                        ) : (
+                          <BookmarkMinus />
+                        )}
                       </button>
                     )}
                   </div>

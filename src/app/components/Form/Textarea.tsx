@@ -102,7 +102,7 @@ export default function Textarea({
             'bg-gray-300 cursor-not-allowed ': !!disabled,
           }
         )}
-        rows={5}
+        rows={10}
       />
 
       {errorMessage && (

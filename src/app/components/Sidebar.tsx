@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import logo from '@/assets/images/bitwire.svg'
-import { Home, LogOutIcon, Pen, User } from 'lucide-react'
+import { Home, LogOutIcon, Newspaper, Pen, User } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { List } from '@phosphor-icons/react'
@@ -89,6 +89,24 @@ export default function Sidebar() {
             {openMenu && 'Dashboard'}
           </button>
         </Link>
+        {session?.user.role === 'costumer' && (
+          <Link href='/dashboard/news'>
+            <button
+              className={`flex flex-row items-center gap-3 text-sx p-2 rounded-xl hover:bg-gray-300 w-full ${
+                pathname?.startsWith('/dashboard/news')
+                  ? `text-gray-800 font-bold ${openMenu && 'bg-gray-100'}`
+                  : 'text-gray-600'
+              }`}
+            >
+              <Newspaper
+                color={
+                  pathname?.startsWith('/dashboard/news') ? '#1565C0' : 'black'
+                }
+              />
+              {openMenu && 'Notícias'}
+            </button>
+          </Link>
+        )}
         {session?.user.role !== 'costumer' && (
           <Link href='/dashboard/posts'>
             <button

@@ -21,6 +21,13 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  if (request.nextUrl.pathname.startsWith('/dashboard/news')) {
+    if (session.user.role !== 'costumer') {
+      const dashboardUrl = new URL('/dashboard', request.url)
+      return NextResponse.redirect(dashboardUrl)
+    }
+  }
+
   if (request.nextUrl.pathname.startsWith('/dashboard')) {
     if (!sessionToken) {
       const loginUrl = new URL('/login', request.url)
