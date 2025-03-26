@@ -91,25 +91,37 @@ export default function Posts() {
                       </ReactMarkdown>
                     </div>
 
-                    <div className='flex flex-row justify-start gap-4'>
-                      {item.categories?.map((categorie, index) => (
+                    <div className='flex flex-row justify-between gap-4'>
+                      {item.categories?.map((category, index) => (
                         <span
                           key={index}
                           className='text-blue-800 font-bold text-xs border border-blue-800 hover:bg-blue-800 hover:text-gray-100 p-2 rounded-xl'
                         >
-                          {categorie}
+                          {category.categoryId}
                         </span>
                       ))}
-                      <span className='text-blue-800 text-md font-bold flex flex-row items-center gap-1'>
-                        <Calendar size={14} color='#1e40af' />
-                        {format(
-                          new Date(item.createdAt),
-                          "dd/MM/yyyy 'às' HH:mm",
-                          {
-                            locale: ptBR,
-                          }
-                        )}
-                      </span>
+                      <div className='flex flex-row gap-4'>
+                        <span className='text-blue-800 text-md font-bold flex flex-row items-center gap-1'>
+                          <Calendar size={14} color='#1e40af' />
+                          {format(
+                            new Date(item.createdAt),
+                            "dd/MM/yyyy 'às' HH:mm",
+                            {
+                              locale: ptBR,
+                            }
+                          )}
+                        </span>
+                        <span className='text-blue-800 text-md font-bold flex flex-row items-center gap-1'>
+                          <Pen size={14} color='#1e40af' />
+                          {format(
+                            new Date(item.updatedAt),
+                            "dd/MM/yyyy 'às' HH:mm",
+                            {
+                              locale: ptBR,
+                            }
+                          )}
+                        </span>
+                      </div>
                     </div>
                   </Link>
                   <div className='flex flex-row gap-2 '>

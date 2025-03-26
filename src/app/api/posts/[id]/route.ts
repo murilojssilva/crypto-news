@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
+import { CategoryProps } from '@/app/interfaces/CategoryInterface'
 
 export async function GET(req: Request, { params }: { params: any }) {
   try {
@@ -65,50 +66,61 @@ export async function DELETE(req: Request, { params }: { params: any }) {
   }
 }
 
-export async function PUT(req: NextRequest) {
+export async function PUT(request: Request, { params }: { params: any }) {
   try {
-    // Ler o corpo da requisição uma única vez
-    const { id, title, subtitle, content, published, categories } =
-      await req.json()
+    const { id } = await params
 
-    if (!id || !title || !subtitle || !content) {
-      return NextResponse.json(
-        { error: 'Campos obrigatórios ausentes' },
-        { status: 400 }
-      )
+    if (!id) {
+      throw new Error('ID não fornecido')
     }
 
-    // Verificar se o post existe antes de atualizar
-    const existingPost = await prisma.post.findUnique({ where: { id } })
+    const { title, subtitle, content, published, categories } =
+      await request.json()
 
-    if (!existingPost) {
-      return NextResponse.json(
-        { error: 'Post não encontrado' },
-        { status: 404 }
-      )
-    }
+    const categoryNames = categories
+      .map((cat: CategoryProps) => (typeof cat === 'string' ? cat : cat?.name))
+      .filter((name: string) => typeof name === 'string' && name.trim() !== '')
 
-    // Atualização do post no Prisma
-    const updatedPost = await prisma.post.update({
+    const categoryObjects = await Promise.all(
+      categoryNames.map(async (categoryName: string) => {
+        const category = await prisma.category.findUnique({
+          where: { name: categoryName },
+        })
+
+        if (!category) {
+          const newCategory = await prisma.category.create({
+            data: { name: categoryName },
+          })
+          return { categoryId: newCategory.id }
+        }
+
+        return { categoryId: category.id }
+      })
+    )
+
+    const updatePost = await prisma.post.update({
       where: { id },
       data: {
         title,
         subtitle,
         content,
         published,
+        updatedAt: new Date(),
         categories: {
-          connect:
-            categories?.map((categoryId: string) => ({ id: categoryId })) || [],
+          connect: categoryObjects.map((cat) => ({
+            postId_categoryId: {
+              postId: id,
+              categoryId: cat.categoryId,
+            },
+          })),
         },
       },
+      include: { categories: { include: { category: true } } },
     })
 
-    return NextResponse.json(updatedPost, { status: 200 })
+    return new Response(JSON.stringify(updatePost), { status: 200 })
   } catch (error) {
     console.error('Erro ao editar o post:', error)
-    return NextResponse.json(
-      { error: 'Erro interno do servidor' },
-      { status: 500 }
-    )
+    return new Response('Erro ao atualizar post', { status: 500 })
   }
 }

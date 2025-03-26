@@ -93,27 +93,21 @@ export default function EditPost() {
       if (id) {
         const formattedData = {
           ...data,
+          id,
+          updatedAt: new Date(),
           categories:
             data.categories?.map((categoryId: string) => ({
               id: categoryId,
             })) || [],
         }
 
-        console.log('Enviando dados para edição:', formattedData)
-
-        const response = await fetch(`/api/posts/${id}`, {
+        await fetch(`/api/posts/${id}`, {
           method: 'PUT',
           body: JSON.stringify(formattedData),
           headers: {
             'Content-Type': 'application/json',
           },
         })
-
-        if (!response.ok) {
-          const errorResponse = await response.json()
-          console.error('Erro na resposta da API:', errorResponse)
-          throw new Error(errorResponse.error || 'Erro ao editar postagem')
-        }
 
         toast.success('Postagem editada com sucesso!')
         fetchPosts()
@@ -144,8 +138,11 @@ export default function EditPost() {
           <div className='flex flex-col gap-8 w-full'>
             <form
               onSubmit={handleSubmit(handleEditPostSubmit)}
-              className='flex flex-col gap-8'
+              className='flex flex-col gap-2'
             >
+              <label className='text-blue-800' htmlFor='title'>
+                Título
+              </label>
               <Input
                 {...register('title')}
                 errorsField={errors.title?.message ?? ''}
@@ -158,6 +155,9 @@ export default function EditPost() {
               {errors.title && (
                 <span className='text-red-500'>{errors.title?.message}</span>
               )}
+              <label className='text-blue-800' htmlFor='subtitle'>
+                Subtítulo
+              </label>
               <Input
                 {...register('subtitle')}
                 disabled={loading}
@@ -170,6 +170,9 @@ export default function EditPost() {
               {errors.subtitle && (
                 <span className='text-red-500'>{errors.subtitle?.message}</span>
               )}
+              <label className='text-blue-800' htmlFor='content'>
+                Conteúdo
+              </label>
               <Textarea
                 {...register('content')}
                 typeof='text'

@@ -28,6 +28,7 @@ export interface NewsItem {
   content: string
   userId: string
   createdAt: string
+  updatedAt: string
   published: boolean
   categories?: { categoryId: string }[]
 }
