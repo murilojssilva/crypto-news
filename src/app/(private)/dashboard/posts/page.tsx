@@ -92,9 +92,14 @@ export default function Posts() {
                     </div>
 
                     <div className='flex flex-row justify-start gap-4'>
-                      <span className='text-blue-800 font-bold text-xs border border-blue-800 hover:bg-blue-800 hover:text-gray-100 p-2 rounded-xl'>
-                        Negócios
-                      </span>
+                      {item.categories?.map((categorie, index) => (
+                        <span
+                          key={index}
+                          className='text-blue-800 font-bold text-xs border border-blue-800 hover:bg-blue-800 hover:text-gray-100 p-2 rounded-xl'
+                        >
+                          {categorie}
+                        </span>
+                      ))}
                       <span className='text-blue-800 text-md font-bold flex flex-row items-center gap-1'>
                         <Calendar size={14} color='#1e40af' />
                         {format(

@@ -23,6 +23,8 @@ import {
 } from '@/app/schemas/EditPostSchema'
 import { Title } from '@/app/components/Dashboard/Title'
 import { Loading } from '@/app/components/Form/Loading'
+import { getCategoryById } from '@/lib/categories/[id]'
+import { useCategories } from '@/context/CategoryContext'
 
 export default function EditPost() {
   const {
@@ -39,6 +41,7 @@ export default function EditPost() {
   const { loading, setLoading, fetchPosts } = usePosts()
   const { data: session } = useSession()
   const currentDate = useFormattedDate()
+  const { categories } = useCategories()
 
   useEffect(() => {
     if (id) {
@@ -46,6 +49,17 @@ export default function EditPost() {
         try {
           setLoading(true)
           const data = await getPostById(id as string)
+
+          const categoriesData = await getCategoryById(data.id as string)
+
+          console.log({ data, categoriesData })
+
+          if (Array.isArray(categoriesData)) {
+            const selectedCategoryNames = categoriesData.map((cat) => cat.name)
+            setValue('categories', selectedCategoryNames)
+          } else {
+            setValue('categories', [])
+          }
 
           setValue('title', data.title)
           setValue('subtitle', data.subtitle)
@@ -62,7 +76,7 @@ export default function EditPost() {
       }
       fetchPost()
     }
-  }, [])
+  }, [id, setValue, setLoading])
 
   useEffect(() => {
     const savedPost = localStorage.getItem(`post-${id}`)
@@ -70,27 +84,43 @@ export default function EditPost() {
       const parsedData = JSON.parse(savedPost)
       setValue('content', parsedData.content)
     }
-  }, [])
+  }, [id, setValue])
 
   const handleEditPostSubmit = async (data: EditPostFormData) => {
     try {
       setLoading(true)
+
       if (id) {
-        await fetch(`/api/posts/${id}`, {
+        const formattedData = {
+          ...data,
+          categories:
+            data.categories?.map((categoryId: string) => ({
+              id: categoryId,
+            })) || [],
+        }
+
+        console.log('Enviando dados para edição:', formattedData)
+
+        const response = await fetch(`/api/posts/${id}`, {
           method: 'PUT',
-          body: JSON.stringify(data),
+          body: JSON.stringify(formattedData),
           headers: {
             'Content-Type': 'application/json',
           },
         })
 
+        if (!response.ok) {
+          const errorResponse = await response.json()
+          console.error('Erro na resposta da API:', errorResponse)
+          throw new Error(errorResponse.error || 'Erro ao editar postagem')
+        }
+
         toast.success('Postagem editada com sucesso!')
         fetchPosts()
-
         router.push('/dashboard/posts')
       }
     } catch (error) {
-      console.log(error)
+      console.error('Erro ao editar postagem:', error)
       toast.error('Erro ao editar postagem. Tente novamente mais tarde.')
     } finally {
       setLoading(false)
@@ -151,6 +181,29 @@ export default function EditPost() {
               />
               {errors.content && (
                 <span className='text-red-500'>{errors.content.message}</span>
+              )}
+
+              <label className='text-bold text-blue-800 font-bold text-xl'>
+                Selecione as categorias
+              </label>
+              <select
+                {...register('categories')}
+                multiple
+                className={`border p-2 rounded w-full text-gray-400 ${
+                  loading && 'bg-gray-300 cursor-not-allowed'
+                }`}
+                disabled={loading}
+              >
+                {categories.map((category) => (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              {errors.categories && (
+                <span className='text-red-500'>
+                  {errors.categories.message as string}
+                </span>
               )}
 
               <label className='text-bold text-blue-800 flex items-center gap-2 font-bold text-md'>

@@ -24,6 +24,14 @@ model User {
   @@map("users")
 }
 
+model Category {
+  id    String   @id @default(cuid())
+  name  String @unique
+  posts PostCategory[]
+
+  @@map("categories")
+}
+
 model Post {
   id        String   @id @default(cuid())
   title     String
@@ -34,6 +42,17 @@ model Post {
   updatedAt DateTime @updatedAt
   userId    String   @map("userId")
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categories PostCategory[]
 
   @@map("posts")
+}
+
+model PostCategory {
+  postId     String
+  categoryId String
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([postId, categoryId])
+  @@map("post_categories")
 }

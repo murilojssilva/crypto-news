@@ -1,6 +1,7 @@
 'use client'
 
 import { usePosts } from '@/context/PostContext'
+
 import Input from '@/app/components/Form/Input'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,6 +18,7 @@ import { useFormattedDate } from '@/hooks/useFormatted'
 import { Button } from '@/app/components/Dashboard/Button'
 import { Title } from '@/app/components/Dashboard/Title'
 import { Loading } from '@/app/components/Form/Loading'
+import { useCategories } from '@/context/CategoryContext'
 
 export default function NewPost() {
   const {
@@ -30,6 +32,7 @@ export default function NewPost() {
     },
   })
   const { loading, handleNewPostSubmit } = usePosts()
+  const { categories } = useCategories()
   const { data: session } = useSession()
   const currentDate = useFormattedDate()
 
@@ -85,6 +88,27 @@ export default function NewPost() {
             />
             {errors.content && (
               <span className='text-red-500'>{errors.content?.message}</span>
+            )}
+
+            <label className='text-bold text-blue-800 font-bold text-xl'>
+              Selecione as categorias
+            </label>
+            <select
+              {...register('categories')}
+              multiple
+              className='border p-2 rounded w-full text-gray-400'
+              disabled={loading}
+            >
+              {categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            {errors.categories && (
+              <span className='text-red-500'>
+                {errors.categories.message as string}
+              </span>
             )}
 
             <label className='text-bold text-blue-800 flex items-center gap-2 font-bold text-md'>

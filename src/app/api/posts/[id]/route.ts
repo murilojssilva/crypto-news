@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 
@@ -65,32 +65,49 @@ export async function DELETE(req: Request, { params }: { params: any }) {
   }
 }
 
-export async function PUT(req: Request, { params }: { params: any }) {
+export async function PUT(req: NextRequest) {
   try {
-    const { id } = await params
-    const { title, subtitle, content, published } = await req.json()
+    // Ler o corpo da requisição uma única vez
+    const { id, title, subtitle, content, published, categories } =
+      await req.json()
 
-    // Check if all required fields are provided
-    if (!title || !subtitle || !content) {
+    if (!id || !title || !subtitle || !content) {
       return NextResponse.json(
-        { error: 'Título, subtítulo e conteúdo são obrigatórios' },
+        { error: 'Campos obrigatórios ausentes' },
         { status: 400 }
       )
     }
 
+    // Verificar se o post existe antes de atualizar
+    const existingPost = await prisma.post.findUnique({ where: { id } })
+
+    if (!existingPost) {
+      return NextResponse.json(
+        { error: 'Post não encontrado' },
+        { status: 404 }
+      )
+    }
+
+    // Atualização do post no Prisma
     const updatedPost = await prisma.post.update({
       where: { id },
-      data: { title, subtitle, content, published },
+      data: {
+        title,
+        subtitle,
+        content,
+        published,
+        categories: {
+          connect:
+            categories?.map((categoryId: string) => ({ id: categoryId })) || [],
+        },
+      },
     })
 
-    return NextResponse.json({
-      message: 'Post atualizado com sucesso',
-      updatedPost,
-    })
+    return NextResponse.json(updatedPost, { status: 200 })
   } catch (error) {
     console.error('Erro ao editar o post:', error)
     return NextResponse.json(
-      { error: 'Erro ao editar o post' },
+      { error: 'Erro interno do servidor' },
       { status: 500 }
     )
   }

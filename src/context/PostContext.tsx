@@ -13,6 +13,7 @@ import {
   PostProps,
 } from '@/app/interfaces/PostInterface'
 import { EditPostFormData } from '@/app/schemas/EditPostSchema'
+import { prisma } from '@/lib/prisma'
 
 interface PostsContextType {
   posts: PostProps[] | NewsItem[]
@@ -45,7 +46,7 @@ export const PostsProvider = ({ children }: { children: React.ReactNode }) => {
     if (id) {
       fetchPostById(id as string)
     }
-  }, [])
+  }, [id])
 
   const fetchPostById = async (
     id: string
@@ -63,7 +64,7 @@ export const PostsProvider = ({ children }: { children: React.ReactNode }) => {
 
       return response
     } catch (error) {
-      console.error('Erro ao buscar post:', error)
+      console.error('Erro ao fazer o post:', error)
       toast.error('Erro ao recuperar postagens. Tente novamente mais tarde.')
       return null
     } finally {
@@ -75,30 +76,68 @@ export const PostsProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       setLoading(true)
 
-      await createPost({
-        title: data.title,
-        subtitle: data.subtitle,
-        content: data.content,
-        published: data.published,
-        userId: session?.user?.id as string,
+      console.log(data)
+
+      const response = await fetch('/api/posts', {
+        method: 'POST',
+        body: JSON.stringify({
+          title: data.title,
+          subtitle: data.subtitle,
+          content: data.content,
+          published: data.published,
+          userId: session?.user?.id,
+          categories: data.categories,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
+
+      if (!response.ok) {
+        throw new Error('Erro ao criar o post')
+      }
+
+      await response.json()
+
       toast.success('Postagem publicada com sucesso!')
       router.push('/dashboard/posts')
     } catch (error) {
-      console.log(error)
+      console.error('Erro ao realizar a postagem:', error)
       toast.error('Erro ao realizar a postagem. Tente novamente mais tarde.')
     } finally {
       setLoading(false)
     }
   }
+
   const handleEditPostSubmit = async (data: EditPostFormData) => {
     try {
       setLoading(true)
 
       if (id) {
+        const categoryObjects = await Promise.all(
+          data.categories.map(async (categoryName) => {
+            let category = await prisma.category.findUnique({
+              where: { name: categoryName },
+            })
+
+            if (!category) {
+              category = await prisma.category.create({
+                data: { name: categoryName },
+              })
+            }
+
+            return { categoryId: category.id }
+          })
+        )
+
         await fetch(`/api/posts/${id}`, {
           method: 'PUT',
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            ...data,
+            categories: categoryObjects.map((cat) => ({
+              categoryId: cat.categoryId,
+            })),
+          }),
           headers: {
             'Content-Type': 'application/json',
           },

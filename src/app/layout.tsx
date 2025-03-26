@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { PostsProvider } from '@/context/PostContext'
 import { UsersProvider } from '@/context/UserContext'
+import { CategoryProvider } from '@/context/CategoryContext'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -28,7 +29,9 @@ export default function RootLayout({
       >
         <SessionProvider>
           <UsersProvider>
-            <PostsProvider>{children}</PostsProvider>
+            <PostsProvider>
+              <CategoryProvider>{children}</CategoryProvider>
+            </PostsProvider>
           </UsersProvider>
         </SessionProvider>
       </body>

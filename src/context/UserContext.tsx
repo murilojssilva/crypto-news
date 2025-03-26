@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { getUsers } from '@/lib/users'
 import { UserProps } from '@/app/interfaces/UserInterface'
+import { Prisma } from '@prisma/client'
 
 interface UsersContextType {
   users: UserProps[]
@@ -26,23 +27,37 @@ export const UsersProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (id) {
       fetchUserById(id as string)
+    } else {
+      console.log('ID do usuário está vazio ou inválido.')
     }
   }, [id])
 
   const fetchUserById = async (id: string): Promise<UserProps | null> => {
     if (!id) {
-      console.error('ID do user não encontrado.')
+      console.error('ID do usuário não encontrado.')
+      toast.error('ID do usuário não encontrado.')
       return null
     }
 
     try {
       setLoading(true)
+      console.log(`Buscando usuário com ID: ${id}`)
       const response = await getUserById(id)
       if (!response) throw new Error('Usuário não encontrado')
+
+      console.log('Usuário encontrado:', response)
       return response
     } catch (error) {
-      console.error('Erro ao buscar user:', error)
-      toast.error('Erro ao recuperar useragens. Tente novamente mais tarde.')
+      console.error('Erro ao buscar usuário:', error)
+
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        toast.error(
+          `Erro ao recuperar usuário. Detalhes: ${
+            error.message || 'Tente novamente mais tarde.'
+          }`
+        )
+      }
+
       return null
     } finally {
       setLoading(false)

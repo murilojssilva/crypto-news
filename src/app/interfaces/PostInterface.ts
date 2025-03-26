@@ -7,6 +7,7 @@ export interface PostProps {
   userId: string
   createdAt: string
   updatedAt: string
+  categories?: { categoryId: string }[]
 }
 
 export interface NewsItemProps {
@@ -28,6 +29,7 @@ export interface NewsItem {
   userId: string
   createdAt: string
   published: boolean
+  categories?: { categoryId: string }[]
 }
 
 export interface NewsPageItem {

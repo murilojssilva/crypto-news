@@ -8,6 +8,9 @@ export const editPostFormValidationsSchema = zod.object({
   subtitle: zod.string().nonempty('Digite o subtítulo'),
   content: zod.string().nonempty('Digite o conteúdo da postagem'),
   published: zod.boolean(),
+  categories: zod
+    .array(zod.string().nonempty('Selecione uma categoria'))
+    .min(1, 'Pelo menos uma categoria deve ser selecionada'),
 })
 
 export type EditPostFormData = zod.infer<typeof editPostFormValidationsSchema>

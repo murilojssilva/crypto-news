@@ -17,7 +17,8 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { title, subtitle, content, published, userId } = await req.json()
+    const { title, subtitle, content, published, userId, categories } =
+      await req.json()
 
     if (!title || !content || !userId) {
       return NextResponse.json(
@@ -26,6 +27,26 @@ export async function POST(req: Request) {
       )
     }
 
+    const categoryObjects = await Promise.all(
+      categories.map(async (categoryName: string) => {
+        const category = await prisma.category.findMany({
+          where: { name: categoryName },
+          take: 1,
+        })
+
+        if (category.length === 0) {
+          const newCategory = await prisma.category.create({
+            data: { name: categoryName },
+          })
+          return { categoryId: newCategory.id }
+        }
+
+        const firstCategory = category[0]
+
+        return { categoryId: firstCategory.id }
+      })
+    )
+
     const newPost = await prisma.post.create({
       data: {
         title,
@@ -33,7 +54,15 @@ export async function POST(req: Request) {
         content,
         published,
         userId: userId,
+        categories: {
+          create: categoryObjects.map((cat) => ({
+            category: {
+              connect: { id: cat.categoryId },
+            },
+          })),
+        },
       },
+      include: { categories: { include: { category: true } } },
     })
 
     return NextResponse.json(newPost, { status: 201 })
