@@ -17,6 +17,23 @@ export default function Footer() {
       <nav className='flex flex-col items-center justify-between sm:justify-between sm:flex-row bg-gray-50 p-8'>
         <div>
           <h1 className='text-xl font-bold text-blue-800 text-center sm:text-left'>
+            Informações
+          </h1>
+          <ul className='flex flex-row sm:flex-col py-4 gap-2'>
+            <Link href='/news' className='text-blue-800 hover:text-blue-600'>
+              <li className={`${pathname === '/news' && 'underline'}`}>
+                Notícias
+              </li>
+            </Link>
+            <Link href='/guides' className='text-blue-800 hover:text-blue-600'>
+              <li className={`${pathname === '/guides' && 'underline'}`}>
+                Guias
+              </li>
+            </Link>
+          </ul>
+        </div>
+        <div>
+          <h1 className='text-xl font-bold text-blue-800 text-center sm:text-left'>
             Mapa do site
           </h1>
           <ul className='flex flex-row sm:flex-col py-4 gap-2'>

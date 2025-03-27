@@ -36,23 +36,41 @@ export function Header() {
           <div
             className={`w-full md:w-auto ${
               openMenu ? 'block' : 'hidden'
-            } md:block`}
+            } md:block pt-4`}
             id='navbar-hamburger'
           >
-            <ul className='flex flex-col sm:flex-row items-center gap-2 font-medium bg-gray-50 md:bg-transparent'>
+            <ul className='flex flex-col sm:flex-row items-center gap-2 font-medium justify-center bg-gray-50 md:bg-transparent'>
               <Link href='/news' className='text-blue-800 hover:text-blue-600'>
                 <li
                   className={`hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold ${
-                    pathname === '/news' ? 'bg-gray-300' : 'bg-transparent'
+                    pathname === '/news'
+                      ? 'bg-blue-900 text-gray-100 hover:bg-blue-700'
+                      : 'bg-transparent text-blue-800'
                   }`}
                 >
                   Notícias
                 </li>
               </Link>
+              <Link
+                href='/guides'
+                className='text-blue-800 hover:text-blue-600'
+              >
+                <li
+                  className={`hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold ${
+                    pathname === '/guides'
+                      ? 'bg-blue-900 text-gray-100 hover:bg-blue-700'
+                      : 'bg-transparent text-blue-800'
+                  }`}
+                >
+                  Guias
+                </li>
+              </Link>
               <Link href='/about' className='text-blue-800 hover:text-blue-600'>
                 <li
                   className={`hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold ${
-                    pathname === '/about' ? 'bg-gray-300' : 'bg-transparent'
+                    pathname === '/about'
+                      ? 'bg-blue-900 text-gray-100 hover:bg-blue-700'
+                      : 'bg-transparent text-blue-800'
                   }`}
                 >
                   Sobre
@@ -64,7 +82,9 @@ export function Header() {
               >
                 <li
                   className={`hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold ${
-                    pathname === '/privacy' ? 'bg-gray-300' : 'bg-transparent'
+                    pathname === '/privacy'
+                      ? 'bg-blue-900 text-gray-100 hover:bg-blue-700'
+                      : 'bg-transparent text-blue-800'
                   }`}
                 >
                   Privacidade
