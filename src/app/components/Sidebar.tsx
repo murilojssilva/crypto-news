@@ -42,7 +42,7 @@ export default function Sidebar() {
   return (
     <div
       className={`flex flex-col gap-4 h-screen bg-gray-200 items-center ${
-        openMenu ? 'w-[24vh]' : 'w-[16vh]'
+        openMenu ? 'w-[24vh]' : 'w-[8vh]'
       } sticky top-0`}
     >
       <div
@@ -81,7 +81,7 @@ export default function Sidebar() {
           <button
             className={`flex flex-row items-center gap-3 text-sx p-2 rounded-xl hover:bg-gray-300 w-full ${
               pathname === '/dashboard'
-                ? `text-gray-800 font-bold ${openMenu && 'bg-gray-100'}`
+                ? `text-blue-800 font-bold ${openMenu && 'bg-gray-100'}`
                 : 'text-gray-600'
             }`}
           >
@@ -94,7 +94,7 @@ export default function Sidebar() {
             <button
               className={`flex flex-row items-center gap-3 text-sx p-2 rounded-xl hover:bg-gray-300 w-full ${
                 pathname?.startsWith('/dashboard/news')
-                  ? `text-gray-800 font-bold ${openMenu && 'bg-gray-100'}`
+                  ? `text-blue-800 font-bold ${openMenu && 'bg-gray-100'}`
                   : 'text-gray-600'
               }`}
             >
@@ -112,7 +112,7 @@ export default function Sidebar() {
             <button
               className={`flex flex-row items-center gap-3 text-sx p-2 rounded-xl hover:bg-gray-300 w-full ${
                 pathname?.startsWith('/dashboard/posts')
-                  ? `text-gray-800 font-bold ${openMenu && 'bg-gray-100'}`
+                  ? `text-blue-800 font-bold ${openMenu && 'bg-gray-100'}`
                   : 'text-gray-600'
               }`}
             >
@@ -129,7 +129,7 @@ export default function Sidebar() {
           <button
             className={`flex flex-row items-center gap-3 text-sx p-2 rounded-xl hover:bg-gray-300 w-full ${
               pathname === '/dashboard/profile'
-                ? `text-gray-800 font-bold ${openMenu && 'bg-gray-100'}`
+                ? `text-blue-800 font-bold ${openMenu && 'bg-gray-100'}`
                 : 'text-gray-600'
             }`}
           >

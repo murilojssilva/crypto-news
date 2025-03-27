@@ -12,13 +12,42 @@ import HeaderDashboard from '@/app/components/Dashboard/Header'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Title } from '@/app/components/Dashboard/Title'
+import { getCategoryById } from '@/lib/categories/[id]'
+import { useEffect, useState } from 'react'
+import { CategoryProps } from '@/app/interfaces/CategoryInterface'
 
 export default function Posts() {
   const { posts, loading, handleDeletePost } = usePosts()
   const { data: session } = useSession()
+
+  const [postCategories, setPostCategories] = useState<
+    Record<string, CategoryProps[]>
+  >({})
+
+  useEffect(() => {
+    async function fetchCategories(postId: string) {
+      try {
+        const categoriesData = await getCategoryById(postId)
+        setPostCategories((prev) => ({
+          ...prev,
+          [postId]: categoriesData,
+        }))
+      } catch (error) {
+        console.error('Erro ao carregar categorias:', error)
+      }
+    }
+
+    posts.forEach((post) => {
+      if (!postCategories[post.id]) {
+        fetchCategories(post.id as string)
+      }
+    })
+  }, [posts, postCategories])
+
   const currentDate = useFormattedDate()
 
   const skeletons = Array(3).fill('')
+
   return (
     <div className='bg-gray-50 pb-4 h-screen flex'>
       <Sidebar />
@@ -42,6 +71,7 @@ export default function Posts() {
                   : ''
               }
             />
+
             <Link
               href='/dashboard/posts/new'
               className='text-gray-100 p-2 text-sm whitespace-nowrap flex flex-row items-center gap-2 bg-blue-800 hover:bg-blue-600 rounded-xl'
@@ -50,6 +80,7 @@ export default function Posts() {
               <span className='hidden md:block'>Novo Post</span>
             </Link>
           </div>
+
           {loading ? (
             <div className='flex items-center justify-center h-full flex-col'>
               {skeletons.map((_, index) => (
@@ -67,84 +98,89 @@ export default function Posts() {
                 }
                 return true
               })
-              .map((item: NewsItem) => (
-                <article
-                  key={item.id}
-                  className='flex p-4 items-start justify-between hover:bg-gray-100 hover:rounded-xl'
-                >
-                  <Link
-                    href={`/news/${item.id}`}
-                    className='flex-1 flex flex-col gap-4'
+              .map((item: NewsItem) => {
+                const postCategoriesList = postCategories[item.id] || [] // Pega as categorias do post específico
+                return (
+                  <article
+                    key={item.id}
+                    className='flex p-4 items-start justify-between hover:bg-gray-100 hover:rounded-xl'
                   >
-                    <div>
-                      <Title title={item.title} />
-                      <span className='text-gray-500 text-sm md:text-ms font-normal'>
-                        {item.subtitle}
-                      </span>
-                    </div>
-
-                    <div className='text-gray-800 text-md'>
-                      <ReactMarkdown>
-                        {item.content.length > 185
-                          ? item.content.slice(0, 185).trimEnd() + '…'
-                          : item.content}
-                      </ReactMarkdown>
-                    </div>
-
-                    <div className='flex flex-row justify-between gap-4'>
-                      {item.categories?.map((category, index) => (
-                        <span
-                          key={index}
-                          className='text-blue-800 font-bold text-xs border border-blue-800 hover:bg-blue-800 hover:text-gray-100 p-2 rounded-xl'
-                        >
-                          {category.categoryId}
-                        </span>
-                      ))}
-                      <div className='flex flex-row gap-4'>
-                        <span className='text-blue-800 text-md font-bold flex flex-row items-center gap-1'>
-                          <Calendar size={14} color='#1e40af' />
-                          {format(
-                            new Date(item.createdAt),
-                            "dd/MM/yyyy 'às' HH:mm",
-                            {
-                              locale: ptBR,
-                            }
-                          )}
-                        </span>
-                        <span className='text-blue-800 text-md font-bold flex flex-row items-center gap-1'>
-                          <Pen size={14} color='#1e40af' />
-                          {format(
-                            new Date(item.updatedAt),
-                            "dd/MM/yyyy 'às' HH:mm",
-                            {
-                              locale: ptBR,
-                            }
-                          )}
+                    <Link
+                      href={`/news/${item.id}`}
+                      className='flex-1 flex flex-col gap-4'
+                    >
+                      <div>
+                        <Title title={item.title} />
+                        <span className='text-gray-500 text-sm md:text-ms font-normal'>
+                          {item.subtitle}
                         </span>
                       </div>
-                    </div>
-                  </Link>
-                  <div className='flex flex-row gap-2 '>
-                    {item.userId === session?.user.id && (
-                      <Link
-                        className='hover:bg-blue-800 text-blue-800 hover:text-gray-200 rounded-xl p-2'
-                        href={`/dashboard/posts/edit/${item.id}`}
-                      >
-                        <Pen size={24} />
-                      </Link>
-                    )}
 
-                    {item.userId === session?.user.id && (
-                      <button
-                        className='hover:bg-red-500 text-red-500 hover:text-gray-200 rounded-xl p-2'
-                        onClick={() => handleDeletePost(item.id)}
-                      >
-                        <Trash size={24} />
-                      </button>
-                    )}
-                  </div>
-                </article>
-              ))
+                      <div className='text-gray-800 text-md'>
+                        <ReactMarkdown>
+                          {item.content.length > 185
+                            ? item.content.slice(0, 185).trimEnd() + '…'
+                            : item.content}
+                        </ReactMarkdown>
+                      </div>
+
+                      <div className='flex flex-row justify-between gap-4'>
+                        {postCategoriesList.length > 0 &&
+                          postCategoriesList.map((category, index) => (
+                            <span
+                              key={index}
+                              className='text-blue-800 font-bold text-xs border border-blue-800 hover:bg-blue-800 hover:text-gray-100 p-2 rounded-xl'
+                            >
+                              {category.name}
+                            </span>
+                          ))}
+
+                        <div className='flex flex-row gap-4'>
+                          <span className='text-blue-800 md:text-md text-xs justity-center font-bold flex flex-row items-center gap-1'>
+                            <Calendar size={14} color='#1e40af' />
+                            {format(
+                              new Date(item.createdAt),
+                              "dd/MM/yyyy 'às' HH:mm",
+                              {
+                                locale: ptBR,
+                              }
+                            )}
+                          </span>
+                          <span className='text-blue-800 md:text-md text-xs justity-center font-bold flex flex-row items-center gap-1'>
+                            <Pen size={14} color='#1e40af' />
+                            {format(
+                              new Date(item.updatedAt),
+                              "dd/MM/yyyy 'às' HH:mm",
+                              {
+                                locale: ptBR,
+                              }
+                            )}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                    <div className='flex flex-row gap-2'>
+                      {item.userId === session?.user.id && (
+                        <Link
+                          className='hover:bg-blue-800 text-blue-800 hover:text-gray-200 rounded-xl p-2'
+                          href={`/dashboard/posts/edit/${item.id}`}
+                        >
+                          <Pen size={24} />
+                        </Link>
+                      )}
+
+                      {item.userId === session?.user.id && (
+                        <button
+                          className='hover:bg-red-500 text-red-500 hover:text-gray-200 rounded-xl p-2'
+                          onClick={() => handleDeletePost(item.id)}
+                        >
+                          <Trash size={24} />
+                        </button>
+                      )}
+                    </div>
+                  </article>
+                )
+              })
           ) : (
             <div>
               <p className='text-blue-800'>Não há postagens</p>

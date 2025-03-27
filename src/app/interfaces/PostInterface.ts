@@ -1,3 +1,5 @@
+import { CategoryProps } from './CategoryInterface'
+
 export interface PostProps {
   id: string
   title: string
@@ -7,7 +9,7 @@ export interface PostProps {
   userId: string
   createdAt: string
   updatedAt: string
-  categories?: { categoryId: string }[]
+  categories: CategoryProps[]
 }
 
 export interface NewsItemProps {
@@ -19,6 +21,7 @@ export interface NewsItemProps {
   userId: string
   createdAt: string
   updatedAt: string
+  categories: CategoryProps[]
 }
 
 export interface NewsItem {
@@ -30,7 +33,7 @@ export interface NewsItem {
   createdAt: string
   updatedAt: string
   published: boolean
-  categories?: { categoryId: string }[]
+  categories: CategoryProps[]
 }
 
 export interface NewsPageItem {

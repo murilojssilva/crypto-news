@@ -10,7 +10,14 @@ export async function GET(req: Request, { params }: { params: any }) {
     const { id } = await params
 
     const post = await prisma.post.findUnique({
-      where: { id },
+      where: { id: id },
+      include: {
+        categories: {
+          include: {
+            category: true,
+          },
+        },
+      },
     })
 
     if (!post) {
