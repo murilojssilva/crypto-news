@@ -110,7 +110,9 @@ export default function Posts() {
                       className='flex-1 flex flex-col gap-4'
                     >
                       <div>
-                        <Title title={item.title} />
+                        <h2 className='text-blue-800 font-semibold text-xl'>
+                          {item.title}
+                        </h2>
                         <span className='text-gray-500 text-sm md:text-ms font-normal'>
                           {item.subtitle}
                         </span>

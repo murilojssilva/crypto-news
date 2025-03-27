@@ -99,6 +99,8 @@ export const PostsProvider = ({ children }: { children: React.ReactNode }) => {
 
       await response.json()
 
+      fetchPosts()
+
       toast.success('Postagem publicada com sucesso!')
       router.push('/dashboard/posts')
     } catch (error) {

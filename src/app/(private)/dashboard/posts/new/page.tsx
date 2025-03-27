@@ -50,10 +50,14 @@ export default function NewPost() {
 
         <section className='px-6 pt-6 flex flex-col gap-4 overflow-y-auto'>
           <Title title='Novo post' />
+
           <form
             onSubmit={handleSubmit(handleNewPostSubmit)}
-            className='flex flex-col gap-8'
+            className='flex flex-col gap-4'
           >
+            <label className='text-blue-800' htmlFor='title'>
+              Título
+            </label>
             <Input
               {...register('title')}
               errorsField={errors.title?.message ?? ''}
@@ -66,6 +70,9 @@ export default function NewPost() {
             {errors.title && (
               <span className='text-red-500'>{errors.title?.message}</span>
             )}
+            <label className='text-blue-800' htmlFor='subtitle'>
+              Subtítulo
+            </label>
             <Input
               {...register('subtitle')}
               errorsField={errors.subtitle?.message ?? ''}
@@ -78,6 +85,9 @@ export default function NewPost() {
             {errors.subtitle && (
               <span className='text-red-500'>{errors.subtitle?.message}</span>
             )}
+            <label className='text-blue-800' htmlFor='title'>
+              Conteúdo
+            </label>
             <Textarea
               {...register('content')}
               errorsField={errors.content?.message ?? ''}
