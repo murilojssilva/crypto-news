@@ -92,6 +92,7 @@ export function Header() {
               </Link>
               <Link
                 href='https://t.me/crypto_newsbr'
+                target='_blank'
                 className='text-blue-800 hover:text-blue-600'
               >
                 <li className='hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold'>
