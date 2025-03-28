@@ -49,7 +49,7 @@ export default function Posts() {
   const skeletons = Array(3).fill('')
 
   return (
-    <div className='bg-gray-50 pb-4 h-screen flex'>
+    <main className='bg-gray-50 pb-4 h-screen flex'>
       <Sidebar />
 
       <div className='flex-1 overflow-auto'>
@@ -127,16 +127,17 @@ export default function Posts() {
                       </div>
 
                       <div className='flex flex-row justify-between gap-4'>
-                        {postCategoriesList.length > 0 &&
-                          postCategoriesList.map((category, index) => (
-                            <span
-                              key={index}
-                              className='text-blue-800 font-bold text-xs border border-blue-800 hover:bg-blue-800 hover:text-gray-100 p-2 rounded-xl'
-                            >
-                              {category.name}
-                            </span>
-                          ))}
-
+                        <div className='flex flex-row gap-4'>
+                          {postCategoriesList.length > 0 &&
+                            postCategoriesList.map((category, index) => (
+                              <span
+                                key={index}
+                                className='text-blue-800 font-bold text-xs border border-blue-800 hover:bg-blue-800 hover:text-gray-100 p-2 rounded-xl'
+                              >
+                                {category.name}
+                              </span>
+                            ))}
+                        </div>
                         <div className='flex flex-row gap-4'>
                           <span className='text-blue-800 md:text-md text-xs justity-center font-bold flex flex-row items-center gap-1'>
                             <Calendar size={14} color='#1e40af' />
@@ -190,6 +191,6 @@ export default function Posts() {
           )}
         </section>
       </div>
-    </div>
+    </main>
   )
 }

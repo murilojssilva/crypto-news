@@ -36,7 +36,7 @@ export function Header() {
           <div
             className={`w-full md:w-auto ${
               openMenu ? 'block' : 'hidden'
-            } md:block pt-4`}
+            } md:block pt-4 md:pt-0`}
             id='navbar-hamburger'
           >
             <ul className='flex flex-col sm:flex-row items-center gap-2 font-medium justify-center bg-gray-50 md:bg-transparent'>
