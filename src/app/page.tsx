@@ -43,7 +43,7 @@ export default function Home() {
           </article>
         </section>
       </div>
-      <LatestNews count={5} />
+      <LatestNews />
       <section className='flex flex-col md:flex-row bg-gray-100 justify-between p-8 gap-16'>
         <div className='flex flex-col items-center gap-4'>
           <Blocks size={64} color='#1565C0' />

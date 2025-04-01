@@ -1,6 +1,8 @@
 'use client'
 
 import ReactMarkdown from 'react-markdown'
+import Image from 'next/image'
+import NotFound from '@/assets/images/not_found.jpg'
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
@@ -81,16 +83,38 @@ export default function NewsPage() {
                 <h3 className='text-gray-800 font-light text-md'>
                   {post.subtitle}
                 </h3>
-                <span className='text-gray-500 font-light text-sm'>
-                  {Object.keys(user).length > 0 &&
-                    `${format(
-                      new Date(post.createdAt),
-                      "dd/MM/yyyy 'às' HH:mm",
-                      {
-                        locale: ptBR,
-                      }
-                    )}, por ${user.firstName} ${user.lastName}`}
-                </span>
+                <div className='flex flex-row'>
+                  <span className='text-gray-500 font-light text-sm'>
+                    {Object.keys(user).length > 0 &&
+                      `${format(
+                        new Date(post.createdAt),
+                        "dd/MM/yyyy 'às' HH:mm",
+                        {
+                          locale: ptBR,
+                        }
+                      )}, por ${user.firstName} ${user.lastName}`}
+                  </span>
+                  {post.createdAt !== post.updatedAt && (
+                    <span className='text-gray-500 font-light text-sm'>
+                      . Editado em{' '}
+                      {Object.keys(user).length > 0 &&
+                        `${format(
+                          new Date(post.updatedAt),
+                          "dd/MM/yyyy 'às' HH:mm",
+                          {
+                            locale: ptBR,
+                          }
+                        )}`}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div>
+                <Image
+                  src={NotFound}
+                  alt='Not found Image'
+                  className='mx-auto h-[50vh] w-[80vw] rounded-xl'
+                />
               </div>
               <div
                 className='text-gray-800 font-medium text-md text-justify'
