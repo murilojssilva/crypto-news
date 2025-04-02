@@ -50,6 +50,7 @@ export default function Posts() {
 
   return (
     <main className='bg-gray-50 pb-4 h-screen flex'>
+      <title>CryptoNews | Todas as postagens</title>
       <Sidebar />
 
       <div className='flex-1 overflow-auto'>

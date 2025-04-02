@@ -52,6 +52,7 @@ export default function Dashboard() {
 
   return (
     <div className='bg-gray-50 pb-4 h-screen flex'>
+      <title>CryptoNews | Dashboard</title>
       <Sidebar />
 
       <div className='flex-1 overflow-auto'>
@@ -253,10 +254,14 @@ export default function Dashboard() {
                         {formatUserPlan(user.plan)}
                       </td>
                       <td className='px-4 py-3 whitespace-nowrap'>
-                        {formatDate(user.startPremium as Date)}
+                        {user.startPremium
+                          ? formatDate(user.startPremium as Date)
+                          : ''}
                       </td>
                       <td className='px-4 py-3 whitespace-nowrap'>
-                        {formatDate(user.endPremium as Date)}
+                        {user.endPremium
+                          ? formatDate(user.endPremium as Date)
+                          : ''}
                       </td>
                     </tr>
                   ))}

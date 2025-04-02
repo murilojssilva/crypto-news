@@ -77,6 +77,7 @@ export default function Guides() {
 
   return (
     <main className='flex flex-col flex-1'>
+      <title>CryptoNews | Guias</title>
       <div className='flex flex-col justify-between p-8'>
         <h1 className='text-blue-800 font-bold text-2xl'>Guias</h1>
         <div className='grid grid-cols-1 md:grid-cols-2 py-8 gap-8'>

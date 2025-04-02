@@ -1,6 +1,7 @@
 export default function UseTerms() {
   return (
     <article className='bg-gray-100 p-8 flex-1'>
+      <title>CryptoNews | Termos de uso</title>
       <h1 className='font-bold text-blue-800 text-2xl'>Termos de uso</h1>
       <p className='text-gray-800'>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam amet

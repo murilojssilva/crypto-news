@@ -40,11 +40,11 @@ export function Header() {
             id='navbar-hamburger'
           >
             <ul className='flex flex-col sm:flex-row items-center gap-2 font-medium justify-center bg-gray-50 md:bg-transparent'>
-              <Link href='/news' className='text-blue-800 hover:text-blue-600'>
+              <Link href='/news' className='text-blue-800 hover:text-blue-700'>
                 <li
                   className={`hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold ${
                     pathname === '/news'
-                      ? 'bg-blue-900 text-gray-100 hover:bg-blue-700'
+                      ? 'bg-[#1e40af] text-gray-100 hover:bg-blue-500'
                       : 'bg-transparent text-blue-800'
                   }`}
                 >
@@ -58,7 +58,7 @@ export function Header() {
                 <li
                   className={`hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold ${
                     pathname === '/guides'
-                      ? 'bg-blue-900 text-gray-100 hover:bg-blue-700'
+                      ? 'bg-[#1e40af] text-gray-100 hover:bg-blue-500'
                       : 'bg-transparent text-blue-800'
                   }`}
                 >
@@ -69,7 +69,7 @@ export function Header() {
                 <li
                   className={`hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold ${
                     pathname === '/about'
-                      ? 'bg-blue-900 text-gray-100 hover:bg-blue-700'
+                      ? 'bg-[#1e40af] text-gray-100 hover:bg-blue-500'
                       : 'bg-transparent text-blue-800'
                   }`}
                 >
@@ -83,7 +83,7 @@ export function Header() {
                 <li
                   className={`hover:bg-gray-200 rounded-md p-2 bg-gray-50 text-md font-bold ${
                     pathname === '/privacy'
-                      ? 'bg-blue-900 text-gray-100 hover:bg-blue-700'
+                      ? 'bg-[#1e40af] text-gray-100 hover:bg-blue-500'
                       : 'bg-transparent text-blue-800'
                   }`}
                 >

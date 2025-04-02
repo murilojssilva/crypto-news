@@ -23,7 +23,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en'>
+    <html lang='pt-BR'>
+      <title>CryptoNews</title>
+      <link rel='icon' href='/logo.svg' sizes='any' />
+
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
