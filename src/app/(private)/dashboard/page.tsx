@@ -334,38 +334,43 @@ export default function Dashboard() {
                         Moedas Fiduciárias
                       </button>
                     </div>
-
-                    <table className='w-full mt-4 border-collapse'>
-                      <thead>
-                        <tr className='bg-gray-200'>
-                          <th className='p-2 text-left text-blue-800'>Nome</th>
-                          <th className='p-2 text-left text-blue-800'>
-                            Símbolo
-                          </th>
-                          <th className='p-2 text-right text-blue-800'>
-                            Preço
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {(activeTab === 'crypto' ? cryptoData : fiatData).map(
-                          (item: ItemProps, index) => (
-                            <tr
-                              key={index}
-                              className='border-t hover:bg-gray-100 transition-colors'
-                            >
-                              <td className='p-2 text-gray-800'>{item.name}</td>
-                              <td className='p-2 text-gray-800'>
-                                {item.symbol}
-                              </td>
-                              <td className='p-2 text-gray-800 text-right'>
-                                {item.price}
-                              </td>
-                            </tr>
-                          )
-                        )}
-                      </tbody>
-                    </table>
+                    <div className='w-full overflow-x-auto rounded-lg mt-4'>
+                      <table className='w-full mt-4 border-collapse'>
+                        <thead>
+                          <tr className='bg-gray-200'>
+                            <th className='p-2 text-left text-blue-800'>
+                              Nome
+                            </th>
+                            <th className='p-2 text-left text-blue-800'>
+                              Símbolo
+                            </th>
+                            <th className='p-2 text-right text-blue-800'>
+                              Preço
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {(activeTab === 'crypto' ? cryptoData : fiatData).map(
+                            (item: ItemProps, index) => (
+                              <tr
+                                key={index}
+                                className='border-t hover:bg-gray-100 transition-colors'
+                              >
+                                <td className='p-2 text-gray-800'>
+                                  {item.name}
+                                </td>
+                                <td className='p-2 text-gray-800'>
+                                  {item.symbol}
+                                </td>
+                                <td className='p-2 text-gray-800 text-right'>
+                                  {item.price}
+                                </td>
+                              </tr>
+                            )
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 )}
               </div>
