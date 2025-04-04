@@ -15,6 +15,9 @@ import { Title } from '@/app/components/Dashboard/Title'
 import { getCategoryById } from '@/lib/categories/[id]'
 import { useEffect, useState } from 'react'
 import { CategoryProps } from '@/app/interfaces/CategoryInterface'
+import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
+import SyntaxHighlighter from 'react-syntax-highlighter'
 
 export default function Posts() {
   const { posts, loading, handleDeletePost } = usePosts()
@@ -120,7 +123,44 @@ export default function Posts() {
                       </div>
 
                       <div className='text-gray-800 text-md'>
-                        <ReactMarkdown>
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          rehypePlugins={[rehypeRaw]}
+                          components={{
+                            code({ className, children }) {
+                              const match = /language-(\w+)/.exec(
+                                className || ''
+                              )
+                              const codeText = String(children).trim()
+
+                              return (
+                                <div className='relative group my-4'>
+                                  <button
+                                    className='absolute right-2 top-2 text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity'
+                                    onClick={() =>
+                                      navigator.clipboard.writeText(codeText)
+                                    }
+                                  >
+                                    Copiar
+                                  </button>
+
+                                  <SyntaxHighlighter
+                                    language={match?.[1] || 'javascript'}
+                                    PreTag='div'
+                                    customStyle={{
+                                      padding: '1rem',
+                                      borderRadius: '0.5rem',
+                                      fontSize: '0.875rem',
+                                      overflowX: 'auto',
+                                    }}
+                                  >
+                                    {codeText}
+                                  </SyntaxHighlighter>
+                                </div>
+                              )
+                            },
+                          }}
+                        >
                           {item.content.length > 185
                             ? item.content.slice(0, 185).trimEnd() + '…'
                             : item.content}

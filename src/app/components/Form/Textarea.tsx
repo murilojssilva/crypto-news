@@ -33,6 +33,32 @@ export default function Textarea({
       formattedText = `*${selectedText}*`
     } else if (format === 'underline') {
       formattedText = `__${selectedText}__`
+    } else if (format === 'strikethrough') {
+      formattedText = `~~${selectedText}~~`
+    } else if (format === 'code') {
+      if (selectedText.includes('\n')) {
+        formattedText = `\`\`\`javascript\n${selectedText}\n\`\`\``
+      } else {
+        formattedText = `\`${selectedText}\``
+      }
+    } else if (format === 'title') {
+      formattedText = `<span class="text-xl font-bold">${selectedText}</span>`
+    } else if (format === 'subtitle') {
+      formattedText = `<span class="text-md font-semibold">${selectedText}</span>`
+    } else if (format === 'unordered-list') {
+      const listItems = selectedText
+        .split('\n')
+        .map((line) => `<li>${line.trim()}</li>`)
+        .join('\n')
+
+      formattedText = `<ul class="list-disc pl-6">\n${listItems}\n</ul>`
+    } else if (format === 'ordered-list') {
+      const listItems = selectedText
+        .split('\n')
+        .map((line) => `<li>${line.trim()}</li>`)
+        .join('\n')
+
+      formattedText = `<ol class="list-decimal pl-6">\n${listItems}\n</ol>`
     }
 
     textarea.value =
@@ -46,7 +72,6 @@ export default function Textarea({
       textarea.focus()
     }, 0)
 
-    // Disparar o evento de mudança para atualizar o react-hook-form
     textarea.dispatchEvent(new Event('input', { bubbles: true }))
   }
 
@@ -73,6 +98,48 @@ export default function Textarea({
           className='px-3 py-1 text-white bg-gray-700 rounded text-sm'
         >
           <u>U</u>
+        </button>
+        <button
+          type='button'
+          onClick={() => applyFormat('strikethrough')}
+          className='px-3 py-1 text-white bg-gray-700 rounded text-sm'
+        >
+          <u>S</u>
+        </button>
+        <button
+          type='button'
+          onClick={() => applyFormat('code')}
+          className='px-3 py-1 text-white bg-gray-700 rounded text-sm'
+        >
+          <u>C</u>
+        </button>
+        <button
+          type='button'
+          onClick={() => applyFormat('title')}
+          className='px-3 py-1 text-white bg-gray-700 rounded text-sm'
+        >
+          <u>T</u>
+        </button>
+        <button
+          type='button'
+          onClick={() => applyFormat('subtitle')}
+          className='px-3 py-1 text-white bg-gray-700 rounded text-sm'
+        >
+          <u>t</u>
+        </button>
+        <button
+          type='button'
+          onClick={() => applyFormat('ordered-list')}
+          className='px-3 py-1 text-white bg-gray-700 rounded text-sm'
+        >
+          <u>º</u>
+        </button>
+        <button
+          type='button'
+          onClick={() => applyFormat('unordered-list')}
+          className='px-3 py-1 text-white bg-gray-700 rounded text-sm'
+        >
+          <u>-</u>
         </button>
 
         <button

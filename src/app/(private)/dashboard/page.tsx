@@ -273,7 +273,7 @@ export default function Dashboard() {
 
   return (
     <div className='bg-gray-50 pb-4 h-screen flex'>
-      <title>CryptoNews | Dashboard</title>
+      <title>Dashboard | CryptoNews</title>
       <Sidebar />
 
       <div className='flex-1 overflow-auto'>
