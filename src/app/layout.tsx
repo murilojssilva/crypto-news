@@ -6,6 +6,7 @@ import './globals.css'
 import { PostsProvider } from '@/context/PostContext'
 import { UsersProvider } from '@/context/UserContext'
 import { CategoryProvider } from '@/context/CategoryContext'
+import { ThemeProvider } from 'next-themes'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -23,7 +24,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='pt-BR'>
+    <html lang='pt-BR' suppressHydrationWarning>
       <title>CryptoNews</title>
       <link rel='icon' href='/logo.svg' sizes='any' />
 
@@ -33,7 +34,15 @@ export default function RootLayout({
         <SessionProvider>
           <UsersProvider>
             <PostsProvider>
-              <CategoryProvider>{children}</CategoryProvider>
+              <CategoryProvider>
+                <ThemeProvider
+                  attribute='class'
+                  defaultTheme='dark'
+                  disableTransitionOnChange
+                >
+                  {children}
+                </ThemeProvider>
+              </CategoryProvider>
             </PostsProvider>
           </UsersProvider>
         </SessionProvider>

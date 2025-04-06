@@ -9,11 +9,13 @@ import { List } from '@phosphor-icons/react'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
+import { useTheme } from 'next-themes'
 
 export default function Sidebar() {
   const [openMenu, setOpenMenu] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
+  const { resolvedTheme } = useTheme()
   const { data: session, status } = useSession()
 
   useEffect(() => {
@@ -37,13 +39,27 @@ export default function Sidebar() {
   }
 
   if (status === 'loading')
-    return <div className='flex flex-col h-screen bg-gray-200 w-[10vh]' />
+    return (
+      <div
+        className={`flex flex-col h-screen w-[8vh] border-r ${
+          resolvedTheme === 'light'
+            ? 'bg-gray-200 border-gray-300'
+            : 'bg-gray-900 border-gray-500'
+        }`}
+      />
+    )
 
   return (
     <div
-      className={`flex flex-col gap-4 h-screen bg-gray-200 items-center ${
-        openMenu ? 'w-[24vh]' : 'w-[8vh]'
-      } sticky top-0`}
+      className={`flex flex-col gap-4 h-screen items-center
+        border-r
+        ${openMenu ? 'w-[24vh]' : 'w-[8vh]'} sticky top-0
+      ${
+        resolvedTheme === 'light'
+          ? 'bg-gray-200 border-gray-300'
+          : 'bg-gray-900 border-gray-500'
+      }
+      `}
     >
       <div
         className={`flex ${
@@ -100,7 +116,11 @@ export default function Sidebar() {
             >
               <Newspaper
                 color={
-                  pathname?.startsWith('/dashboard/news') ? '#1565C0' : 'black'
+                  pathname?.startsWith('/dashboard/news')
+                    ? '#1565C0'
+                    : resolvedTheme === 'light'
+                    ? 'black'
+                    : 'gray'
                 }
               />
               {openMenu && 'Notícias'}
@@ -118,7 +138,11 @@ export default function Sidebar() {
             >
               <Pen
                 color={
-                  pathname?.startsWith('/dashboard/posts') ? '#1565C0' : 'black'
+                  pathname?.startsWith('/dashboard/posts')
+                    ? '#1565C0'
+                    : resolvedTheme === 'light'
+                    ? 'black'
+                    : 'gray'
                 }
               />
               {openMenu && 'Posts'}
@@ -134,7 +158,13 @@ export default function Sidebar() {
             }`}
           >
             <User
-              color={pathname === '/dashboard/profile' ? '#1565C0' : 'black'}
+              color={
+                pathname === '/dashboard/profile'
+                  ? '#1565C0'
+                  : resolvedTheme === 'light'
+                  ? 'black'
+                  : 'gray'
+              }
             />
             {openMenu && 'Perfil'}
           </button>

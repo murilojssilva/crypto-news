@@ -22,6 +22,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Loading } from '@/app/components/Form/Loading'
+import { useTheme } from 'next-themes'
 
 interface ItemProps {
   name: string
@@ -247,6 +248,7 @@ export default function Dashboard() {
 
   const { posts, loading } = usePosts()
   const { users } = useUsers()
+  const { resolvedTheme } = useTheme()
 
   const router = useRouter()
 
@@ -272,7 +274,11 @@ export default function Dashboard() {
   }
 
   return (
-    <div className='bg-gray-50 pb-4 h-screen flex'>
+    <div
+      className={`pb-4 h-screen flex
+    ${resolvedTheme === 'light' ? 'bg-gray-50' : 'bg-gray-800'}
+    `}
+    >
       <title>Dashboard | CryptoNews</title>
       <Sidebar />
 
@@ -303,7 +309,15 @@ export default function Dashboard() {
               </div>
             ) : (
               <div className='flex flex-col border border-gray-300 rounded-xl p-4'>
-                <h2 className='text-blue-800 font-semibold text-lg mt-2'>
+                <h2
+                  className={`font-semibold text-lg mt-2
+                  ${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  }
+                `}
+                >
                   Mercado
                 </h2>
                 {loadingCoins ? (
@@ -316,7 +330,11 @@ export default function Dashboard() {
                       <button
                         className={`w-1/2 py-2 text-center ${
                           activeTab === 'crypto'
-                            ? 'border-b-2 border-blue-800 text-blue-800 font-semibold'
+                            ? `border-b-2 font-semibold ${
+                                resolvedTheme === 'light'
+                                  ? 'border-blue-800 text-blue-800'
+                                  : 'border-blue-400 text-blue-400'
+                              }`
                             : 'text-gray-500'
                         }`}
                         onClick={() => setActiveTab('crypto')}
@@ -326,7 +344,11 @@ export default function Dashboard() {
                       <button
                         className={`w-1/2 py-2 text-center ${
                           activeTab === 'fiat'
-                            ? 'border-b-2 border-blue-800 text-blue-800 font-semibold'
+                            ? `border-b-2 font-semibold ${
+                                resolvedTheme === 'light'
+                                  ? 'border-blue-800 text-blue-800'
+                                  : 'border-blue-400 text-blue-400'
+                              }`
                             : 'text-gray-500'
                         }`}
                         onClick={() => setActiveTab('fiat')}
@@ -337,14 +359,38 @@ export default function Dashboard() {
                     <div className='w-full overflow-x-auto rounded-lg mt-4'>
                       <table className='w-full mt-4 border-collapse'>
                         <thead>
-                          <tr className='bg-gray-200'>
-                            <th className='p-2 text-left text-blue-800'>
+                          <tr
+                            className={`${
+                              resolvedTheme === 'light'
+                                ? 'bg-gray-200'
+                                : 'bg-gray-700'
+                            }`}
+                          >
+                            <th
+                              className={`p-2 text-left ${
+                                resolvedTheme === 'light'
+                                  ? 'text-blue-800'
+                                  : 'text-blue-400'
+                              }`}
+                            >
                               Nome
                             </th>
-                            <th className='p-2 text-left text-blue-800'>
+                            <th
+                              className={`p-2 text-left ${
+                                resolvedTheme === 'light'
+                                  ? 'text-blue-800'
+                                  : 'text-blue-400'
+                              }`}
+                            >
                               Símbolo
                             </th>
-                            <th className='p-2 text-right text-blue-800'>
+                            <th
+                              className={`p-2 text-right ${
+                                resolvedTheme === 'light'
+                                  ? 'text-blue-800'
+                                  : 'text-blue-400'
+                              }`}
+                            >
                               Preço
                             </th>
                           </tr>
@@ -354,15 +400,39 @@ export default function Dashboard() {
                             (item: ItemProps, index) => (
                               <tr
                                 key={index}
-                                className='border-t hover:bg-gray-100 transition-colors'
+                                className={`border-t transition-colors
+                                  ${
+                                    resolvedTheme === 'light'
+                                      ? 'hover:bg-gray-100'
+                                      : 'hover:bg-gray-700'
+                                  }
+                                  `}
                               >
-                                <td className='p-2 text-gray-800'>
+                                <td
+                                  className={`p-2 ${
+                                    resolvedTheme === 'light'
+                                      ? 'text-gray-800'
+                                      : 'text-gray-200'
+                                  }`}
+                                >
                                   {item.name}
                                 </td>
-                                <td className='p-2 text-gray-800'>
+                                <td
+                                  className={`p-2 ${
+                                    resolvedTheme === 'light'
+                                      ? 'text-gray-800'
+                                      : 'text-gray-200'
+                                  }`}
+                                >
                                   {item.symbol}
                                 </td>
-                                <td className='p-2 text-gray-800 text-right'>
+                                <td
+                                  className={`p-2 ${
+                                    resolvedTheme === 'light'
+                                      ? 'text-gray-800'
+                                      : 'text-gray-200'
+                                  } text-right`}
+                                >
                                   {item.price}
                                 </td>
                               </tr>
@@ -395,7 +465,15 @@ export default function Dashboard() {
               </div>
             ) : (
               <div className='flex flex-col border border-gray-300 rounded-xl p-4'>
-                <h2 className='text-blue-800 font-semibold text-lg mt-2'>
+                <h2
+                  className={`font-semibold text-lg mt-2
+                  ${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  }
+                `}
+                >
                   Informações
                 </h2>
 
@@ -450,7 +528,15 @@ export default function Dashboard() {
                   </span>
                 </div>
                 <div className='flex flex-col items-center gap-4'>
-                  <h2 className='text-blue-800 font-semibold text-lg mt-2'>
+                  <h2
+                    className={`font-semibold text-lg mt-2
+                  ${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  }
+                `}
+                  >
                     Meus benefícios
                   </h2>
                   <ul className='text-blue-800 list-disc list-inside'>
@@ -486,7 +572,15 @@ export default function Dashboard() {
                     </h1>
                   </div>
                   <div className='flex flex-col items-center gap-4'>
-                    <h2 className='text-blue-800 font-semibold text-lg mt-2'>
+                    <h2
+                      className={`font-semibold text-lg mt-2
+                  ${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  }
+                `}
+                    >
                       Vantagens
                     </h2>
                     <ul className='text-blue-800 list-disc list-inside'>
@@ -525,7 +619,15 @@ export default function Dashboard() {
         </section>
         {session?.user.role === 'admin' && (
           <section className='px-4 pt-4 md:px-6 md:pt-6 w-full overflow-x-auto'>
-            <h2 className='text-blue-800 font-semibold text-lg mt-2'>
+            <h2
+              className={`font-semibold text-lg mt-2
+                  ${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  }
+                `}
+            >
               Usuários cadastrados
             </h2>
 

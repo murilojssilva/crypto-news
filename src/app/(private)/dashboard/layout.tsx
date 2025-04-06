@@ -1,5 +1,6 @@
 'use client'
 
+import { useTheme } from 'next-themes'
 import { ToastContainer } from 'react-toastify'
 
 interface BasicLayoutProps {
@@ -7,8 +8,12 @@ interface BasicLayoutProps {
 }
 
 export default function BasicDashboardLayout({ children }: BasicLayoutProps) {
+  const { resolvedTheme } = useTheme()
   return (
-    <div className='bg-gray-50 h-screen'>
+    <div
+      className={`h-screen
+    ${resolvedTheme === 'light' ? 'bg-gray-200' : 'bg-gray-800'}`}
+    >
       <div>{children}</div>
       <ToastContainer
         position='top-right'
