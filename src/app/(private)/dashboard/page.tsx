@@ -12,6 +12,7 @@ import {
   Bookmark,
   Eye,
   X,
+  Trash,
 } from 'lucide-react'
 import HeaderDashboard from '@/app/components/Dashboard/Header'
 import Sidebar from '@/app/components/Sidebar'
@@ -31,7 +32,7 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Loading } from '@/app/components/Form/Loading'
 import { useTheme } from 'next-themes'
-import { getUserById } from '@/lib/users/[id]'
+import { deleteUser, getUserById } from '@/lib/users/[id]'
 import { UserProps } from '@/app/interfaces/UserInterface'
 
 interface ItemProps {
@@ -51,6 +52,17 @@ export default function Dashboard() {
     setModal(!openModal)
     const data = await getUserById(id as string)
     setShowUser(data)
+  }
+
+  async function handleDeleteUser(id: string) {
+    try {
+      deleteUser(id)
+
+      toast.success(`Usuário ${id} deletado com sucesso.`)
+    } catch (err) {
+      console.log(err)
+      toast.success('Usuário deletado com sucesso.')
+    }
   }
 
   const [activeTab, setActiveTab] = useState('crypto')
@@ -1169,7 +1181,7 @@ export default function Dashboard() {
                   `}
                   >
                     <h2
-                      className={`text-sm font-medium py-3 px-4
+                      className={`text-md font-medium py-3 px-4
                       ${
                         resolvedTheme === 'light'
                           ? 'text-gray-900'
@@ -1177,14 +1189,18 @@ export default function Dashboard() {
                       }
                     `}
                     >
-                      Perfil de {showUser.firstName}
+                      Perfil de{' '}
+                      <span className='font-bold'>{showUser.firstName}</span>
                     </h2>
                     <button
                       type='button'
                       className='h-8 px-2 text-sm rounded-md text-gray-800'
                       onClick={() => handleModal(showUser.id)}
                     >
-                      <X color={resolvedTheme === 'light' ? 'black' : 'gray'} />
+                      <X
+                        size={20}
+                        color={resolvedTheme === 'light' ? 'black' : 'gray'}
+                      />
                     </button>
                   </div>
 
@@ -1283,11 +1299,11 @@ export default function Dashboard() {
                         }
                         `}
                       >
-                        {showUser.plan}
+                        {formatUserPlan(showUser.plan)}
                       </span>
                     </div>
 
-                    {showUser.plan === 'free' && (
+                    {showUser.plan !== 'free' && (
                       <div className='grid grid-cols-2 gap-2'>
                         <div className='flex flex-row items-center justify-between'>
                           <h2
@@ -1344,6 +1360,16 @@ export default function Dashboard() {
                         </div>
                       </div>
                     )}
+                  </div>
+                  <div className='flex flex-row items-center p-2 justify-end'>
+                    <button
+                      onClick={() => handleDeleteUser(showUser.id)}
+                      data-modal-hide='default-modal'
+                      type='button'
+                      className='flex flex-row gap-4 items-center font-bold text-gray-100 bg-red-700 hover:bg-red-800 rounded-lg text-md px-3 py-2'
+                    >
+                      <Trash size={20} /> Deletar conta
+                    </button>
                   </div>
                 </div>
               </div>
