@@ -3,7 +3,14 @@
 import 'react-toastify/dist/ReactToastify.css'
 import Skeleton from 'react-loading-skeleton'
 
-import { Home, DollarSign, Newspaper, Check, Pen } from 'lucide-react'
+import {
+  Home,
+  DollarSign,
+  Newspaper,
+  BadgeCheck,
+  Pen,
+  Bookmark,
+} from 'lucide-react'
 import HeaderDashboard from '@/app/components/Dashboard/Header'
 import Sidebar from '@/app/components/Sidebar'
 import { getSession, useSession } from 'next-auth/react'
@@ -12,7 +19,6 @@ import { usePosts } from '@/context/PostContext'
 
 import { useUsers } from '@/context/UserContext'
 import { Card } from '@/app/components/Dashboard/Card'
-import { Button } from '@/app/components/Dashboard/Button'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
 import { formatDate } from '@/hooks/formatDate'
@@ -252,17 +258,19 @@ export default function Dashboard() {
 
   const router = useRouter()
 
-  async function handleAssignPremium() {
+  async function handleAssignPremium(plan: string) {
     try {
       await fetch(`/api/users/${session?.user.id}/plan`, {
         method: 'PUT',
-        body: JSON.stringify({ plan: 'premium' }),
+        body: JSON.stringify({ plan }),
         headers: {
           'Content-Type': 'application/json',
         },
       })
 
-      toast.success('Obrigado por assinar o plano Premium!')
+      toast.success(`Obrigado por assinar o plano 
+        ${plan === 'premium' ? 'Premium' : 'Standard'}
+        !`)
 
       await getSession()
 
@@ -463,7 +471,15 @@ export default function Dashboard() {
                 ))}
               </div>
             ) : (
-              <div className='flex flex-col border border-gray-300 rounded-xl p-4'>
+              <div
+                className={`flex flex-col border-2 rounded-xl p-4
+              ${
+                resolvedTheme === 'light'
+                  ? 'border-gray-200'
+                  : 'border-gray-700'
+              }
+              `}
+              >
                 <h2
                   className={`font-semibold text-lg mt-2
                   ${
@@ -517,114 +533,508 @@ export default function Dashboard() {
                       />
                     </>
                   )}
+                  {session?.user.role === 'costumer' && (
+                    <Card
+                      text='Posts favoritados'
+                      value={
+                        posts.filter((item) => item.userId === session?.user.id)
+                          .length
+                      }
+                      icon={
+                        <Bookmark
+                          color={resolvedTheme === 'light' ? 'black' : 'gray'}
+                        />
+                      }
+                    />
+                  )}
                 </div>
               </div>
             )}
           </section>
           {session?.user.role === 'costumer' && (
-            <section
-              className={`grid ${
-                session?.user.plan === 'free'
-                  ? 'md:grid-cols-2'
-                  : 'md:grid-cols-1'
-              } grid-cols-1 gap-4`}
-            >
-              <div className='flex p-8 flex-col justify-between items-center border border-gray-300 bg-gray-100 rounded-xl'>
-                <div className='flex flex-col items-center'>
-                  <h1 className='text-blue-800 font-bold text-3xl'>
-                    Meu plano
-                  </h1>
-                  <span className='text-blue-800 text-md'>
-                    {session?.user.plan === 'free' ? 'Gratuito' : 'Premium'}
+            <section className='flex flex-col items-center xl:grid xl:grid-cols-3 gap-4'>
+              <div
+                className={`w-full max-w-sm p-4 border-2 rounded-lg shadow-sm sm:p-8 
+              
+              ${
+                resolvedTheme === 'light'
+                  ? 'bg-gray-50 border-gray-200'
+                  : 'bg-gray-800 border-gray-700'
+              }
+              `}
+              >
+                <h5
+                  className={`mb-4 text-xl font-medium 
+                  ${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  }`}
+                >
+                  Gratuito
+                </h5>
+                <div
+                  className={`flex items-baseline 
+                  ${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  }
+                  `}
+                >
+                  <span className='text-3xl font-semibold'>R$</span>
+                  <span className='text-5xl font-extrabold tracking-tight'>
+                    0
+                  </span>
+                  <span
+                    className={`ms-1 text-xl font-normal 
+                    ${
+                      resolvedTheme === 'light'
+                        ? 'text-gray-800'
+                        : 'text-gray-400'
+                    }
+                    `}
+                  >
+                    /mês
                   </span>
                 </div>
-                <div className='flex flex-col items-center gap-4'>
-                  <h2
-                    className={`font-semibold text-lg mt-2
-                  ${
-                    resolvedTheme === 'light'
-                      ? 'text-blue-800'
-                      : 'text-blue-400'
-                  }
-                `}
-                  >
-                    Meus benefícios
-                  </h2>
-                  <ul className='text-blue-800 list-disc list-inside'>
-                    <li>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Exercitationem repellendus sequi reiciendis iste
-                      perspiciatis asperiores animi atque perferendis. Quaerat
-                      aperiam et exercitationem iure nihil fuga culpa nostrum
-                      accusamus, excepturi libero.
-                    </li>
-                    <li>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Exercitationem repellendus sequi reiciendis iste
-                      perspiciatis asperiores animi atque perferendis. Quaerat
-                      aperiam et exercitationem iure nihil fuga culpa nostrum
-                      accusamus, excepturi libero.
-                    </li>
-                    <li>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Exercitationem repellendus sequi reiciendis iste
-                      perspiciatis asperiores animi atque perferendis. Quaerat
-                      aperiam et exercitationem iure nihil fuga culpa nostrum
-                      accusamus, excepturi libero.
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              {session?.user.plan === 'free' && (
-                <div className='flex p-8 flex-col justify-between items-center border border-gray-300 bg-gray-100 rounded-xl'>
-                  <div className='flex flex-col items-center'>
-                    <h1 className='text-blue-800 font-bold text-3xl'>
-                      Premium
-                    </h1>
-                  </div>
-                  <div className='flex flex-col items-center gap-4'>
-                    <h2
-                      className={`font-semibold text-lg mt-2
-                  ${
-                    resolvedTheme === 'light'
-                      ? 'text-blue-800'
-                      : 'text-blue-400'
-                  }
-                `}
+
+                <ul role='list' className='space-y-5 my-7'>
+                  <li className='flex decoration-gray-500'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
                     >
-                      Vantagens
-                    </h2>
-                    <ul className='text-blue-800 list-disc list-inside'>
-                      <li>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Exercitationem repellendus sequi reiciendis iste
-                        perspiciatis asperiores animi atque perferendis. Quaerat
-                        aperiam et exercitationem iure nihil fuga culpa nostrum
-                        accusamus, excepturi libero.
-                      </li>
-                      <li>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Exercitationem repellendus sequi reiciendis iste
-                        perspiciatis asperiores animi atque perferendis. Quaerat
-                        aperiam et exercitationem iure nihil fuga culpa nostrum
-                        accusamus, excepturi libero.
-                      </li>
-                      <li>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Exercitationem repellendus sequi reiciendis iste
-                        perspiciatis asperiores animi atque perferendis. Quaerat
-                        aperiam et exercitationem iure nihil fuga culpa nostrum
-                        accusamus, excepturi libero.
-                      </li>
-                    </ul>
-                    <Button
-                      onClick={handleAssignPremium}
-                      text='Assinar plano'
-                      IconComponent={Check}
+                      Notícias e análises do mercado
+                    </span>
+                  </li>
+                  <li className='flex items-center'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Acompanhamento das criptomoedas
+                    </span>
+                  </li>
+                  <li className='flex items-center'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Conteúdos educativos
+                    </span>
+                  </li>
+
+                  <li className='flex line-through decoration-gray-500'>
+                    <BadgeCheck
+                      size={20}
+                      fill='gray'
+                      color={resolvedTheme === 'light' ? 'white' : 'black'}
                     />
-                  </div>
+                    <span className='text-base font-normal leading-tight text-gray-500 ms-3'>
+                      Gráficos com indicadores
+                    </span>
+                  </li>
+                  <li className='flex line-through decoration-gray-500'>
+                    <BadgeCheck
+                      size={20}
+                      fill='gray'
+                      color={resolvedTheme === 'light' ? 'white' : 'black'}
+                    />
+                    <span className='text-base font-normal leading-tight text-gray-500 ms-3'>
+                      Relatórios com sugestões estratégicas
+                    </span>
+                  </li>
+                  <li className='flex line-through decoration-gray-500'>
+                    <BadgeCheck
+                      size={20}
+                      fill='gray'
+                      color={resolvedTheme === 'light' ? 'white' : 'black'}
+                    />
+                    <span className='text-base font-normal leading-tight text-gray-500 ms-3'>
+                      Gestão de portfólio
+                    </span>
+                  </li>
+                  <li className='flex line-through decoration-gray-500'>
+                    <BadgeCheck
+                      size={20}
+                      fill='gray'
+                      color={resolvedTheme === 'light' ? 'white' : 'black'}
+                    />
+                    <span className='text-base font-normal leading-tight text-gray-500 ms-3'>
+                      Comunidade no Discord/Telegram
+                    </span>
+                  </li>
+                </ul>
+
+                <button
+                  type='button'
+                  onClick={() => {
+                    if (session.user.plan !== 'free') {
+                      handleAssignPremium('free')
+                    }
+                  }}
+                  className={`text-white bg-blue-700 hover:bg-blue-800  font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center
+                      ${
+                        session.user.plan !== 'free'
+                          ? 'bg-blue-600 hover:bg-blue-700 '
+                          : ' bg-gray-500 hover:bg-gray-600  cursor-not-allowed'
+                      }
+                    `}
+                >
+                  {session.user.plan !== 'free'
+                    ? 'Escolher plano'
+                    : 'Meu plano'}
+                </button>
+              </div>
+
+              <div
+                className={`w-full max-w-sm p-4 border-2 rounded-lg shadow-sm sm:p-8 
+              
+              ${
+                resolvedTheme === 'light'
+                  ? 'bg-gray-50 border-gray-200'
+                  : 'bg-gray-800 border-gray-700'
+              }
+              `}
+              >
+                <h5
+                  className={`mb-4 text-xl font-medium 
+                  ${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  }`}
+                >
+                  Standard
+                </h5>
+                <div
+                  className={`flex items-baseline 
+                  ${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  }
+                  `}
+                >
+                  <span className='text-3xl font-semibold'>R$</span>
+                  <span className='text-5xl font-extrabold tracking-tight'>
+                    10
+                  </span>
+                  <span
+                    className={`ms-1 text-xl font-normal 
+                    ${
+                      resolvedTheme === 'light'
+                        ? 'text-gray-800'
+                        : 'text-gray-400'
+                    }
+                    `}
+                  >
+                    /mês
+                  </span>
                 </div>
-              )}
+                <ul role='list' className='space-y-5 my-7'>
+                  <li className='flex decoration-gray-500'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Notícias e análises do mercado
+                    </span>
+                  </li>
+                  <li className='flex items-center'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Acompanhamento das criptomoedas
+                    </span>
+                  </li>
+                  <li className='flex items-center'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Conteúdos educativos
+                    </span>
+                  </li>
+
+                  <li className='flex decoration-gray-500'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Gráficos com indicadores
+                    </span>
+                  </li>
+                  <li className='flex decoration-gray-500'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Relatórios com sugestões estratégicas
+                    </span>
+                  </li>
+                  <li className='flex line-through decoration-gray-500'>
+                    <BadgeCheck
+                      size={20}
+                      fill='gray'
+                      color={resolvedTheme === 'light' ? 'white' : 'black'}
+                    />
+                    <span className='text-base font-normal leading-tight text-gray-500 ms-3'>
+                      Gestão de portfólio
+                    </span>
+                  </li>
+                  <li className='flex line-through decoration-gray-500'>
+                    <BadgeCheck
+                      size={20}
+                      fill='gray'
+                      color={resolvedTheme === 'light' ? 'white' : 'black'}
+                    />
+                    <span className='text-base font-normal leading-tight text-gray-500 ms-3'>
+                      Comunidade no Discord/Telegram
+                    </span>
+                  </li>
+                </ul>
+                {session.user.plan !== 'standard' && (
+                  <button
+                    type='button'
+                    onClick={() => {
+                      if (session.user.plan !== 'standard') {
+                        handleAssignPremium('standard')
+                      }
+                    }}
+                    className={`text-white bg-blue-700 hover:bg-blue-800  font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center
+                      ${
+                        session.user.plan !== 'standard'
+                          ? 'bg-blue-600 hover:bg-blue-700 '
+                          : ' bg-gray-500 hover:bg-gray-600  cursor-not-allowed'
+                      }
+                    `}
+                  >
+                    {session.user.plan !== 'standard'
+                      ? 'Escolher plano'
+                      : 'Meu plano'}
+                  </button>
+                )}
+              </div>
+
+              <div
+                className={`w-full max-w-sm p-4 border-2 rounded-lg shadow-sm sm:p-8 
+              
+              ${
+                resolvedTheme === 'light'
+                  ? 'bg-gray-50 border-gray-200'
+                  : 'bg-gray-800 border-gray-700'
+              }
+              `}
+              >
+                <h5
+                  className={`mb-4 text-xl font-medium 
+                  ${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  }`}
+                >
+                  Premium
+                </h5>
+                <div
+                  className={`flex items-baseline 
+                  ${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  }
+                  `}
+                >
+                  <span className='text-3xl font-semibold'>R$</span>
+                  <span className='text-5xl font-extrabold tracking-tight'>
+                    100
+                  </span>
+                  <span
+                    className={`ms-1 text-xl font-normal 
+                    ${
+                      resolvedTheme === 'light'
+                        ? 'text-gray-800'
+                        : 'text-gray-400'
+                    }
+                    `}
+                  >
+                    /mês
+                  </span>
+                </div>
+                <ul role='list' className='space-y-5 my-7'>
+                  <li className='flex decoration-gray-500'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Notícias e análises do mercado
+                    </span>
+                  </li>
+                  <li className='flex items-center'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Acompanhamento das criptomoedas
+                    </span>
+                  </li>
+                  <li className='flex items-center'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Conteúdos educativos
+                    </span>
+                  </li>
+
+                  <li className='flex decoration-gray-500'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Gráficos com indicadores
+                    </span>
+                  </li>
+                  <li className='flex decoration-gray-500'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Relatórios com sugestões estratégicas
+                    </span>
+                  </li>
+                  <li className='flex decoration-gray-500'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Gestão de portfólio
+                    </span>
+                  </li>
+                  <li className='flex decoration-gray-500'>
+                    <BadgeCheck size={20} fill='blue' color='white' />
+                    <span
+                      className={`text-base font-normal leading-tight ms-3
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-800'
+                          : 'text-gray-200'
+                      }
+                       `}
+                    >
+                      Comunidade no Discord/Telegram
+                    </span>
+                  </li>
+                </ul>
+                {session.user.plan !== 'premium' && (
+                  <button
+                    type='button'
+                    onClick={() => {
+                      if (session.user.plan !== 'premium') {
+                        handleAssignPremium('premium')
+                      }
+                    }}
+                    className={`text-white bg-blue-700 hover:bg-blue-800  font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center
+                      ${
+                        session.user.plan !== 'premium'
+                          ? 'bg-blue-600 hover:bg-blue-700 '
+                          : ' bg-gray-500 hover:bg-gray-600  cursor-not-allowed'
+                      }
+                    `}
+                  >
+                    {session.user.plan !== 'premium'
+                      ? 'Escolher plano'
+                      : 'Meu plano'}
+                  </button>
+                )}
+              </div>
             </section>
           )}
         </section>

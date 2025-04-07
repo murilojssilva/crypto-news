@@ -12,15 +12,19 @@ export function Card({ text, value, icon }: CardProps) {
 
   return (
     <div
-      className={`border border-gray-300 p-4 rounded-md flex flex-col gap-3 justify-around
-    ${resolvedTheme === 'light' ? 'bg-gray-100' : ' bg-gray-800'}
+      className={`border p-4 rounded-md flex flex-col gap-3 justify-around
+    ${
+      resolvedTheme === 'light'
+        ? 'bg-gray-100 border-gray-200'
+        : ' bg-gray-800 border-gray-700'
+    }
       `}
     >
       <div>
         <h3
           className={`text-xl font-bold
 
-        ${resolvedTheme === 'light' ? 'text-blue-800' : ' text-blue-400'}
+        ${resolvedTheme === 'light' ? 'text-blue-800' : ' text-blue-500'}
           text-gray-800
           `}
         >
