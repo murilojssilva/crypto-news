@@ -40,7 +40,7 @@ export default function News() {
 
   return (
     <main className='flex flex-col flex-1 justify-between'>
-      <title>CryptoNews | Últimas notícias</title>
+      <title>Últimas notícias | CryptoNews</title>
       <div className='flex flex-row justify-between p-8'>
         <h1 className='text-blue-800 font-bold text-2xl'>Últimas notícias</h1>
       </div>

@@ -15,7 +15,7 @@ import 'react-toastify/dist/ReactToastify.css'
 export default function Home() {
   return (
     <div className='flex flex-col min-h-screen bg-white'>
-      <title>CryptoNews | HomePage</title>
+      <title>HomePage | CryptoNews</title>
       <div>
         <Header />
         <section className='w-full p-4 flex flex-col md:flex-row items-center justify-around max-w-screen-lg mx-auto sm:flex-1'>

@@ -1,7 +1,7 @@
 export default function Privacy() {
   return (
     <article className='bg-gray-100 p-8 flex-1'>
-      <title>CryptoNews | Privacidade</title>
+      <title>Privacidade | CryptoNews</title>
       <h1 className='font-bold text-blue-800 text-2xl'>Privacidade</h1>
       <p className='text-gray-800'>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Veritatis

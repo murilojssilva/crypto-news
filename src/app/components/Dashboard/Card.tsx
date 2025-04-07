@@ -24,7 +24,7 @@ export function Card({ text, value, icon }: CardProps) {
         <h3
           className={`text-xl font-bold
 
-        ${resolvedTheme === 'light' ? 'text-blue-800' : ' text-blue-500'}
+        ${resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-400'}
           text-gray-800
           `}
         >

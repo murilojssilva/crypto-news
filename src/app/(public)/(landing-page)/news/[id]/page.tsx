@@ -64,7 +64,7 @@ export default function NewsPage() {
 
   return (
     <main className='flex flex-col flex-1'>
-      <title>CryptoNews | Notícia</title>
+      <title>Notícia | CryptoNews</title>
       {loading ? (
         <section className='p-4 items-center justify-center gap-4'>
           <Skeleton
