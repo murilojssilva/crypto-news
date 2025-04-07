@@ -10,6 +10,8 @@ import {
   BadgeCheck,
   Pen,
   Bookmark,
+  Eye,
+  X,
 } from 'lucide-react'
 import HeaderDashboard from '@/app/components/Dashboard/Header'
 import Sidebar from '@/app/components/Sidebar'
@@ -29,6 +31,8 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Loading } from '@/app/components/Form/Loading'
 import { useTheme } from 'next-themes'
+import { getUserById } from '@/lib/users/[id]'
+import { UserProps } from '@/app/interfaces/UserInterface'
 
 interface ItemProps {
   name: string
@@ -40,6 +44,14 @@ export default function Dashboard() {
   const { data: session } = useSession()
   const currentDate = useFormattedDate()
   const skeletons = Array(8).fill('')
+  const [showUser, setShowUser] = useState<UserProps>({} as UserProps)
+
+  const [openModal, setModal] = useState(false)
+  async function handleModal(id: string) {
+    setModal(!openModal)
+    const data = await getUserById(id as string)
+    setShowUser(data)
+  }
 
   const [activeTab, setActiveTab] = useState('crypto')
   const [cryptoData, setCryptoData] = useState<ItemProps[]>([] as ItemProps[])
@@ -1056,7 +1068,7 @@ export default function Dashboard() {
               <table className='w-full min-w-[800px] text-sm text-left text-gray-800'>
                 <thead
                   className={`text-xs text-gray-700 uppercase
-                    ${resolvedTheme === 'light' ? 'bg-gray-300' : 'bg-gray-700'}
+                    ${resolvedTheme === 'light' ? 'bg-gray-200' : 'bg-gray-600'}
                   `}
                 >
                   <tr
@@ -1093,10 +1105,14 @@ export default function Dashboard() {
                       `}
                     >
                       <td className='px-4 py-3 whitespace-nowrap'>
-                        {user.id === session.user.id && (
+                        {user.id === session.user.id ? (
                           <Link href='/dashboard/profile'>
                             <Pen />
                           </Link>
+                        ) : (
+                          <button onClick={() => handleModal(user.id)}>
+                            <Eye />
+                          </button>
                         )}
                       </td>
                       <td className='px-4 py-3 whitespace-nowrap'>
@@ -1135,6 +1151,81 @@ export default function Dashboard() {
                 </tbody>
               </table>
             </div>
+
+            {openModal && (
+              <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center'>
+                <div className='w-[30vw] bg-gray-100 shadow-lg py-2 rounded-md'>
+                  <div className='flex flex-row justify-between border-b-2 border-gray-200'>
+                    <h2 className='text-sm font-medium text-gray-900  py-3 px-4'>
+                      Perfil de {showUser.firstName}
+                    </h2>
+                    <button
+                      type='button'
+                      className='h-8 px-2 text-sm rounded-md  text-gray-800'
+                      onClick={() => handleModal(showUser.id)}
+                    >
+                      <X />
+                    </button>
+                  </div>
+
+                  <div className='flex flex-col gap-4 p-4'>
+                    <div className='flex flex-row items-center justify-between'>
+                      <h2 className='text-blue-800 font-bold text-md'>Nome</h2>
+                      <span className='text-blue-800 font-thin text-sm'>
+                        {showUser.firstName} {showUser.lastName}
+                      </span>
+                    </div>
+                    <div className='flex flex-row items-center justify-between'>
+                      <h2 className='text-blue-800 font-bold text-md'>
+                        E-mail
+                      </h2>
+                      <span className='text-blue-800 font-thin text-sm'>
+                        {showUser.email}
+                      </span>
+                    </div>
+                    <div className='flex flex-row items-center justify-between'>
+                      <h2 className='text-blue-800 font-bold text-md'>Cargo</h2>
+                      <span className='text-blue-800 font-thin text-sm'>
+                        {formatUserRole(showUser.role)}
+                      </span>
+                    </div>
+
+                    <div className='flex flex-row items-center justify-between'>
+                      <h2 className='text-blue-800 font-bold text-md'>Plano</h2>
+                      <span className='text-blue-800 font-thin text-sm'>
+                        {showUser.plan}
+                      </span>
+                    </div>
+
+                    {showUser.plan !== 'free' && (
+                      <div className='grid grid-cols-2'>
+                        <div className='flex flex-row items-center justify-between'>
+                          <h2 className='text-blue-800 font-bold text-md'>
+                            Início do plano
+                          </h2>
+                          <span className='text-blue-800 font-thin text-sm'>
+                            {showUser.startPremium
+                              ? formatDate(showUser.startPremium as Date)
+                              : ''}
+                          </span>
+                        </div>
+
+                        <div className='flex flex-row items-center justify-between'>
+                          <h2 className='text-blue-800 font-bold text-md'>
+                            Final do plano
+                          </h2>
+                          <span className='text-blue-800 font-thin text-sm'>
+                            {showUser.startPremium
+                              ? formatDate(showUser.startPremium as Date)
+                              : ''}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </section>
         )}
       </div>
