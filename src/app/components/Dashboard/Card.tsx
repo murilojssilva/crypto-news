@@ -1,3 +1,4 @@
+import { useTheme } from 'next-themes'
 import { ReactElement } from 'react'
 
 interface CardProps {
@@ -7,14 +8,36 @@ interface CardProps {
 }
 
 export function Card({ text, value, icon }: CardProps) {
+  const { resolvedTheme } = useTheme()
+
   return (
-    <div className='border border-gray-300 bg-gray-100 p-4 rounded-md flex flex-col gap-3 justify-around'>
+    <div
+      className={`border border-gray-300 p-4 rounded-md flex flex-col gap-3 justify-around
+    ${resolvedTheme === 'light' ? 'bg-gray-100' : ' bg-gray-800'}
+      `}
+    >
       <div>
-        <h3 className='text-gray-800 text-xl font-bold'>{text}</h3>
+        <h3
+          className={`text-xl font-bold
+
+        ${resolvedTheme === 'light' ? 'text-blue-800' : ' text-blue-400'}
+          text-gray-800
+          `}
+        >
+          {text}
+        </h3>
       </div>
       <div className='flex flex-row justify-between items-center'>
         {icon}
-        <span className='text-blue-800 font-bold text-3xl'>{value}</span>
+        <span
+          className={`font-bold text-3xl
+
+        ${resolvedTheme === 'light' ? 'text-blue-800' : ' text-blue-400'}
+          
+          `}
+        >
+          {value}
+        </span>
       </div>
     </div>
   )

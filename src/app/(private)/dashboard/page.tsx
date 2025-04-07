@@ -290,114 +290,107 @@ export default function Dashboard() {
           title='Dashboard'
         />
         <section className='p-6  flex flex-col gap-4 overflow-y-auto'>
-          <section>
-            {loading ? (
-              <div className='py-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 md:grid-cols-3 gap-4'>
-                {skeletons.map((_, index) => (
-                  <div
-                    key={index}
-                    className='border border-gray-300 bg-gray-100 p-4 rounded-md flex flex-col gap-3 justify-around h-[12vh]'
-                  >
-                    <Skeleton
-                      key={index}
-                      baseColor='#e0e0e0'
-                      highlightColor='#bdbdbd'
-                      className='flex items-center justify-center h-[8vh]'
-                    />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className='flex flex-col border border-gray-300 rounded-xl p-4'>
-                <h2
-                  className={`font-semibold text-lg mt-2
+          {session?.user.role === 'costumer' && (
+            <section>
+              {loading ? (
+                <div
+                  className={`border border-gray-300 p-4 rounded-md flex flex-col gap-3 justify-around h-[60vh]
+                ${resolvedTheme === 'light' ? 'bg-gray-100' : ' bg-gray-700'}
+              `}
+                ></div>
+              ) : (
+                <div className='flex flex-col border border-gray-300 rounded-xl p-4'>
+                  <h2
+                    className={`font-semibold text-lg mt-2
                   ${
                     resolvedTheme === 'light'
                       ? 'text-blue-800'
                       : 'text-blue-400'
                   }
                 `}
-                >
-                  Mercado
-                </h2>
-                {loadingCoins ? (
-                  <div className='flex justify-center'>
-                    <Loading />
-                  </div>
-                ) : (
-                  <div className='w-full max-w-2xl mx-auto  rounded-lg p-6'>
-                    <div className='flex border-b'>
-                      <button
-                        className={`w-1/2 py-2 text-center ${
-                          activeTab === 'crypto'
-                            ? `border-b-2 font-semibold ${
-                                resolvedTheme === 'light'
-                                  ? 'border-blue-800 text-blue-800'
-                                  : 'border-blue-400 text-blue-400'
-                              }`
-                            : 'text-gray-500'
-                        }`}
-                        onClick={() => setActiveTab('crypto')}
-                      >
-                        Criptomoedas
-                      </button>
-                      <button
-                        className={`w-1/2 py-2 text-center ${
-                          activeTab === 'fiat'
-                            ? `border-b-2 font-semibold ${
-                                resolvedTheme === 'light'
-                                  ? 'border-blue-800 text-blue-800'
-                                  : 'border-blue-400 text-blue-400'
-                              }`
-                            : 'text-gray-500'
-                        }`}
-                        onClick={() => setActiveTab('fiat')}
-                      >
-                        Moedas Fiduciárias
-                      </button>
+                  >
+                    Mercado
+                  </h2>
+                  {loadingCoins ? (
+                    <div className='flex justify-center'>
+                      <Loading />
                     </div>
-                    <div className='w-full overflow-x-auto rounded-lg mt-4'>
-                      <table className='w-full mt-4 border-collapse'>
-                        <thead>
-                          <tr
-                            className={`${
-                              resolvedTheme === 'light'
-                                ? 'bg-gray-200'
-                                : 'bg-gray-700'
-                            }`}
-                          >
-                            <th
-                              className={`p-2 text-left ${
+                  ) : (
+                    <div className='w-full max-w-2xl mx-auto rounded-lg p-6'>
+                      <div className='flex border-b'>
+                        <button
+                          className={`w-1/2 py-2 text-center ${
+                            activeTab === 'crypto'
+                              ? `border-b-2 font-semibold ${
+                                  resolvedTheme === 'light'
+                                    ? 'border-blue-800 text-blue-800'
+                                    : 'border-blue-400 text-blue-400'
+                                }`
+                              : 'text-gray-500'
+                          }`}
+                          onClick={() => setActiveTab('crypto')}
+                        >
+                          Criptomoedas
+                        </button>
+                        <button
+                          className={`w-1/2 py-2 text-center ${
+                            activeTab === 'fiat'
+                              ? `border-b-2 font-semibold ${
+                                  resolvedTheme === 'light'
+                                    ? 'border-blue-800 text-blue-800'
+                                    : 'border-blue-400 text-blue-400'
+                                }`
+                              : 'text-gray-500'
+                          }`}
+                          onClick={() => setActiveTab('fiat')}
+                        >
+                          Moedas Fiduciárias
+                        </button>
+                      </div>
+                      <div className='w-full overflow-x-auto rounded-lg mt-4'>
+                        <table className='w-full mt-4 border-collapse'>
+                          <thead>
+                            <tr
+                              className={`${
                                 resolvedTheme === 'light'
-                                  ? 'text-blue-800'
-                                  : 'text-blue-400'
+                                  ? 'bg-gray-200'
+                                  : 'bg-gray-700'
                               }`}
                             >
-                              Nome
-                            </th>
-                            <th
-                              className={`p-2 text-left ${
-                                resolvedTheme === 'light'
-                                  ? 'text-blue-800'
-                                  : 'text-blue-400'
-                              }`}
-                            >
-                              Símbolo
-                            </th>
-                            <th
-                              className={`p-2 text-right ${
-                                resolvedTheme === 'light'
-                                  ? 'text-blue-800'
-                                  : 'text-blue-400'
-                              }`}
-                            >
-                              Preço
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {(activeTab === 'crypto' ? cryptoData : fiatData).map(
-                            (item: ItemProps, index) => (
+                              <th
+                                className={`p-2 text-left ${
+                                  resolvedTheme === 'light'
+                                    ? 'text-blue-800'
+                                    : 'text-blue-400'
+                                }`}
+                              >
+                                Nome
+                              </th>
+                              <th
+                                className={`p-2 text-left ${
+                                  resolvedTheme === 'light'
+                                    ? 'text-blue-800'
+                                    : 'text-blue-400'
+                                }`}
+                              >
+                                Símbolo
+                              </th>
+                              <th
+                                className={`p-2 text-right ${
+                                  resolvedTheme === 'light'
+                                    ? 'text-blue-800'
+                                    : 'text-blue-400'
+                                }`}
+                              >
+                                Preço
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {(activeTab === 'crypto'
+                              ? cryptoData
+                              : fiatData
+                            ).map((item: ItemProps, index) => (
                               <tr
                                 key={index}
                                 className={`border-t transition-colors
@@ -436,23 +429,29 @@ export default function Dashboard() {
                                   {item.price}
                                 </td>
                               </tr>
-                            )
-                          )}
-                        </tbody>
-                      </table>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </section>
+                  )}
+                </div>
+              )}
+            </section>
+          )}
           <section>
             {loading ? (
               <div className='py-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 md:grid-cols-3 gap-4'>
                 {skeletons.map((_, index) => (
                   <div
                     key={index}
-                    className='border border-gray-300 bg-gray-100 p-4 rounded-md flex flex-col gap-3 justify-around h-[12vh]'
+                    className={`border border-gray-300 p-4 rounded-md flex flex-col gap-3 justify-around h-[12vh]
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'bg-gray-100'
+                          : ' bg-gray-700'
+                      }
+                    `}
                   >
                     <Skeleton
                       key={index}
@@ -484,7 +483,11 @@ export default function Dashboard() {
                       value={
                         users.filter((item) => item.role === 'costumer').length
                       }
-                      icon={<DollarSign color='black' />}
+                      icon={
+                        <DollarSign
+                          color={resolvedTheme === 'light' ? 'black' : 'gray'}
+                        />
+                      }
                     />
                   )}
 
@@ -493,7 +496,11 @@ export default function Dashboard() {
                       <Card
                         text='Total de posts'
                         value={posts.length}
-                        icon={<Newspaper color='black' />}
+                        icon={
+                          <Newspaper
+                            color={resolvedTheme === 'light' ? 'black' : 'gray'}
+                          />
+                        }
                       />
                       <Card
                         text='Meus posts'
@@ -502,7 +509,11 @@ export default function Dashboard() {
                             (item) => item.userId === session?.user.id
                           ).length
                         }
-                        icon={<Newspaper color='black' />}
+                        icon={
+                          <Newspaper
+                            color={resolvedTheme === 'light' ? 'black' : 'gray'}
+                          />
+                        }
                       />
                     </>
                   )}
@@ -633,8 +644,20 @@ export default function Dashboard() {
 
             <div className='w-full overflow-x-auto bg-white shadow-md rounded-lg mt-4'>
               <table className='w-full min-w-[800px] text-sm text-left text-gray-800'>
-                <thead className='text-xs text-gray-700 uppercase bg-gray-300'>
-                  <tr className='*:px-4 *:py-3'>
+                <thead
+                  className={`text-xs text-gray-700 uppercase
+                    ${resolvedTheme === 'light' ? 'bg-gray-300' : 'bg-gray-700'}
+                  `}
+                >
+                  <tr
+                    className={`border-b *:px-4 *:py-3
+                    ${
+                      resolvedTheme === 'light'
+                        ? 'text-gray-700 border-gray-100'
+                        : 'text-gray-200 border-gray-800'
+                    }
+                    `}
+                  >
                     <th scope='col'>#</th>
                     <th scope='col'>Nome</th>
                     <th scope='col'>Sobrenome</th>
@@ -651,7 +674,13 @@ export default function Dashboard() {
                   {users.map((user) => (
                     <tr
                       key={user.id}
-                      className='bg-gray-200 border-b border-gray-300 text-gray-700'
+                      className={`border-b h-16
+                        ${
+                          resolvedTheme === 'light'
+                            ? 'border-gray-200 text-gray-700 bg-gray-50 hover:bg-gray-100'
+                            : 'border-gray-800 text-gray-200 bg-gray-700 hover:bg-gray-600'
+                        }
+                      `}
                     >
                       <td className='px-4 py-3 whitespace-nowrap'>
                         {user.id === session.user.id && (
