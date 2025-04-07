@@ -1155,7 +1155,7 @@ export default function Dashboard() {
             {openModal && (
               <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center'>
                 <div
-                  className={`w-[30vw] shadow-lg py-2 rounded-md
+                  className={`w-[90vw] md:w-[40vw] shadow-lg py-2 rounded-md
                     ${resolvedTheme === 'light' ? 'bg-gray-100' : 'bg-gray-700'}
                   `}
                 >
