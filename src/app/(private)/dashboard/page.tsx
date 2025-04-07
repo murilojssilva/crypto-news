@@ -1154,56 +1154,162 @@ export default function Dashboard() {
 
             {openModal && (
               <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center'>
-                <div className='w-[30vw] bg-gray-100 shadow-lg py-2 rounded-md'>
-                  <div className='flex flex-row justify-between border-b-2 border-gray-200'>
-                    <h2 className='text-sm font-medium text-gray-900  py-3 px-4'>
+                <div
+                  className={`w-[30vw] shadow-lg py-2 rounded-md
+                    ${resolvedTheme === 'light' ? 'bg-gray-100' : 'bg-gray-700'}
+                  `}
+                >
+                  <div
+                    className={`flex flex-row justify-between items-center border-b-2
+                    ${
+                      resolvedTheme === 'light'
+                        ? 'border-gray-200'
+                        : 'border-gray-800'
+                    }
+                  `}
+                  >
+                    <h2
+                      className={`text-sm font-medium py-3 px-4
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-gray-900'
+                          : 'text-gray-100'
+                      }
+                    `}
+                    >
                       Perfil de {showUser.firstName}
                     </h2>
                     <button
                       type='button'
-                      className='h-8 px-2 text-sm rounded-md  text-gray-800'
+                      className='h-8 px-2 text-sm rounded-md text-gray-800'
                       onClick={() => handleModal(showUser.id)}
                     >
-                      <X />
+                      <X color={resolvedTheme === 'light' ? 'black' : 'gray'} />
                     </button>
                   </div>
 
                   <div className='flex flex-col gap-4 p-4'>
                     <div className='flex flex-row items-center justify-between'>
-                      <h2 className='text-blue-800 font-bold text-md'>Nome</h2>
-                      <span className='text-blue-800 font-thin text-sm'>
+                      <h2
+                        className={`font-bold
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-blue-900'
+                          : 'text-blue-400'
+                      }
+                      `}
+                      >
+                        Nome
+                      </h2>
+                      <span
+                        className={`font-thin text-sm
+                        ${
+                          resolvedTheme === 'light'
+                            ? 'text-gray-800'
+                            : 'text-gray-100'
+                        }
+                        `}
+                      >
                         {showUser.firstName} {showUser.lastName}
                       </span>
                     </div>
                     <div className='flex flex-row items-center justify-between'>
-                      <h2 className='text-blue-800 font-bold text-md'>
+                      <h2
+                        className={`font-bold
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-blue-900'
+                          : 'text-blue-400'
+                      }
+                      `}
+                      >
                         E-mail
                       </h2>
-                      <span className='text-blue-800 font-thin text-sm'>
+                      <span
+                        className={`font-thin text-sm
+                        ${
+                          resolvedTheme === 'light'
+                            ? 'text-gray-800'
+                            : 'text-gray-100'
+                        }
+                        `}
+                      >
                         {showUser.email}
                       </span>
                     </div>
                     <div className='flex flex-row items-center justify-between'>
-                      <h2 className='text-blue-800 font-bold text-md'>Cargo</h2>
-                      <span className='text-blue-800 font-thin text-sm'>
+                      <h2
+                        className={`font-bold
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-blue-800'
+                          : 'text-blue-400'
+                      }
+                      `}
+                      >
+                        Cargo
+                      </h2>
+                      <span
+                        className={`font-thin text-sm
+                        ${
+                          resolvedTheme === 'light'
+                            ? 'text-gray-800'
+                            : 'text-gray-100'
+                        }
+                        `}
+                      >
                         {formatUserRole(showUser.role)}
                       </span>
                     </div>
 
                     <div className='flex flex-row items-center justify-between'>
-                      <h2 className='text-blue-800 font-bold text-md'>Plano</h2>
-                      <span className='text-blue-800 font-thin text-sm'>
+                      <h2
+                        className={`font-bold
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-blue-800'
+                          : 'text-blue-400'
+                      }
+                      `}
+                      >
+                        Plano
+                      </h2>
+                      <span
+                        className={`font-thin text-sm
+                        ${
+                          resolvedTheme === 'light'
+                            ? 'text-gray-800'
+                            : 'text-gray-100'
+                        }
+                        `}
+                      >
                         {showUser.plan}
                       </span>
                     </div>
 
-                    {showUser.plan !== 'free' && (
-                      <div className='grid grid-cols-2'>
+                    {showUser.plan === 'free' && (
+                      <div className='grid grid-cols-2 gap-2'>
                         <div className='flex flex-row items-center justify-between'>
-                          <h2 className='text-blue-800 font-bold text-md'>
+                          <h2
+                            className={`font-bold
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-blue-900'
+                          : 'text-blue-400'
+                      }
+                      `}
+                          >
                             Início do plano
                           </h2>
-                          <span className='text-blue-800 font-thin text-sm'>
+                          <span
+                            className={`font-thin text-sm
+                            ${
+                              resolvedTheme === 'light'
+                                ? 'text-gray-800'
+                                : 'text-gray-100'
+                            }
+                            `}
+                          >
                             {showUser.startPremium
                               ? formatDate(showUser.startPremium as Date)
                               : ''}
@@ -1211,10 +1317,26 @@ export default function Dashboard() {
                         </div>
 
                         <div className='flex flex-row items-center justify-between'>
-                          <h2 className='text-blue-800 font-bold text-md'>
+                          <h2
+                            className={`font-bold
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-blue-900'
+                          : 'text-blue-400'
+                      }
+                      `}
+                          >
                             Final do plano
                           </h2>
-                          <span className='text-blue-800 font-thin text-sm'>
+                          <span
+                            className={`font-thin text-sm
+                            ${
+                              resolvedTheme === 'light'
+                                ? 'text-gray-800'
+                                : 'text-gray-100'
+                            }
+                            `}
+                          >
                             {showUser.startPremium
                               ? formatDate(showUser.startPremium as Date)
                               : ''}
