@@ -277,7 +277,7 @@ export default function Dashboard() {
   }, [])
 
   const { posts, loading } = usePosts()
-  const { users } = useUsers()
+  const { users, setPage, page, totalPages } = useUsers()
   const { resolvedTheme } = useTheme()
 
   const router = useRouter()
@@ -1117,8 +1117,11 @@ export default function Dashboard() {
                       `}
                     >
                       <td className='px-4 py-3 whitespace-nowrap'>
-                        {user.id === session.user.id ? (
-                          <Link href='/dashboard/profile'>
+                        {user.id === session?.user.id ? (
+                          <Link
+                            href='/dashboard/profile'
+                            aria-label='Editar perfil'
+                          >
                             <Pen />
                           </Link>
                         ) : (
@@ -1140,22 +1143,22 @@ export default function Dashboard() {
                         {formatUserRole(user.role)}
                       </td>
                       <td className='px-4 py-3 whitespace-nowrap'>
-                        {formatDate(user.createdAt)}
+                        {formatDate(new Date(user.createdAt))}
                       </td>
                       <td className='px-4 py-3 whitespace-nowrap'>
-                        {formatDate(user.updatedAt)}
+                        {formatDate(new Date(user.updatedAt))}
                       </td>
                       <td className='px-4 py-3 whitespace-nowrap'>
                         {formatUserPlan(user.plan)}
                       </td>
                       <td className='px-4 py-3 whitespace-nowrap'>
                         {user.startPremium
-                          ? formatDate(user.startPremium as Date)
+                          ? formatDate(new Date(user.startPremium))
                           : ''}
                       </td>
                       <td className='px-4 py-3 whitespace-nowrap'>
                         {user.endPremium
-                          ? formatDate(user.endPremium as Date)
+                          ? formatDate(new Date(user.endPremium))
                           : ''}
                       </td>
                     </tr>
@@ -1163,6 +1166,47 @@ export default function Dashboard() {
                 </tbody>
               </table>
             </div>
+
+            {totalPages > 1 && (
+              <div className='flex items-center justify-end gap-2 mt-6'>
+                <button
+                  className={`px-3 py-1 rounded ${
+                    page === 1
+                      ? 'bg-blue-700 hover:bg-blue-600 text-white cursor-not-allowed'
+                      : 'bg-gray-200 text-gray-800 hover:bg-gray-50'
+                  }`}
+                  onClick={() => setPage(1)}
+                >
+                  1
+                </button>
+
+                {page > 3 && <span className='px-2'>...</span>}
+
+                {page !== 1 && page !== totalPages && (
+                  <button
+                    className='px-3 py-1 bg-blue-800 hover:bg-blue-600 text-white rounded cursor-not-allowed'
+                    disabled
+                  >
+                    {page}
+                  </button>
+                )}
+
+                {page < totalPages - 2 && <span className='px-2'>...</span>}
+
+                {totalPages !== 1 && (
+                  <button
+                    className={`px-3 py-1 rounded ${
+                      page === totalPages
+                        ? 'bg-blue-800 hover:bg-blue-600 text-white cursor-not-allowed'
+                        : 'bg-gray-200 text-gray-800 hover:bg-gray-50'
+                    }`}
+                    onClick={() => setPage(totalPages)}
+                  >
+                    {totalPages}
+                  </button>
+                )}
+              </div>
+            )}
 
             {openModal && (
               <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center'>
@@ -1327,7 +1371,7 @@ export default function Dashboard() {
                             `}
                           >
                             {showUser.startPremium
-                              ? formatDate(showUser.startPremium as Date)
+                              ? formatDate(new Date(showUser.startPremium))
                               : ''}
                           </span>
                         </div>
@@ -1354,7 +1398,7 @@ export default function Dashboard() {
                             `}
                           >
                             {showUser.startPremium
-                              ? formatDate(showUser.startPremium as Date)
+                              ? formatDate(new Date(showUser.startPremium))
                               : ''}
                           </span>
                         </div>

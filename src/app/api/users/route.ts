@@ -1,15 +1,36 @@
-import { NextResponse } from 'next/server'
 import { sign } from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
 import { UserCreateProps } from '@/app/interfaces/UserInterface'
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const { searchParams } = new URL(req.url)
+
+    const page = parseInt(searchParams.get('page') || '1', 10)
+    let limit = parseInt(searchParams.get('limit') || '10', 10)
+
+    if (isNaN(limit) || limit <= 0) {
+      limit = 10
+    }
+
+    const skip = (page - 1) * limit
+
     const users = await prisma.user.findMany({
+      skip,
+      take: limit,
       orderBy: { createdAt: 'desc' },
     })
-    return NextResponse.json(users)
+
+    const total = await prisma.user.count()
+
+    return NextResponse.json({
+      users,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    })
   } catch (error) {
     console.error('Erro ao buscar users:', error)
     return NextResponse.json({ error: 'Erro ao buscar users' }, { status: 500 })

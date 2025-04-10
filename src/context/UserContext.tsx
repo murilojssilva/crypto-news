@@ -12,6 +12,9 @@ interface UsersContextType {
   users: UserProps[]
   loading: boolean
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  setPage: React.Dispatch<React.SetStateAction<number>>
+  page: number
+  totalPages: number
   fetchUsers: () => Promise<void>
   fetchUserById: (id: string) => Promise<UserProps | null>
 }
@@ -20,6 +23,8 @@ const UsersContext = createContext<UsersContextType | undefined>(undefined)
 
 export const UsersProvider = ({ children }: { children: React.ReactNode }) => {
   const [users, setUsers] = useState<UserProps[]>([])
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
 
   const { id } = useParams()
@@ -68,8 +73,9 @@ export const UsersProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(true)
 
     try {
-      const data = await getUsers()
-      setUsers(data)
+      const data = await getUsers(page, 10)
+      setUsers(data.users)
+      setTotalPages(data.totalPages)
     } catch (err) {
       console.log(err)
     } finally {
@@ -79,7 +85,7 @@ export const UsersProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     fetchUsers()
-  }, [])
+  }, [page])
 
   return (
     <UsersContext.Provider
@@ -88,6 +94,9 @@ export const UsersProvider = ({ children }: { children: React.ReactNode }) => {
         loading,
         fetchUsers,
         setLoading,
+        setPage,
+        page,
+        totalPages,
         fetchUserById,
       }}
     >
