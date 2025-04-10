@@ -1,7 +1,7 @@
 'use client'
 
 import ReactMarkdown from 'react-markdown'
-import { Calendar, Pen, Plus, Trash } from 'lucide-react'
+import { Bookmark, Calendar, Pen, Plus, Trash } from 'lucide-react'
 import Link from 'next/link'
 import { usePosts } from '@/context/PostContext'
 import { NewsItem } from '@/app/interfaces/PostInterface'
@@ -18,31 +18,34 @@ import { CategoryProps } from '@/app/interfaces/CategoryInterface'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import SyntaxHighlighter from 'react-syntax-highlighter'
+import { useUsers } from '@/context/UserContext'
+import { useTheme } from 'next-themes'
 
 export default function Posts() {
   const { posts, loading, handleDeletePost } = usePosts()
   const { data: session } = useSession()
+  const { setPage, page, totalPages } = useUsers()
+  const { resolvedTheme } = useTheme()
 
   const [postCategories, setPostCategories] = useState<
     Record<string, CategoryProps[]>
   >({})
 
   useEffect(() => {
-    async function fetchCategories(postId: string) {
-      try {
-        const categoriesData = await getCategoryById(postId)
-        setPostCategories((prev) => ({
-          ...prev,
-          [postId]: categoriesData,
-        }))
-      } catch (error) {
-        console.error('Erro ao carregar categorias:', error)
-      }
-    }
+    const fetchedIds = new Set(Object.keys(postCategories))
 
-    posts.forEach((post) => {
-      if (!postCategories[post.id]) {
-        fetchCategories(post.id as string)
+    posts?.forEach((post) => {
+      if (!fetchedIds.has(post.id)) {
+        getCategoryById(post.id)
+          .then((categoriesData) => {
+            setPostCategories((prev) => ({
+              ...prev,
+              [post.id]: categoriesData,
+            }))
+          })
+          .catch((error) => {
+            console.error('Erro ao carregar categorias:', error)
+          })
       }
     })
   }, [posts, postCategories])
@@ -52,11 +55,16 @@ export default function Posts() {
   const skeletons = Array(3).fill('')
 
   return (
-    <main className='bg-gray-50 pb-4 h-screen flex'>
+    <main
+      className={`pb-4 h-screen flex
+    ${resolvedTheme === 'light' ? 'bg-gray-50' : 'bg-gray-800'}
+    `}
+    >
       <title>Postagens | CryptoNews</title>
+
       <Sidebar />
 
-      <div className='flex-1 overflow-auto'>
+      <div className='flex-1 w-full overflow-auto'>
         <HeaderDashboard
           firstName={session?.user?.firstName as string}
           IconComponent={Pen}
@@ -103,11 +111,11 @@ export default function Posts() {
                 return true
               })
               .map((item: NewsItem) => {
-                const postCategoriesList = postCategories[item.id] || [] // Pega as categorias do post específico
+                const postCategoriesList = postCategories[item.id] || []
                 return (
                   <article
                     key={item.id}
-                    className='flex p-4 items-start justify-between hover:bg-gray-100 hover:rounded-xl'
+                    className='flex flex-row items-start  justify-between gap-2 w-full p-6 bg-gray-50 hover:bg-gray-200 cursor:pointer rounded-2xl  transition-all'
                   >
                     <Link
                       href={`/news/${item.id}`}
@@ -161,13 +169,13 @@ export default function Posts() {
                             },
                           }}
                         >
-                          {item.content.length > 185
-                            ? item.content.slice(0, 185).trimEnd() + '…'
+                          {item.content.length > 120
+                            ? item.content.slice(0, 120).trimEnd() + '…'
                             : item.content}
                         </ReactMarkdown>
                       </div>
 
-                      <div className='flex flex-row justify-between gap-4'>
+                      <div className='flex flex-col md:flex-row justify-between gap-4'>
                         <div className='flex flex-row gap-4'>
                           {postCategoriesList.length > 0 &&
                             postCategoriesList.map((category, index) => (
@@ -203,7 +211,7 @@ export default function Posts() {
                         </div>
                       </div>
                     </Link>
-                    <div className='flex flex-row gap-2'>
+                    <div className='flex flex-col gap-2'>
                       {item.userId === session?.user.id && (
                         <Link
                           className='hover:bg-blue-800 text-blue-800 hover:text-gray-200 rounded-xl p-2'
@@ -221,6 +229,15 @@ export default function Posts() {
                           <Trash size={24} />
                         </button>
                       )}
+
+                      {item.userId === session?.user.id && (
+                        <Link
+                          className='hover:bg-blue-800 text-blue-800 hover:text-gray-200 rounded-xl p-2'
+                          href={`/dashboard/posts/edit/${item.id}`}
+                        >
+                          <Bookmark size={24} />
+                        </Link>
+                      )}
                     </div>
                   </article>
                 )
@@ -228,6 +245,47 @@ export default function Posts() {
           ) : (
             <div>
               <p className='text-blue-800'>Não há postagens</p>
+            </div>
+          )}
+
+          {totalPages > 0 && (
+            <div className='flex items-center justify-end gap-2 mt-6'>
+              <button
+                className={`px-3 py-1 rounded ${
+                  page === 1
+                    ? 'bg-blue-700 hover:bg-blue-600 text-white cursor-not-allowed'
+                    : 'bg-gray-200 text-gray-800 hover:bg-gray-50'
+                }`}
+                onClick={() => setPage(1)}
+              >
+                1
+              </button>
+
+              {page > 3 && <span className='px-2'>...</span>}
+
+              {page !== 1 && page !== totalPages && (
+                <button
+                  className='px-3 py-1 bg-blue-800 hover:bg-blue-600 text-white rounded cursor-not-allowed'
+                  disabled
+                >
+                  {page}
+                </button>
+              )}
+
+              {page < totalPages - 2 && <span className='px-2'>...</span>}
+
+              {totalPages !== 1 && (
+                <button
+                  className={`px-3 py-1 rounded ${
+                    page === totalPages
+                      ? 'bg-blue-800 hover:bg-blue-600 text-white cursor-not-allowed'
+                      : 'bg-gray-200 text-gray-800 hover:bg-gray-50'
+                  }`}
+                  onClick={() => setPage(totalPages)}
+                >
+                  {totalPages}
+                </button>
+              )}
             </div>
           )}
         </section>

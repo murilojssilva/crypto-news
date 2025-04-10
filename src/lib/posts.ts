@@ -1,7 +1,9 @@
 import axios from 'axios'
 
-export const getPosts = async () => {
-  const response = await axios.get('/api/posts')
+export const getPosts = async (page = 1, limit = 10) => {
+  const response = await axios.get('/api/posts', {
+    params: { page, limit },
+  })
   return response.data
 }
 

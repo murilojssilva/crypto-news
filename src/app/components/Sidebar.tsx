@@ -81,16 +81,20 @@ export default function Sidebar() {
         </div>
       </div>
       <div className='flex flex-col justify-center items-center gap-4'>
-        <Image
-          src={logo}
-          alt='CryptoNews'
-          className='md:w-10 md:h-10 w-6 h-6'
-        />
-        <span
-          className={`text-blue-800 font-bold text-xl ${!openMenu && 'hidden'}`}
-        >
-          CryptoNews
-        </span>
+        <Link href='/' aria-label='CryptoNews'>
+          <Image
+            src={logo}
+            alt='CryptoNews'
+            className='md:w-10 md:h-10 w-6 h-6'
+          />
+          <span
+            className={`text-blue-800 font-bold text-xl ${
+              !openMenu && 'hidden'
+            }`}
+          >
+            CryptoNews
+          </span>
+        </Link>
       </div>
       <div className='flex-1 flex flex-col gap-2 px-5'>
         <Link href='/dashboard'>
@@ -101,7 +105,15 @@ export default function Sidebar() {
                 : 'text-gray-600'
             }`}
           >
-            <Home color={pathname === '/dashboard' ? '#1565C0' : 'black'} />
+            <Home
+              color={
+                pathname === '/dashboard'
+                  ? '#1565C0'
+                  : resolvedTheme === 'light'
+                  ? 'black'
+                  : 'gray'
+              }
+            />
             {openMenu && 'Dashboard'}
           </button>
         </Link>

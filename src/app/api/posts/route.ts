@@ -1,14 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const { searchParams } = new URL(req.url)
+
+    const page = parseInt(searchParams.get('page') || '1', 10)
+    let limit = parseInt(searchParams.get('limit') || '10', 10)
+
+    if (isNaN(limit) || limit <= 0) {
+      limit = 10
+    }
+
+    const skip = (page - 1) * limit
+
     const posts = await prisma.post.findMany({
+      skip,
+      take: limit,
       orderBy: { createdAt: 'desc' },
     })
-    return NextResponse.json(posts)
+
+    const total = await prisma.post.count()
+
+    const totalPages = Math.ceil(total / limit)
+
+    return NextResponse.json({
+      posts,
+      total,
+      page,
+      totalPages,
+    })
   } catch (error) {
     console.error('Erro ao buscar posts:', error)
     return NextResponse.json({ error: 'Erro ao buscar posts' }, { status: 500 })

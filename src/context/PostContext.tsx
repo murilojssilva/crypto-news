@@ -1,6 +1,12 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { getPosts, createPost as createPostAPI } from '@/lib/posts'
 import { deletePost, getPostById } from '@/lib/posts/[id]'
 import { useParams, useRouter } from 'next/navigation'
@@ -22,6 +28,9 @@ interface PostsContextType {
   error: string | null
   handleNewPostSubmit: (data: NewPostFormData) => Promise<void>
   handleEditPostSubmit: (data: NewPostFormData) => Promise<void>
+  setPage: React.Dispatch<React.SetStateAction<number>>
+  page: number
+  totalPages: number
   fetchPosts: () => Promise<void>
   fetchPostById: (id: string) => Promise<NewsItemProps | PostProps | null>
   handleDeletePost: (id: string) => Promise<void>
@@ -33,18 +42,23 @@ interface PostsContextType {
 const PostsContext = createContext<PostsContextType | undefined>(undefined)
 
 export const PostsProvider = ({ children }: { children: React.ReactNode }) => {
-  const [posts, setPosts] = useState<PostProps[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { data: session } = useSession()
+
   const router = useRouter()
 
-  const { data: session } = useSession()
+  const [posts, setPosts] = useState<PostProps[]>([])
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   const { id } = useParams()
 
   useEffect(() => {
     if (id) {
       fetchPostById(id as string)
+    } else {
+      console.log('ID do post está vazio ou inválido.')
     }
   }, [id])
 
@@ -72,11 +86,26 @@ export const PostsProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  const fetchPosts = useCallback(async () => {
+    setLoading(true)
+    try {
+      const data = await getPosts(page, 10)
+      setPosts(data.posts)
+      setTotalPages(data.totalPages)
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
+  }, [page])
+
+  useEffect(() => {
+    fetchPosts()
+  }, [fetchPosts])
+
   const handleNewPostSubmit = async (data: NewPostFormData) => {
     try {
       setLoading(true)
-
-      console.log(data)
 
       const response = await fetch('/api/posts', {
         method: 'POST',
@@ -156,20 +185,6 @@ export const PostsProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const fetchPosts = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const data = await getPosts()
-      setPosts(data)
-    } catch (err) {
-      setError('Erro ao carregar os posts.')
-      console.log(err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   const createPost = async (
     newPost: Omit<PostProps, 'id' | 'createdAt' | 'updatedAt'>
   ) => {
@@ -203,10 +218,6 @@ export const PostsProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  useEffect(() => {
-    fetchPosts()
-  }, [])
-
   return (
     <PostsContext.Provider
       value={{
@@ -215,6 +226,9 @@ export const PostsProvider = ({ children }: { children: React.ReactNode }) => {
         error,
         fetchPosts,
         setLoading,
+        setPage,
+        page,
+        totalPages,
         handleNewPostSubmit,
         handleEditPostSubmit,
         createPost,

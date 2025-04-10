@@ -21,12 +21,15 @@ import {
 } from '@/app/schemas/EditProfileSchema'
 import { Title } from '@/app/components/Dashboard/Title'
 import { Loading } from '@/app/components/Form/Loading'
+import { useTheme } from 'next-themes'
 
 export default function Profile() {
   const { data: session } = useSession()
   const currentDate = useFormattedDate()
 
   const [loading, setLoading] = useState(false)
+
+  const { resolvedTheme } = useTheme()
 
   const editProfileForm = useForm<EditProfileFormData>({
     resolver: zodResolver(editProfileFormValidationsSchema),
@@ -108,7 +111,11 @@ export default function Profile() {
     }
   }, [session?.user, setValue])
   return (
-    <div className='bg-gray-50 pb-4 h-screen flex'>
+    <div
+      className={`pb-4 h-screen flex
+    ${resolvedTheme === 'light' ? 'bg-gray-50' : 'bg-gray-800'}
+    `}
+    >
       <title>Editar perfil | CryptoNews</title>
       <Sidebar />
       <div className='flex-1 overflow-auto'>
@@ -128,7 +135,14 @@ export default function Profile() {
             >
               <div className='flex flex-col gap-4'>
                 <div className='flex flex-col gap-2'>
-                  <label className='text-blue-800' htmlFor='firstName'>
+                  <label
+                    className={`${
+                      resolvedTheme === 'light'
+                        ? 'text-blue-800'
+                        : 'text-blue-200'
+                    }`}
+                    htmlFor='firstName'
+                  >
                     Nome
                   </label>
                   <Input
@@ -148,7 +162,14 @@ export default function Profile() {
                   )}
                 </div>
                 <div className='flex flex-col gap-2'>
-                  <label className='text-blue-800' htmlFor='lastName'>
+                  <label
+                    className={`${
+                      resolvedTheme === 'light'
+                        ? 'text-blue-800'
+                        : 'text-blue-200'
+                    }`}
+                    htmlFor='lastName'
+                  >
                     Sobrenome
                   </label>
                   <Input
@@ -168,7 +189,14 @@ export default function Profile() {
                   )}
                 </div>
                 <div className='flex flex-col gap-2'>
-                  <label className='text-blue-800' htmlFor='email'>
+                  <label
+                    className={`${
+                      resolvedTheme === 'light'
+                        ? 'text-blue-800'
+                        : 'text-blue-200'
+                    }`}
+                    htmlFor='email'
+                  >
                     E-mail
                   </label>
                   <Input
@@ -188,7 +216,14 @@ export default function Profile() {
                   )}
                 </div>
                 <div className='flex flex-col gap-2'>
-                  <label className='text-blue-800' htmlFor='roles'>
+                  <label
+                    className={`${
+                      resolvedTheme === 'light'
+                        ? 'text-blue-800'
+                        : 'text-blue-200'
+                    }`}
+                    htmlFor='roles'
+                  >
                     Cargo
                   </label>
                   <select
@@ -210,7 +245,14 @@ export default function Profile() {
                   )}
                 </div>
                 <div className='flex flex-col gap-2'>
-                  <label className='text-blue-800' htmlFor='roles'>
+                  <label
+                    className={`${
+                      resolvedTheme === 'light'
+                        ? 'text-blue-800'
+                        : 'text-blue-200'
+                    }`}
+                    htmlFor='roles'
+                  >
                     Plano
                   </label>
                   <select
@@ -232,7 +274,13 @@ export default function Profile() {
                 </div>
                 <div className='flex flex-col gap-2 relative'>
                   <label
-                    className='text-blue-800 flex flex-row justify-between'
+                    className={`
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-blue-800'
+                          : 'text-blue-200'
+                      }
+                      flex flex-row justify-between`}
                     htmlFor='password'
                   >
                     Nova senha
@@ -259,7 +307,13 @@ export default function Profile() {
                 </div>
                 <div className='flex flex-col gap-2 relative'>
                   <label
-                    className='text-blue-800 flex flex-row justify-between'
+                    className={`
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'text-blue-800'
+                          : 'text-blue-200'
+                      }
+                      flex flex-row justify-between`}
                     htmlFor='passwordConfirm'
                   >
                     Confirme a nova senha

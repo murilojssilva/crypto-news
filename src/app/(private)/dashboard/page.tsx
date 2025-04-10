@@ -521,7 +521,7 @@ export default function Dashboard() {
                     <Card
                       text='Total de clientes'
                       value={
-                        users.filter((item) => item.role === 'costumer').length
+                        users?.filter((item) => item.role === 'costumer').length
                       }
                       icon={
                         <DollarSign
@@ -535,7 +535,7 @@ export default function Dashboard() {
                     <>
                       <Card
                         text='Total de posts'
-                        value={posts.length}
+                        value={posts?.length}
                         icon={
                           <Newspaper
                             color={resolvedTheme === 'light' ? 'black' : 'gray'}
@@ -545,7 +545,7 @@ export default function Dashboard() {
                       <Card
                         text='Meus posts'
                         value={
-                          posts.filter(
+                          posts?.filter(
                             (item) => item.userId === session?.user.id
                           ).length
                         }
@@ -561,8 +561,9 @@ export default function Dashboard() {
                     <Card
                       text='Posts favoritados'
                       value={
-                        posts.filter((item) => item.userId === session?.user.id)
-                          .length
+                        posts?.filter(
+                          (item) => item.userId === session?.user.id
+                        ).length
                       }
                       icon={
                         <Bookmark
@@ -1167,7 +1168,7 @@ export default function Dashboard() {
               </table>
             </div>
 
-            {totalPages > 1 && (
+            {totalPages > 0 && (
               <div className='flex items-center justify-end gap-2 mt-6'>
                 <button
                   className={`px-3 py-1 rounded ${

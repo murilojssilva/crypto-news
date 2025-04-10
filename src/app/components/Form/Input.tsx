@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { useTheme } from 'next-themes'
 import { InputHTMLAttributes } from 'react'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -6,14 +7,21 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export default function Input({ errorsField, disabled, ...props }: InputProps) {
+  const { resolvedTheme } = useTheme()
   return (
     <input
       {...props}
       className={clsx(
-        'border border-gray-400 p-2 rounded w-full text-gray-800 placeholder:text-gray-400 outline-none focus:border-blue-800',
+        'border p-2 rounded w-full outline-none border-gray-400 focus:border-blue-800',
         {
           'border-red-500 focus:border-red-500': !!errorsField,
-          'bg-gray-300 cursor-not-allowed ': !!disabled,
+          'cursor-not-allowed ': !!disabled,
+          'text-gray-800 bg-gray-400': resolvedTheme !== 'light' && !!disabled,
+          'text-gray-100 bg-gray-300': resolvedTheme === 'light' && !!disabled,
+          'text-gray-800 placeholder:text-gray-600 bg-gray-100':
+            resolvedTheme === 'light',
+          'text-gray-200 placeholder:text-gray-100 bg-gray-800':
+            resolvedTheme !== 'light',
         }
       )}
     />

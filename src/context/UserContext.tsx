@@ -1,6 +1,12 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import { getUserById } from '@/lib/users/[id]'
 import { useParams } from 'next/navigation'
 import { toast } from 'react-toastify'
@@ -69,9 +75,8 @@ export const UsersProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true)
-
     try {
       const data = await getUsers(page, 10)
       setUsers(data.users)
@@ -81,11 +86,11 @@ export const UsersProvider = ({ children }: { children: React.ReactNode }) => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [page])
 
   useEffect(() => {
     fetchUsers()
-  }, [page])
+  }, [fetchUsers])
 
   return (
     <UsersContext.Provider
