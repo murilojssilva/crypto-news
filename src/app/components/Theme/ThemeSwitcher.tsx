@@ -6,9 +6,7 @@ export default function ThemeSwitcher() {
   return (
     <button
       className={`h-10 w-10 border rounded-xl flex items-center justify-center
-    ${
-      resolvedTheme === 'dark' ? 'dark:border-blue-400' : 'dark:border-blue-800'
-    }
+    ${resolvedTheme === 'light' ? 'border-blue-800' : 'border-blue-400'}
     `}
     >
       {resolvedTheme === 'light' ? (

@@ -19,6 +19,7 @@ import { Button } from '@/app/components/Dashboard/Button'
 import { Title } from '@/app/components/Dashboard/Title'
 import { Loading } from '@/app/components/Form/Loading'
 import { useCategories } from '@/context/CategoryContext'
+import { useTheme } from 'next-themes'
 
 export default function NewPost() {
   const {
@@ -35,9 +36,14 @@ export default function NewPost() {
   const { categories } = useCategories()
   const { data: session } = useSession()
   const currentDate = useFormattedDate()
+  const { resolvedTheme } = useTheme()
 
   return (
-    <div className='bg-gray-50 pb-4 h-screen flex'>
+    <div
+      className={`pb-4 h-screen flex
+     ${resolvedTheme === 'light' ? 'bg-gray-50' : 'bg-gray-800'}
+    `}
+    >
       <title>Nova postagem | CryptoNews</title>
       <Sidebar />
 
@@ -56,7 +62,12 @@ export default function NewPost() {
             onSubmit={handleSubmit(handleNewPostSubmit)}
             className='flex flex-col gap-4'
           >
-            <label className='text-blue-800' htmlFor='title'>
+            <label
+              className={`${
+                resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-400'
+              }`}
+              htmlFor='title'
+            >
               Título
             </label>
             <Input
@@ -71,7 +82,12 @@ export default function NewPost() {
             {errors.title && (
               <span className='text-red-500'>{errors.title?.message}</span>
             )}
-            <label className='text-blue-800' htmlFor='subtitle'>
+            <label
+              className={`${
+                resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-400'
+              }`}
+              htmlFor='subtitle'
+            >
               Subtítulo
             </label>
             <Input
@@ -86,7 +102,12 @@ export default function NewPost() {
             {errors.subtitle && (
               <span className='text-red-500'>{errors.subtitle?.message}</span>
             )}
-            <label className='text-blue-800' htmlFor='title'>
+            <label
+              className={`${
+                resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-400'
+              }`}
+              htmlFor='title'
+            >
               Conteúdo
             </label>
             <Textarea
@@ -101,13 +122,25 @@ export default function NewPost() {
               <span className='text-red-500'>{errors.content?.message}</span>
             )}
 
-            <label className='text-bold text-blue-800 font-bold text-xl'>
+            <label
+              className={`${
+                resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-400'
+              }`}
+            >
               Selecione as categorias
             </label>
             <select
               {...register('categories')}
               multiple
-              className='border p-2 rounded w-full text-gray-400'
+              className={`border p-2 rounded w-full text-gray-400 ${
+                loading && 'bg-gray-300 cursor-not-allowed'
+              }
+              ${
+                resolvedTheme === 'light'
+                  ? 'bg-gray-100 border-gray-200'
+                  : 'bg-gray-800 border-gray-400'
+              }
+              `}
               disabled={loading}
             >
               {categories.map((category) => (
@@ -122,8 +155,21 @@ export default function NewPost() {
               </span>
             )}
 
-            <label className='text-bold text-blue-800 flex items-center gap-2 font-bold text-md'>
-              <input type='checkbox' {...register('published')} />
+            <label
+              className={`flex items-center gap-2 p-4 w-full border rounded-md cursor-pointer
+              ${
+                resolvedTheme === 'light'
+                  ? 'border-gray-200 text-blue-800 '
+                  : 'border-gray-400 text-blue-400'
+              }
+              font-bold text-md
+            `}
+            >
+              <input
+                type='checkbox'
+                {...register('published')}
+                className='accent-blue-600'
+              />
               Publicar post
             </label>
 

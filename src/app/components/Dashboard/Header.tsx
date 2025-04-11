@@ -12,46 +12,48 @@ export default function HeaderDashboard({
 }: HeaderDashboardProps) {
   const { resolvedTheme } = useTheme()
 
-  if (firstName)
-    return (
-      <div
-        className={`p-4 border-b
+  return (
+    <div
+      className={`p-4 border-b
       ${
-        resolvedTheme === 'dark'
-          ? 'bg-gray-800 border-gray-500'
-          : 'bg-gray-50 border-gray-300'
+        resolvedTheme === 'light'
+          ? 'bg-gray-50 border-gray-300'
+          : 'bg-gray-800 border-gray-500'
       }
       
       `}
-      >
-        <div className='flex items-center justify-between w-full'>
-          <div>
-            <h1
-              className={`${
-                resolvedTheme === 'dark' ? 'text-blue-400' : 'text-blue-800'
+    >
+      <div className='flex items-center justify-between w-full'>
+        <div>
+          <h1
+            className={`${
+              resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-400'
+            }`}
+          >
+            Olá,{' '}
+            <span className='font-bold'>
+              {firstName ? firstName : 'Usuário'}
+            </span>
+          </h1>
+        </div>
+        <div className='flex flex-row items-center gap-8'>
+          <ThemeSwitcher />
+          <div className='flex flex-row gap-2'>
+            <IconComponent
+              color={resolvedTheme === 'light' ? '#1565C0' : '#60a5fa'}
+            />
+            <span
+              className={`font-bold ${
+                resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-400'
               }`}
             >
-              Olá, <span className='font-bold'>{firstName}</span>
-            </h1>
-          </div>
-          <div className='flex flex-row items-center gap-8'>
-            <ThemeSwitcher />
-            <div className='flex flex-row gap-2'>
-              <IconComponent
-                color={resolvedTheme === 'light' ? '#1565C0' : '#60a5fa'}
-              />
-              <span
-                className={`font-bold ${
-                  resolvedTheme === 'dark' ? 'text-blue-400' : 'text-blue-800'
-                }`}
-              >
-                {title}
-              </span>
-            </div>
+              {title}
+            </span>
           </div>
         </div>
       </div>
-    )
+    </div>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {

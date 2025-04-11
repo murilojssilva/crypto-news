@@ -21,15 +21,13 @@ export function Card({ text, value, icon }: CardProps) {
       `}
     >
       <div>
-        <h3
+        <h2
           className={`text-xl font-bold
-
-        ${resolvedTheme === 'light' ? 'text-blue-800' : 'text-[#e5e7eb]'}
-          text-gray-800
+            ${resolvedTheme === 'light' ? 'text-blue-800' : 'text-gray-200'}
           `}
         >
           {text}
-        </h3>
+        </h2>
       </div>
       <div className='flex flex-row justify-between items-center'>
         {icon}

@@ -115,22 +115,50 @@ export default function Posts() {
                 return (
                   <article
                     key={item.id}
-                    className='flex flex-row items-start  justify-between gap-2 w-full p-6 bg-gray-50 hover:bg-gray-200 cursor:pointer rounded-2xl  transition-all'
+                    className={`flex flex-row items-center  justify-between gap-2 w-full p-6 cursor:pointer rounded-xl transition-all
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'bg-gray-50 hover:bg-gray-200'
+                          : 'bg-gray-800 hover:bg-gray-700'
+                      }
+                      `}
                   >
                     <Link
                       href={`/news/${item.id}`}
                       className='flex-1 flex flex-col gap-4'
                     >
                       <div>
-                        <h2 className='text-blue-800 font-semibold text-xl'>
+                        <h2
+                          className={`font-semibold text-xl ${
+                            resolvedTheme === 'light'
+                              ? 'text-blue-800'
+                              : 'text-blue-400'
+                          }`}
+                        >
                           {item.title}
                         </h2>
-                        <span className='text-gray-500 text-sm md:text-ms font-normal'>
+                        <span
+                          className={`text-sm md:text-ms font-normal
+                          ${
+                            resolvedTheme === 'light'
+                              ? 'text-gray-500'
+                              : 'text-gray-200'
+                          }
+                          `}
+                        >
                           {item.subtitle}
                         </span>
                       </div>
 
-                      <div className='text-gray-800 text-md'>
+                      <div
+                        className={`text-emerald-50
+                        ${
+                          resolvedTheme === 'light'
+                            ? 'text-gray-800'
+                            : 'text-gray-200'
+                        }
+                        `}
+                      >
                         <ReactMarkdown
                           remarkPlugins={[remarkGfm]}
                           rehypePlugins={[rehypeRaw]}
@@ -144,7 +172,13 @@ export default function Posts() {
                               return (
                                 <div className='relative group my-4'>
                                   <button
-                                    className='absolute right-2 top-2 text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity'
+                                    className={`absolute right-2 top-2 text-xs bg-gray-100 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity
+                                      ${
+                                        resolvedTheme === 'light'
+                                          ? 'text-gray-800'
+                                          : 'text-gray-200'
+                                      }
+                                      `}
                                     onClick={() =>
                                       navigator.clipboard.writeText(codeText)
                                     }
@@ -181,15 +215,36 @@ export default function Posts() {
                             postCategoriesList.map((category, index) => (
                               <span
                                 key={index}
-                                className='text-blue-800 font-bold text-xs border border-blue-800 hover:bg-blue-800 hover:text-gray-100 p-2 rounded-xl'
+                                className={`font-bold text-xs border p-2 rounded-xl hover:text-gray-100
+                                  ${
+                                    resolvedTheme === 'light'
+                                      ? 'text-blue-800 border-blue-800 hover:bg-blue-800'
+                                      : 'text-blue-400 border-blue-400 hover:bg-blue-400'
+                                  }
+                                  `}
                               >
                                 {category.name}
                               </span>
                             ))}
                         </div>
                         <div className='flex flex-row gap-4'>
-                          <span className='text-blue-800 md:text-md text-xs justity-center font-bold flex flex-row items-center gap-1'>
-                            <Calendar size={14} color='#1e40af' />
+                          <span
+                            className={`md:text-md text-xs justity-center font-bold flex flex-row items-center gap-1
+                            ${
+                              resolvedTheme === 'light'
+                                ? 'text-blue-800'
+                                : 'text-blue-400'
+                            }
+                            `}
+                          >
+                            <Calendar
+                              size={14}
+                              color={
+                                resolvedTheme === 'light'
+                                  ? '#1e40af'
+                                  : '#60a5fa'
+                              }
+                            />
                             {format(
                               new Date(item.createdAt),
                               "dd/MM/yyyy 'às' HH:mm",
@@ -198,8 +253,23 @@ export default function Posts() {
                               }
                             )}
                           </span>
-                          <span className='text-blue-800 md:text-md text-xs justity-center font-bold flex flex-row items-center gap-1'>
-                            <Pen size={14} color='#1e40af' />
+                          <span
+                            className={`md:text-md text-xs justity-center font-bold flex flex-row items-center gap-1
+                            ${
+                              resolvedTheme === 'light'
+                                ? 'text-blue-800'
+                                : 'text-blue-400'
+                            }
+                            `}
+                          >
+                            <Pen
+                              size={14}
+                              color={
+                                resolvedTheme === 'light'
+                                  ? '#1e40af'
+                                  : '#60a5fa'
+                              }
+                            />
                             {format(
                               new Date(item.updatedAt),
                               "dd/MM/yyyy 'às' HH:mm",
@@ -214,7 +284,13 @@ export default function Posts() {
                     <div className='flex flex-col gap-2'>
                       {item.userId === session?.user.id && (
                         <Link
-                          className='hover:bg-blue-800 text-blue-800 hover:text-gray-200 rounded-xl p-2'
+                          className={`rounded-xl p-2
+                            ${
+                              resolvedTheme === 'light'
+                                ? 'hover:bg-blue-800 text-blue-800 hover:text-gray-200'
+                                : 'hover:bg-blue-400 text-blue-400 hover:text-gray-200'
+                            }
+                          `}
                           href={`/dashboard/posts/edit/${item.id}`}
                         >
                           <Pen size={24} />
@@ -232,7 +308,13 @@ export default function Posts() {
 
                       {item.userId === session?.user.id && (
                         <Link
-                          className='hover:bg-blue-800 text-blue-800 hover:text-gray-200 rounded-xl p-2'
+                          className={`rounded-xl p-2
+                          ${
+                            resolvedTheme === 'light'
+                              ? 'hover:bg-blue-800 text-blue-800 hover:text-gray-200'
+                              : 'hover:bg-blue-400 text-blue-400 hover:text-gray-200'
+                          }
+                        `}
                           href={`/dashboard/posts/edit/${item.id}`}
                         >
                           <Bookmark size={24} />

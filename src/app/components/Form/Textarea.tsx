@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { useTheme } from 'next-themes'
 import { TextareaHTMLAttributes } from 'react'
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -12,6 +13,7 @@ export default function Textarea({
   disabled,
   ...props
 }: TextareaProps) {
+  const { resolvedTheme } = useTheme()
   const applyFormat = (format: string) => {
     const textarea = document.getElementById(
       'custom-textarea'
@@ -163,10 +165,14 @@ export default function Textarea({
         id='custom-textarea'
         {...props}
         className={clsx(
-          'border border-gray-400 p-2 rounded w-full text-gray-800 placeholder:text-gray-400 outline-none focus:border-blue-800 resize-none',
+          'border border-gray-400 p-2 rounded w-full outline-none focus:border-blue-800 resize-none',
           {
             'border-red-500 focus:border-red-500': !!errorMessage,
             'bg-gray-300 cursor-not-allowed ': !!disabled,
+            'text-gray-800 placeholder:text-gray-400 bg-gray-100':
+              resolvedTheme === 'light',
+            'text-gray-200 placeholder:text-gray-200 bg-gray-800':
+              resolvedTheme !== 'light',
           }
         )}
         rows={10}
