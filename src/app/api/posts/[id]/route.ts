@@ -3,7 +3,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
-import { CategoryProps } from '@/app/interfaces/CategoryInterface'
 
 export async function GET(req: Request, { params }: { params: any }) {
   try {
@@ -75,37 +74,16 @@ export async function DELETE(req: Request, { params }: { params: any }) {
 
 export async function PUT(request: Request, { params }: { params: any }) {
   try {
-    const { id } = await params
+    const { id } = params
 
-    if (!id) {
-      throw new Error('ID não fornecido')
-    }
+    if (!id) throw new Error('ID não fornecido')
 
-    const { title, subtitle, content, published, categories } =
-      await request.json()
+    const body = await request.json()
+    console.log('BODY RECEBIDO:', body)
 
-    const categoryNames = categories
-      .map((cat: CategoryProps) => (typeof cat === 'string' ? cat : cat?.name))
-      .filter((name: string) => typeof name === 'string' && name.trim() !== '')
+    const { title, subtitle, content, published, categories } = body
 
-    const categoryObjects = await Promise.all(
-      categoryNames.map(async (categoryName: string) => {
-        const category = await prisma.category.findUnique({
-          where: { name: categoryName },
-        })
-
-        if (!category) {
-          const newCategory = await prisma.category.create({
-            data: { name: categoryName },
-          })
-          return { categoryId: newCategory.id }
-        }
-
-        return { categoryId: category.id }
-      })
-    )
-
-    const updatePost = await prisma.post.update({
+    await prisma.post.update({
       where: { id },
       data: {
         title,
@@ -113,19 +91,49 @@ export async function PUT(request: Request, { params }: { params: any }) {
         content,
         published,
         updatedAt: new Date(),
-        categories: {
-          connect: categoryObjects.map((cat) => ({
-            postId_categoryId: {
-              postId: id,
-              categoryId: cat.categoryId,
-            },
-          })),
-        },
       },
-      include: { categories: { include: { category: true } } },
     })
 
-    return new Response(JSON.stringify(updatePost), { status: 200 })
+    await prisma.postCategory.deleteMany({
+      where: { postId: id },
+    })
+
+    const categoryNames = categories
+      .map((cat: any) => (typeof cat === 'string' ? cat : cat?.id))
+      .filter((name: string) => typeof name === 'string' && name.trim() !== '')
+
+    const categoryObjects = await Promise.all(
+      categoryNames.map(async (name: string) => {
+        const existing = await prisma.category.findUnique({ where: { name } })
+        if (existing) return { categoryId: existing.id }
+
+        const created = await prisma.category.create({ data: { name } })
+        return { categoryId: created.id }
+      })
+    )
+
+    if (categoryObjects.length > 0) {
+      await prisma.postCategory.createMany({
+        data: categoryObjects.map((cat) => ({
+          postId: id,
+          categoryId: cat.categoryId,
+        })),
+        skipDuplicates: true,
+      })
+    } else {
+      console.warn('Nenhuma categoria válida para adicionar.')
+    }
+
+    const postWithCategories = await prisma.post.findUnique({
+      where: { id },
+      include: {
+        categories: {
+          include: { category: true },
+        },
+      },
+    })
+
+    return new Response(JSON.stringify(postWithCategories), { status: 200 })
   } catch (error) {
     console.error('Erro ao editar o post:', error)
     return new Response('Erro ao atualizar post', { status: 500 })

@@ -28,6 +28,7 @@ import { useWhatsAppFormat } from '@/hooks/useWhatsAppFormat'
 export default function Profile() {
   const { data: session } = useSession()
   const currentDate = useFormattedDate()
+  const [amount, setAmount] = useState(0)
 
   const [loading, setLoading] = useState(false)
 
@@ -54,6 +55,7 @@ export default function Profile() {
         plan: data.plan,
         amount: data.amount,
       }
+      setAmount(data.amount)
 
       if (data.password) {
         body.password = data.password
@@ -85,6 +87,7 @@ export default function Profile() {
   const [passwordType, setPasswordType] = useState<'password' | 'text'>(
     'password'
   )
+
   const [passwordConfirmType, setPasswordConfirmType] = useState<
     'password' | 'text'
   >('password')
@@ -116,7 +119,7 @@ export default function Profile() {
   }, [session?.user, setValue])
   return (
     <div
-      className={`pb-4 h-screen flex
+      className={`h-screen flex
     ${resolvedTheme === 'light' ? 'bg-gray-50' : 'bg-gray-800'}
     `}
     >
@@ -129,7 +132,7 @@ export default function Profile() {
           currentDate={currentDate}
           title='Perfil'
         />
-        <section className='px-6 pt-6 flex flex-col gap-4 overflow-y-auto'>
+        <section className='p-6 flex flex-col gap-4 overflow-y-auto'>
           <Title title='Perfil' />
 
           <div className='flex flex-col gap-8 w-full'>
@@ -138,70 +141,71 @@ export default function Profile() {
               className='flex flex-col gap-8'
             >
               <div className='flex flex-col gap-4'>
-                <div className='flex flex-col gap-2'>
-                  <label
-                    className={`${
-                      resolvedTheme === 'light'
-                        ? 'text-blue-800'
-                        : 'text-blue-200'
-                    }`}
-                    htmlFor='firstName'
-                  >
-                    Nome
-                  </label>
-                  <Input
-                    {...register('firstName')}
-                    errorsField={errors.firstName?.message ?? ''}
-                    type='text'
-                    id='firstName'
-                    placeholder='Digite seu nome'
-                    name='firstName'
-                    disabled={loading}
-                    readOnly={loading}
-                  />
-                  {errors.firstName && (
-                    <span className='text-red-500'>
-                      {errors.firstName?.message}
-                    </span>
-                  )}
+                <div className='flex flex-row gap-8'>
+                  <div className='flex flex-col basis-1/3 gap-2'>
+                    <label
+                      className={`${
+                        resolvedTheme === 'light'
+                          ? 'text-blue-800'
+                          : 'text-blue-200'
+                      }`}
+                      htmlFor='firstName'
+                    >
+                      Nome
+                    </label>
+                    <Input
+                      {...register('firstName')}
+                      errorsField={errors.firstName?.message ?? ''}
+                      type='text'
+                      id='firstName'
+                      placeholder='Digite seu nome'
+                      name='firstName'
+                      disabled={loading}
+                      readOnly={loading}
+                    />
+                    {errors.firstName && (
+                      <span className='text-red-500'>
+                        {errors.firstName?.message}
+                      </span>
+                    )}
+                  </div>
+                  <div className='flex flex-col basis-2/3 gap-2'>
+                    <label
+                      className={`${
+                        resolvedTheme === 'light'
+                          ? 'text-blue-800'
+                          : 'text-blue-200'
+                      }`}
+                      htmlFor='lastName'
+                    >
+                      Sobrenome
+                    </label>
+                    <Input
+                      {...register('lastName')}
+                      errorsField={errors.lastName?.message ?? ''}
+                      type='text'
+                      id='lastName'
+                      name='lastName'
+                      placeholder='Digite seu sobrenome'
+                      disabled={loading}
+                      readOnly={loading}
+                    />
+                    {errors.lastName && (
+                      <span className='text-red-500'>
+                        {errors.lastName?.message}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className='flex flex-col gap-2'>
-                  <label
-                    className={`${
-                      resolvedTheme === 'light'
-                        ? 'text-blue-800'
-                        : 'text-blue-200'
-                    }`}
-                    htmlFor='lastName'
-                  >
-                    Sobrenome
-                  </label>
-                  <Input
-                    {...register('lastName')}
-                    errorsField={errors.lastName?.message ?? ''}
-                    type='text'
-                    id='lastName'
-                    name='lastName'
-                    placeholder='Digite seu sobrenome'
-                    disabled={loading}
-                    readOnly={loading}
-                  />
-                  {errors.lastName && (
-                    <span className='text-red-500'>
-                      {errors.lastName?.message}
-                    </span>
-                  )}
-                </div>
-                <label
+                <h3
                   className={`${
                     resolvedTheme === 'light'
                       ? 'text-blue-800'
                       : 'text-blue-200'
                   }`}
-                  htmlFor='birth'
                 >
                   Localização
-                </label>
+                </h3>
                 <div className='grid grid-cols-2 gap-3 items-center'>
                   <div className='flex flex-col gap-2'>
                     <select
@@ -210,7 +214,7 @@ export default function Profile() {
                       aria-invalid={!!errors.state}
                       {...register('state')}
                       name='state'
-                      className='p-2 rounded-md border border-gray-500 text-md text-gray-900 pr-8 bg-gray-300'
+                      className='p-2 rounded-md border border-gray-500 text-md text-gray-900 bg-gray-300'
                     >
                       <option value=''>Estado</option>
                       <option value='Acre'>Acre</option>
@@ -230,7 +234,7 @@ export default function Profile() {
                       aria-invalid={!!errors.city}
                       {...register('city')}
                       name='city'
-                      className='p-2 rounded-md border border-gray-500 text-md text-gray-900 pr-8 bg-gray-300'
+                      className='p-2 rounded-md border border-gray-500 text-md text-gray-900 bg-gray-300'
                     >
                       <option value=''>Cidade</option>
                       <option value='Petrópolis'>Petrópolis</option>
@@ -245,26 +249,32 @@ export default function Profile() {
                   </div>
                 </div>
                 <div className='flex flex-col gap-2'>
-                  <label
+                  <h3
                     className={`${
                       resolvedTheme === 'light'
                         ? 'text-blue-800'
                         : 'text-blue-200'
                     }`}
-                    htmlFor='genders'
                   >
                     Gênero
-                  </label>
+                  </h3>
                   <select
                     id='gender'
                     contentEditable={false}
-                    disabled
                     aria-invalid={!!errors.gender}
                     {...register('gender')}
                     name='gender'
-                    className='p-2 rounded-md border border-gray-500 text-md text-gray-900 pr-8 cursor-not-allowed bg-gray-300'
+                    className={`p-2 rounded-md border  text-md
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'bg-gray-100 border-gray-500 text-gray-900'
+                          : 'bg-gray-800 border-gray-400 text-gray-100'
+                      }
+                      `}
                   >
-                    <option value=''>Selecione uma opção</option>
+                    <option value='' disabled>
+                      Selecione uma opção
+                    </option>
                     <option value='admin'>Masculino</option>
                     <option value='editor'>Feminino</option>
                     <option value='costumer'>Outro</option>
@@ -308,16 +318,15 @@ export default function Profile() {
                   )}
                 </div>
                 <div className='flex flex-col gap-2'>
-                  <label
+                  <h3
                     className={`${
                       resolvedTheme === 'light'
                         ? 'text-blue-800'
                         : 'text-blue-200'
                     }`}
-                    htmlFor='experience_age'
                   >
                     Anos de experiência
-                  </label>
+                  </h3>
                   <Input
                     {...register('experience_age')}
                     errorsField={errors.experience_age?.message ?? ''}
@@ -361,16 +370,15 @@ export default function Profile() {
                     </span>
                   )}
                 </div>
-                <label
+                <h3
                   className={`${
                     resolvedTheme === 'light'
                       ? 'text-blue-800'
                       : 'text-blue-200'
                   }`}
-                  htmlFor='birth'
                 >
                   Redes sociais
-                </label>
+                </h3>
                 <div className='grid grid-cols-2 lg:grid-cols-4 gap-8 items-center'>
                   <div className='flex flex-col gap-2'>
                     <label
@@ -475,16 +483,15 @@ export default function Profile() {
                   </div>
                 </div>
 
-                <label
+                <h3
                   className={`${
                     resolvedTheme === 'light'
                       ? 'text-blue-800'
                       : 'text-blue-200'
                   }`}
-                  htmlFor='birth'
                 >
                   Data de nascimento
-                </label>
+                </h3>
                 <div className='grid grid-cols-3 gap-3 items-center'>
                   <div className='flex flex-col gap-2'>
                     <Input
@@ -535,16 +542,15 @@ export default function Profile() {
 
                 {session?.user.role === 'admin' && (
                   <div className='flex flex-col gap-2'>
-                    <label
+                    <h3
                       className={`${
                         resolvedTheme === 'light'
                           ? 'text-blue-800'
                           : 'text-blue-200'
                       }`}
-                      htmlFor='roles'
                     >
                       Cargo
-                    </label>
+                    </h3>
                     <select
                       id='role'
                       contentEditable={false}
@@ -552,7 +558,7 @@ export default function Profile() {
                       aria-invalid={!!errors.role}
                       {...register('role')}
                       name='role'
-                      className='p-2 rounded-md border border-gray-500 text-md text-gray-900 pr-8 cursor-not-allowed bg-gray-300'
+                      className='p-2 rounded-md border border-gray-500 text-md text-gray-900 cursor-not-allowed bg-gray-300'
                     >
                       <option value=''>Selecione uma opção</option>
                       <option value='admin'>Administrador</option>
@@ -567,16 +573,15 @@ export default function Profile() {
                   </div>
                 )}
                 <div className='flex flex-col gap-2'>
-                  <label
+                  <h3
                     className={`${
                       resolvedTheme === 'light'
                         ? 'text-blue-800'
                         : 'text-blue-200'
                     }`}
-                    htmlFor='roles'
                   >
                     Estilo do investidor
-                  </label>
+                  </h3>
                   <select
                     id='investor_style'
                     contentEditable={false}
@@ -584,7 +589,7 @@ export default function Profile() {
                     aria-invalid={!!errors.investor_style}
                     {...register('investor_style')}
                     name='investor_style'
-                    className='p-2 rounded-md border border-gray-500 text-md text-gray-900 pr-8 cursor-not-allowed bg-gray-300'
+                    className='p-2 rounded-md border border-gray-500 text-md text-gray-900 cursor-not-allowed bg-gray-300'
                   >
                     <option value=''>Selecione uma opção</option>
                     <option value='admin'>Conservador</option>
@@ -598,16 +603,15 @@ export default function Profile() {
                   )}
                 </div>
                 <div className='flex flex-col gap-2'>
-                  <label
+                  <h3
                     className={`${
                       resolvedTheme === 'light'
                         ? 'text-blue-800'
                         : 'text-blue-200'
                     }`}
-                    htmlFor='roles'
                   >
                     Plano
-                  </label>
+                  </h3>
                   <select
                     id='plan'
                     contentEditable={false}
@@ -615,7 +619,7 @@ export default function Profile() {
                     aria-invalid={!!errors.plan}
                     {...register('plan')}
                     name='plan'
-                    className='p-2 rounded-md border border-gray-500 text-md text-gray-900 pr-8 cursor-not-allowed bg-gray-300'
+                    className='p-2 rounded-md border border-gray-500 text-md text-gray-900 cursor-not-allowed bg-gray-300'
                   >
                     <option value=''>Selecione uma opção</option>
                     <option value='free'>Gratuito</option>
@@ -693,6 +697,312 @@ export default function Profile() {
                   />
                 </div>
               </div>
+
+              <h3
+                className={`${
+                  resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-200'
+                }`}
+              >
+                Moedas favoriras
+              </h3>
+
+              <ul className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 w-full'>
+                <li>
+                  <input
+                    type='checkbox'
+                    id='bitcoin-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='bitcoin-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>Bitcoin</div>
+                  </label>
+                </li>
+
+                <li>
+                  <input
+                    type='checkbox'
+                    id='sol-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='sol-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>Solana</div>
+                  </label>
+                </li>
+
+                <li>
+                  <input
+                    type='checkbox'
+                    id='bnb-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='bnb-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>BNB</div>
+                  </label>
+                </li>
+
+                <li>
+                  <input
+                    type='checkbox'
+                    id='eth-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='eth-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>ETH</div>
+                  </label>
+                </li>
+
+                <li>
+                  <input
+                    type='checkbox'
+                    id='ada-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='ada-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>Cardano</div>
+                  </label>
+                </li>
+
+                <li>
+                  <input
+                    type='checkbox'
+                    id='doge-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='doge-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>Dogecoin</div>
+                  </label>
+                </li>
+
+                <li>
+                  <input
+                    type='checkbox'
+                    id='pol-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='pol-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>Polygon</div>
+                  </label>
+                </li>
+
+                <li>
+                  <input
+                    type='checkbox'
+                    id='arb-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='arb-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>Arbitrum</div>
+                  </label>
+                </li>
+
+                <li>
+                  <input
+                    type='checkbox'
+                    id='sui-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='sui-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>SUI</div>
+                  </label>
+                </li>
+
+                <li>
+                  <input
+                    type='checkbox'
+                    id='link-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='link-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>
+                      Chainlink
+                    </div>
+                  </label>
+                </li>
+
+                <li>
+                  <input
+                    type='checkbox'
+                    id='rndr-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='rndr-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>Render</div>
+                  </label>
+                </li>
+
+                <li>
+                  <input
+                    type='checkbox'
+                    id='bmx-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='bmx-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>BitMart</div>
+                  </label>
+                </li>
+
+                <li>
+                  <input
+                    type='checkbox'
+                    id='xrl-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='xrl-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>XRP</div>
+                  </label>
+                </li>
+
+                <li>
+                  <input
+                    type='checkbox'
+                    id='ton-option'
+                    value=''
+                    className='hidden peer'
+                  />
+                  <label
+                    htmlFor='ton-option'
+                    className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2 
+                      ${
+                        resolvedTheme === 'light'
+                          ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                          : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                      }
+                       `}
+                  >
+                    <div className='w-full text-lg font-semibold'>TON</div>
+                  </label>
+                </li>
+              </ul>
 
               <Button
                 IconComponent={loading ? Loading : Save}

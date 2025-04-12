@@ -2,16 +2,17 @@
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { v4 as uuidv4 } from 'uuid'
 
 import Input from '@/app/components/Form/Input'
 import Textarea from '@/app/components/Form/Textarea'
 import { usePosts } from '@/context/PostContext'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { getPostById } from '@/lib/posts/[id]'
 
-import { Home, Save } from 'lucide-react'
+import { Home, Plus, Save } from 'lucide-react'
 import Sidebar from '@/app/components/Sidebar'
 import HeaderDashboard from '@/app/components/Dashboard/Header'
 import { useSession } from 'next-auth/react'
@@ -28,6 +29,8 @@ import { useCategories } from '@/context/CategoryContext'
 import { useTheme } from 'next-themes'
 
 export default function EditPost() {
+  const [newCategory, setNewCategory] = useState('')
+  const [addingCategory, setAddingCategory] = useState(false)
   const {
     register,
     handleSubmit,
@@ -42,7 +45,7 @@ export default function EditPost() {
   const { loading, setLoading, fetchPosts } = usePosts()
   const { data: session } = useSession()
   const currentDate = useFormattedDate()
-  const { categories } = useCategories()
+  const { categories, addCategory } = useCategories()
   const { resolvedTheme } = useTheme()
 
   useEffect(() => {
@@ -207,34 +210,103 @@ export default function EditPost() {
               {errors.content && (
                 <span className='text-red-500'>{errors.content.message}</span>
               )}
-
-              <label
+              <h3
                 className={`${
-                  resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-400'
+                  resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-200'
                 }`}
               >
                 Selecione as categorias
-              </label>
-              <select
-                {...register('categories')}
-                multiple
-                className={`border p-2 rounded w-full text-gray-400 ${
-                  loading && 'bg-gray-300 cursor-not-allowed'
-                }
-                ${
-                  resolvedTheme === 'light'
-                    ? 'bg-gray-100 border-gray-200'
-                    : 'bg-gray-800 border-gray-400'
-                }
-                `}
-                disabled={loading}
-              >
-                {categories.map((category) => (
-                  <option key={category.id} value={category.name}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
+              </h3>
+              <ul className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 w-full'>
+                {categories.map((category) => {
+                  const id = `category-${category.id}`
+                  return (
+                    <li key={category.id}>
+                      <input
+                        type='checkbox'
+                        id={id}
+                        value={category.name}
+                        {...register('categories')}
+                        className='hidden peer'
+                        disabled={loading}
+                      />
+                      <label
+                        htmlFor={id}
+                        className={`inline-flex items-center justify-between w-full p-5 rounded-lg cursor-pointer border-2
+                          ${
+                            resolvedTheme === 'light'
+                              ? 'border-gray-200 peer-checked:border-blue-600 hover:text-gray-600 peer-checked:text-gray-600 hover:bg-gray-50 text-gray-500 bg-white'
+                              : 'hover:text-gray-300 border-gray-700 peer-checked:border-blue-600 peer-checked:text-gray-300 text-gray-400 bg-gray-800 hover:bg-gray-700'
+                          }
+                          ${loading ? 'bg-gray-300 cursor-not-allowed' : ''}
+                        `}
+                      >
+                        <div className='w-full text-lg font-semibold'>
+                          {category.name}
+                        </div>
+                      </label>
+                    </li>
+                  )
+                })}
+                <li>
+                  {addingCategory ? (
+                    <div className='flex flex-col gap-2'>
+                      <input
+                        type='text'
+                        value={newCategory}
+                        onChange={(e) => setNewCategory(e.target.value)}
+                        className={`p-2 rounded border
+                                      ${
+                                        resolvedTheme === 'light'
+                                          ? 'border-gray-400 bg-gray-50 text-black'
+                                          : 'border-gray-400 dark:text-white dark:bg-gray-800'
+                                      }
+                                      `}
+                        placeholder='Nome da categoria'
+                        disabled={loading}
+                      />
+                      <div className='flex gap-2'>
+                        <button
+                          type='button'
+                          onClick={() => {
+                            if (newCategory.trim()) {
+                              addCategory({
+                                id: uuidv4(),
+                                name: newCategory.trim(),
+                              })
+                              setNewCategory('')
+                              setAddingCategory(false)
+                            }
+                          }}
+                          className='px-2 py-1 bg-blue-600 text-white rounded'
+                        >
+                          Adicionar
+                        </button>
+                        <button
+                          type='button'
+                          onClick={() => {
+                            setNewCategory('')
+                            setAddingCategory(false)
+                          }}
+                          className='px-2 py-1 border rounded bg-gray-100 text-gray-800 border-gray-800'
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      type='button'
+                      onClick={() => setAddingCategory(true)}
+                      className='w-full h-full flex flex-col items-center justify-center p-2 border-2 border-dashed rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400'
+                    >
+                      <Plus size={24} />
+                      <span className='text-sm'>Nova categoria</span>
+                    </button>
+                  )}
+                </li>
+              </ul>
+
               {errors.categories && (
                 <span className='text-red-500'>
                   {errors.categories.message as string}

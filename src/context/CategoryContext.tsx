@@ -9,6 +9,7 @@ interface CategoryContextType {
   loading: boolean
   error: string | null
   fetchCategories: () => Promise<void>
+  addCategory: (category: CategoryProps) => void
 }
 
 interface CategoryProviderProps {
@@ -46,9 +47,13 @@ export const CategoryProvider: React.FC<CategoryProviderProps> = ({
     }
   }
 
+  const addCategory = (category: CategoryProps) => {
+    setCategories((prev) => [...prev, category])
+  }
+
   return (
     <CategoryContext.Provider
-      value={{ categories, loading, error, fetchCategories }}
+      value={{ categories, loading, addCategory, error, fetchCategories }}
     >
       {children}
     </CategoryContext.Provider>
