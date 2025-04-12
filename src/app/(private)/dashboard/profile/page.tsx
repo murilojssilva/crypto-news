@@ -371,7 +371,7 @@ export default function Profile() {
                 >
                   Redes sociais
                 </label>
-                <div className='grid grid-cols-4 md:grid-cols-2 gap-8 items-center'>
+                <div className='grid grid-cols-2 lg:grid-cols-4 gap-8 items-center'>
                   <div className='flex flex-col gap-2'>
                     <label
                       className={`${
