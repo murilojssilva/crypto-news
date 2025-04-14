@@ -78,7 +78,7 @@ export default function Home() {
 
       <section
         className={`flex flex-col items-center py-8
-        ${resolvedTheme === 'light' ? 'bg-gray-200' : 'bg-gray-900'}
+        ${resolvedTheme === 'light' ? 'bg-gray-100' : 'bg-gray-900'}
         `}
       >
         <Title title='Nossos planos' />
@@ -561,7 +561,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className='flex flex-col md:flex-row bg-gray-100 justify-between p-8 gap-16'>
+      <section className='flex flex-col md:flex-row bg-gray-200 justify-between p-8 gap-16'>
         <div className='flex flex-col items-center gap-4'>
           <Blocks size={64} color='#1565C0' />
           <h2 className='font-bold text-blue-800'>Análise de projetos</h2>
