@@ -24,7 +24,7 @@ export default function Sidebar() {
   if (status === 'loading')
     return (
       <div
-        className={`flex flex-col h-screen w-[8vh] border-r ${
+        className={`flex flex-col h-screen w-[10vh] border-r ${
           resolvedTheme === 'light'
             ? 'bg-gray-200 border-gray-300'
             : 'bg-gray-900 border-gray-500'
@@ -36,7 +36,7 @@ export default function Sidebar() {
     <div
       className={`flex flex-col gap-4 h-screen items-center py-6
         border-r
-        ${openMenu ? 'w-[24vh]' : 'w-[12vh]'} sticky top-0
+        ${openMenu ? 'w-[32vh]' : 'w-[10vh]'} sticky top-0
       ${
         resolvedTheme === 'light'
           ? 'bg-gray-200 border-gray-300'
@@ -85,7 +85,7 @@ export default function Sidebar() {
       </div>
 
       <div
-        className={`flex items-center gap-4
+        className={`flex items-center gap-1
     ${openMenu ? 'w-[90%] justify-between' : 'w-[80%] justify-center'}
   `}
       >
@@ -108,14 +108,14 @@ export default function Sidebar() {
                   resolvedTheme === 'light' ? 'text-gray-800' : 'text-gray-200'
                 }`}
               >
-                Olá,
+                {String(session?.user.firstName)}
               </span>
               <span
                 className={`block text-xs font-bold ${
                   resolvedTheme === 'light' ? 'text-gray-800' : 'text-gray-200'
                 }`}
               >
-                {String(session?.user.firstName)}
+                {String(session?.user.lastName)}
               </span>
             </div>
           </div>
