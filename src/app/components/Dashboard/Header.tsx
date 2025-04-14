@@ -39,40 +39,36 @@ export default function HeaderDashboard({
             </span>
           </div>
         </div>
-        <div className='flex flex-row gap-4 items-end justify-end'>
+        <div className={`flex flex-row justify-end gap-4`}>
           <ThemeSwitcher />
           <div
-            className={`flex ${
+            className={`${
               openMenu ? 'flex-row' : 'flex-col'
-            } gap-8 items-center justify-between`}
+            } hidden md:flex justify-start`}
           >
-            <div className='hidden md:flex justify-start'>
-              <button
-                data-collapse-toggle='navbar-hamburger'
-                type='button'
-                className={`flex items-center justify-center w-10 h-10 text-sm rounded-lg border 
+            <button
+              data-collapse-toggle='navbar-hamburger'
+              type='button'
+              className={`flex items-center justify-center w-10 h-10 text-sm rounded-lg border 
               ${
                 resolvedTheme === 'light'
                   ? 'bg-gray-100 border-blue-800'
                   : 'bg-gray-800 border-blue-400'
               }
               `}
-                aria-controls='navbar-hamburger'
-                aria-expanded={openMenu}
-                onClick={() => setOpenMenu(!openMenu)}
-              >
-                <span className='sr-only'>Open main menu</span>
-                <List
-                  weight='bold'
-                  size={24}
-                  className={`${
-                    resolvedTheme === 'light'
-                      ? 'text-blue-800'
-                      : 'text-blue-400'
-                  }`}
-                />
-              </button>
-            </div>
+              aria-controls='navbar-hamburger'
+              aria-expanded={openMenu}
+              onClick={() => setOpenMenu(!openMenu)}
+            >
+              <span className='sr-only'>Open main menu</span>
+              <List
+                weight='bold'
+                size={24}
+                className={`${
+                  resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-400'
+                }`}
+              />
+            </button>
           </div>
         </div>
       </div>
