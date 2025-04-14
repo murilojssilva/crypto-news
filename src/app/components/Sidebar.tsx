@@ -3,16 +3,15 @@
 import Image from 'next/image'
 import logo from '@/assets/images/bitwire.svg'
 import { Home, LogOutIcon, Newspaper, Pen, User } from 'lucide-react'
-import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
 import { useTheme } from 'next-themes'
 import { useMenu } from '@/context/MenuContext'
+import SidebarItem from './SidebarItem'
 
 export default function Sidebar() {
   const { openMenu } = useMenu()
-  const pathname = usePathname()
   const router = useRouter()
   const { resolvedTheme } = useTheme()
   const { data: session, status } = useSession()
@@ -37,7 +36,7 @@ export default function Sidebar() {
     <div
       className={`flex flex-col gap-4 h-screen items-center py-6
         border-r
-        ${openMenu ? 'w-[24vh]' : 'w-[8vh]'} sticky top-0
+        ${openMenu ? 'w-[24vh]' : 'w-[12vh]'} sticky top-0
       ${
         resolvedTheme === 'light'
           ? 'bg-gray-200 border-gray-300'
@@ -66,179 +65,72 @@ export default function Sidebar() {
           </span>
         </Link>
       </div>
-      <div className='flex-1 flex flex-col gap-2'>
-        <Link
-          href='/dashboard'
-          className={`group flex items-center gap-3 px-3 py-2 outline-none
-            ${!openMenu && 'justify-center'}
-            `}
-        >
-          <Home
-            className='h-5 w-5 flex-shrink-0'
-            color={
-              pathname === '/dashboard'
-                ? '#1565C0'
-                : resolvedTheme === 'light'
-                ? 'black'
-                : 'gray'
-            }
-          />
-          <span
-            className={`rounded-full
-            ${
-              pathname === '/dashboard'
-                ? `${
-                    resolvedTheme === 'light'
-                      ? 'text-blue-800'
-                      : 'text-blue-400'
-                  } cursor-not-allowed font-bold`
-                : resolvedTheme === 'light'
-                ? 'text-gray-600'
-                : 'text-gray-200'
-            }
-            ${!openMenu && 'hidden'}
-          `}
-          >
-            Dashboard
-          </span>
-        </Link>
+      <div
+        className={`flex-1 flex flex-col gap-2
+        ${openMenu && 'self-start'}
+        `}
+      >
+        <SidebarItem title='Dashboard' href='/dashboard' icon={Home} />
         {session?.user.role === 'costumer' && (
-          <Link
+          <SidebarItem
+            title='Notícias'
             href='/dashboard/news'
-            className={`group flex items-center gap-3 px-3 py-2 outline-none
-              ${!openMenu && 'justify-center'}
-              `}
-          >
-            <Newspaper
-              className='h-5 w-5 flex-shrink-0'
-              color={
-                pathname === '/dashboard/news'
-                  ? '#1565C0'
-                  : resolvedTheme === 'light'
-                  ? 'black'
-                  : 'gray'
-              }
-            />
-            <span
-              className={`rounded-full
-            ${
-              pathname === '/dashboard/news'
-                ? `${
-                    resolvedTheme === 'light'
-                      ? 'text-blue-800'
-                      : 'text-blue-400'
-                  } cursor-not-allowed font-bold`
-                : resolvedTheme === 'light'
-                ? 'text-gray-600'
-                : 'text-gray-200'
-            }
-            ${!openMenu && 'hidden'}
-            `}
-            >
-              Notícias
-            </span>
-          </Link>
+            icon={Newspaper}
+          />
         )}
         {session?.user.role !== 'costumer' && (
-          <Link
-            href='/dashboard/posts'
-            className={`group flex items-center gap-3 px-3 py-2 outline-none
-              ${!openMenu && 'justify-center'}
-              `}
-          >
-            <Pen
-              className='h-5 w-5 flex-shrink-0'
-              color={
-                pathname === '/dashboard/posts'
-                  ? '#1565C0'
-                  : resolvedTheme === 'light'
-                  ? 'black'
-                  : 'gray'
-              }
-            />
-            <span
-              className={`rounded-full
-            ${
-              pathname === '/dashboard/posts'
-                ? `${
-                    resolvedTheme === 'light'
-                      ? 'text-blue-800'
-                      : 'text-blue-400'
-                  } cursor-not-allowed font-bold`
-                : resolvedTheme === 'light'
-                ? 'text-gray-600'
-                : 'text-gray-200'
-            }
-            ${!openMenu && 'hidden'}`}
-            >
-              Posts
-            </span>
-          </Link>
+          <SidebarItem title='Postagens' href='/dashboard/posts' icon={Pen} />
         )}
-        <Link
-          href='/dashboard/profile'
-          className={`group flex items-center gap-3 px-3 py-2 outline-none
-            ${!openMenu && 'justify-center'}
-            `}
-        >
-          <User
-            className='h-5 w-5 flex-shrink-0'
-            color={
-              pathname === '/dashboard/profile'
-                ? '#1565C0'
-                : resolvedTheme === 'light'
-                ? 'black'
-                : 'gray'
-            }
-          />
-          <span
-            className={`rounded-full
-            ${
-              pathname === '/dashboard/profile'
-                ? `${
-                    resolvedTheme === 'light'
-                      ? 'text-blue-800'
-                      : 'text-blue-400'
-                  } cursor-not-allowed font-bold`
-                : resolvedTheme === 'light'
-                ? 'text-gray-600'
-                : 'text-gray-200'
-            }
-            ${!openMenu && 'hidden'}
-          `}
-          >
-            Perfil
-          </span>
-        </Link>
+        <SidebarItem title='Perfil' href='/dashboard/profile' icon={User} />
       </div>
 
       <div
-        className={`flex items-center justify-center mx-auto pt-8 px-2 border-t
-          ${resolvedTheme === 'light' ? 'border-gray-400' : 'border-gray-500'}
-          ${openMenu ? 'w-[90%]' : 'w-[80%]'}
-        `}
+        className={`flex items-center gap-4
+    ${openMenu ? 'w-[90%] justify-between' : 'w-[80%] justify-center'}
+  `}
       >
         {openMenu && (
-          <div className='flex flex-col'>
+          <div className='flex flex-row items-center gap-3'>
             <span
-              className={`block text-xs font-bold ${
-                resolvedTheme === 'light' ? 'text-gray-800' : 'text-gray-200'
-              }
-              `}
+              className={`font-medium p-2 rounded-full
+          ${
+            resolvedTheme === 'light'
+              ? 'text-gray-300 bg-gray-600'
+              : 'text-gray-200 bg-gray-600'
+          }
+        `}
             >
-              {session?.user.firstName as string}{' '}
-              {session?.user.lastName as string}
+              MS
             </span>
-            <span
-              className={`block text-xs
-              ${resolvedTheme === 'light' ? 'text-gray-800' : 'text-gray-200'}
-            `}
-            >
-              {session?.user.email}
-            </span>
+            <div className='flex flex-col'>
+              <span
+                className={`block text-xs ${
+                  resolvedTheme === 'light' ? 'text-gray-800' : 'text-gray-200'
+                }`}
+              >
+                Olá,
+              </span>
+              <span
+                className={`block text-xs font-bold ${
+                  resolvedTheme === 'light' ? 'text-gray-800' : 'text-gray-200'
+                }`}
+              >
+                {String(session?.user.firstName)}
+              </span>
+            </div>
           </div>
         )}
-        <button onClick={handleLogout}>
+
+        <button
+          onClick={handleLogout}
+          className={`p-1 rounded
+            ${
+              resolvedTheme === 'light'
+                ? 'hover:bg-gray-200'
+                : 'hover:bg-gray-800'
+            }
+          `}
+        >
           <LogOutIcon color='red' />
         </button>
       </div>
