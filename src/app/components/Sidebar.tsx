@@ -28,14 +28,14 @@ export default function Sidebar() {
           resolvedTheme === 'light'
             ? 'bg-gray-200 border-gray-300'
             : 'bg-gray-900 border-gray-500'
-        }`}
+        } delay-75`}
       />
     )
 
   return (
     <div
       className={`flex flex-col gap-4 h-screen items-center py-6
-        border-r
+        border-r transition-all duration-500 ease-in-out
         ${openMenu ? 'w-[32vh]' : 'w-[10vh]'} sticky top-0
       ${
         resolvedTheme === 'light'

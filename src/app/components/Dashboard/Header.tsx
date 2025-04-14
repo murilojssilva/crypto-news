@@ -3,8 +3,8 @@
 import { HeaderDashboardProps } from '@/app/interfaces/Dashboard'
 import ThemeSwitcher from '../Theme/ThemeSwitcher'
 import { useTheme } from 'next-themes'
-import { List } from '@phosphor-icons/react'
 import { useMenu } from '@/context/MenuContext'
+import { PanelRightClose, PanelLeftClose } from 'lucide-react'
 
 export default function HeaderDashboard({
   IconComponent,
@@ -61,13 +61,25 @@ export default function HeaderDashboard({
               onClick={() => setOpenMenu(!openMenu)}
             >
               <span className='sr-only'>Open main menu</span>
-              <List
-                weight='bold'
-                size={24}
-                className={`${
-                  resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-400'
-                }`}
-              />
+              {openMenu ? (
+                <PanelLeftClose
+                  size={24}
+                  className={`${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  }`}
+                />
+              ) : (
+                <PanelRightClose
+                  size={24}
+                  className={`${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  }`}
+                />
+              )}
             </button>
           </div>
         </div>
