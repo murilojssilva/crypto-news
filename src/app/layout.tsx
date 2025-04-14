@@ -7,6 +7,7 @@ import { PostsProvider } from '@/context/PostContext'
 import { UsersProvider } from '@/context/UserContext'
 import { CategoryProvider } from '@/context/CategoryContext'
 import { ThemeProvider } from 'next-themes'
+import { MenuProvider } from '@/context/MenuContext'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -40,7 +41,7 @@ export default function RootLayout({
                   defaultTheme='dark'
                   disableTransitionOnChange
                 >
-                  {children}
+                  <MenuProvider>{children}</MenuProvider>
                 </ThemeProvider>
               </CategoryProvider>
             </PostsProvider>

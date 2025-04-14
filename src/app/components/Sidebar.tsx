@@ -5,33 +5,17 @@ import logo from '@/assets/images/bitwire.svg'
 import { Home, LogOutIcon, Newspaper, Pen, User } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { List } from '@phosphor-icons/react'
-import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
 import { useTheme } from 'next-themes'
+import { useMenu } from '@/context/MenuContext'
 
 export default function Sidebar() {
-  const [openMenu, setOpenMenu] = useState(false)
+  const { openMenu } = useMenu()
   const pathname = usePathname()
   const router = useRouter()
   const { resolvedTheme } = useTheme()
   const { data: session, status } = useSession()
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setOpenMenu(false)
-      }
-    }
-
-    handleResize()
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [session?.user])
 
   const handleLogout = async () => {
     await signOut({ redirect: false })
@@ -51,7 +35,7 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`flex flex-col gap-4 h-screen items-center
+      className={`flex flex-col gap-4 h-screen items-center py-6
         border-r
         ${openMenu ? 'w-[24vh]' : 'w-[8vh]'} sticky top-0
       ${
@@ -62,176 +46,200 @@ export default function Sidebar() {
       `}
     >
       <div
-        className={`flex ${
-          openMenu ? 'flex-row' : 'flex-col'
-        } gap-8 items-center justify-between p-8`}
+        className={`flex flex-col justify-center items-center gap-4 pb-4 border-b
+          ${resolvedTheme === 'light' ? 'border-gray-400' : 'border-gray-500'}
+          ${openMenu ? 'w-[90%]' : 'w-[80%]'}
+        `}
       >
-        <div className='hidden md:flex justify-start'>
-          <button
-            data-collapse-toggle='navbar-hamburger'
-            type='button'
-            className={`flex items-center justify-center w-10 h-10 text-sm rounded-lg border 
-              ${
-                resolvedTheme === 'light'
-                  ? 'bg-gray-100 border-blue-800'
-                  : 'bg-gray-800 border-blue-400'
-              }
-              `}
-            aria-controls='navbar-hamburger'
-            aria-expanded={openMenu}
-            onClick={() => setOpenMenu(!openMenu)}
-          >
-            <span className='sr-only'>Open main menu</span>
-            <List
-              weight='bold'
-              size={24}
-              className={`${
-                resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-400'
-              }`}
-            />
-          </button>
-        </div>
-      </div>
-      <div className='flex flex-col justify-center items-center gap-4'>
         <Link
-          className='flex flex-col gap-2 items-center'
+          className='flex flex-row gap-2 items-center'
           href='/'
           aria-label='CryptoNews'
         >
-          <Image
-            src={logo}
-            alt='CryptoNews'
-            className='md:w-10 md:h-10 w-6 h-6'
-          />
+          <Image src={logo} alt='CryptoNews' className='w-8 h-8' />
           <span
-            className={`text-blue-800 font-bold text-xl ${
-              !openMenu && 'hidden'
-            }`}
+            className={`font-bold text-md
+              ${resolvedTheme === 'light' ? 'text-blue-800' : 'text-blue-400'}
+              ${!openMenu && 'hidden'}`}
           >
             CryptoNews
           </span>
         </Link>
       </div>
-      <div className='flex-1 flex flex-col gap-2 px-5'>
-        <Link href='/dashboard'>
-          <button
-            className={`flex flex-row ${
-              openMenu ? 'w-36' : 'w-full'
-            } justify-center items-center gap-3 text-md p-2 rounded-xl ${
+      <div className='flex-1 flex flex-col gap-2'>
+        <Link
+          href='/dashboard'
+          className={`group flex items-center gap-3 px-3 py-2 outline-none
+            ${!openMenu && 'justify-center'}
+            `}
+        >
+          <Home
+            className='h-5 w-5 flex-shrink-0'
+            color={
               pathname === '/dashboard'
-                ? `text-blue-800 cursor-not-allowed font-bold bg-gray-100
-                    }`
+                ? '#1565C0'
                 : resolvedTheme === 'light'
-                ? 'text-gray-600 hover:bg-gray-300'
-                : 'text-gray-200 hover:bg-gray-600'
-            }`}
+                ? 'black'
+                : 'gray'
+            }
+          />
+          <span
+            className={`rounded-full
+            ${
+              pathname === '/dashboard'
+                ? `${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  } cursor-not-allowed font-bold`
+                : resolvedTheme === 'light'
+                ? 'text-gray-600'
+                : 'text-gray-200'
+            }
+            ${!openMenu && 'hidden'}
+          `}
           >
-            <Home
+            Dashboard
+          </span>
+        </Link>
+        {session?.user.role === 'costumer' && (
+          <Link
+            href='/dashboard/news'
+            className={`group flex items-center gap-3 px-3 py-2 outline-none
+              ${!openMenu && 'justify-center'}
+              `}
+          >
+            <Newspaper
+              className='h-5 w-5 flex-shrink-0'
               color={
-                pathname === '/dashboard'
+                pathname === '/dashboard/news'
                   ? '#1565C0'
                   : resolvedTheme === 'light'
                   ? 'black'
                   : 'gray'
               }
             />
-            {openMenu && 'Dashboard'}
-          </button>
-        </Link>
-        {session?.user.role === 'costumer' && (
-          <Link href='/dashboard/news'>
-            <button
-              className={`flex flex-row ${
-                openMenu ? 'w-36' : 'w-full'
-              } justify-center items-center gap-3 text-md p-2 rounded-xl ${
-                pathname?.startsWith('/dashboard/news')
-                  ? `text-blue-800 cursor-not-allowed font-bold bg-gray-100
-                    }`
-                  : resolvedTheme === 'light'
-                  ? 'text-gray-600 hover:bg-gray-300'
-                  : 'text-gray-200 hover:bg-gray-600'
-              }`}
+            <span
+              className={`rounded-full
+            ${
+              pathname === '/dashboard/news'
+                ? `${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  } cursor-not-allowed font-bold`
+                : resolvedTheme === 'light'
+                ? 'text-gray-600'
+                : 'text-gray-200'
+            }
+            ${!openMenu && 'hidden'}
+            `}
             >
-              <Newspaper
-                color={
-                  pathname?.startsWith('/dashboard/news')
-                    ? '#1565C0'
-                    : resolvedTheme === 'light'
-                    ? 'black'
-                    : 'gray'
-                }
-              />
-              {openMenu && 'Notícias'}
-            </button>
+              Notícias
+            </span>
           </Link>
         )}
         {session?.user.role !== 'costumer' && (
-          <Link href='/dashboard/posts'>
-            <button
-              className={`flex flex-row ${
-                openMenu ? 'w-36' : 'w-full'
-              } justify-center items-center gap-3 text-md p-2 rounded-xl ${
-                pathname?.startsWith('/dashboard/posts')
-                  ? `text-blue-800 cursor-not-allowed font-bold bg-gray-100
-                    }`
-                  : resolvedTheme === 'light'
-                  ? 'text-gray-600 hover:bg-gray-300'
-                  : 'text-gray-200 hover:bg-gray-600'
-              }`}
-            >
-              <Pen
-                color={
-                  pathname?.startsWith('/dashboard/posts')
-                    ? '#1565C0'
-                    : resolvedTheme === 'light'
-                    ? 'black'
-                    : 'gray'
-                }
-              />
-              {openMenu && 'Posts'}
-            </button>
-          </Link>
-        )}
-        <Link href='/dashboard/profile'>
-          <button
-            className={`flex flex-row ${
-              openMenu ? 'w-36' : 'w-full'
-            } justify-center items-center gap-3 text-md p-2 rounded-xl ${
-              pathname === '/dashboard/profile'
-                ? `text-blue-800 cursor-not-allowed font-bold bg-gray-100
-                    }`
-                : resolvedTheme === 'light'
-                ? 'text-gray-600 hover:bg-gray-300'
-                : 'text-gray-200 hover:bg-gray-600'
-            }`}
+          <Link
+            href='/dashboard/posts'
+            className={`group flex items-center gap-3 px-3 py-2 outline-none
+              ${!openMenu && 'justify-center'}
+              `}
           >
-            <User
+            <Pen
+              className='h-5 w-5 flex-shrink-0'
               color={
-                pathname === '/dashboard/profile'
+                pathname === '/dashboard/posts'
                   ? '#1565C0'
                   : resolvedTheme === 'light'
                   ? 'black'
                   : 'gray'
               }
             />
-            {openMenu && 'Perfil'}
-          </button>
+            <span
+              className={`rounded-full
+            ${
+              pathname === '/dashboard/posts'
+                ? `${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  } cursor-not-allowed font-bold`
+                : resolvedTheme === 'light'
+                ? 'text-gray-600'
+                : 'text-gray-200'
+            }
+            ${!openMenu && 'hidden'}`}
+            >
+              Posts
+            </span>
+          </Link>
+        )}
+        <Link
+          href='/dashboard/profile'
+          className={`group flex items-center gap-3 px-3 py-2 outline-none
+            ${!openMenu && 'justify-center'}
+            `}
+        >
+          <User
+            className='h-5 w-5 flex-shrink-0'
+            color={
+              pathname === '/dashboard/profile'
+                ? '#1565C0'
+                : resolvedTheme === 'light'
+                ? 'black'
+                : 'gray'
+            }
+          />
+          <span
+            className={`rounded-full
+            ${
+              pathname === '/dashboard/profile'
+                ? `${
+                    resolvedTheme === 'light'
+                      ? 'text-blue-800'
+                      : 'text-blue-400'
+                  } cursor-not-allowed font-bold`
+                : resolvedTheme === 'light'
+                ? 'text-gray-600'
+                : 'text-gray-200'
+            }
+            ${!openMenu && 'hidden'}
+          `}
+          >
+            Perfil
+          </span>
         </Link>
       </div>
-      <div className='py-8'>
-        <button
-          onClick={handleLogout}
-          className={`flex flex-row ${
-            openMenu ? 'w-36' : 'w-full'
-          } justify-center items-center gap-3 text-md p-2 rounded-xl text-red-500
-            ${
-              resolvedTheme === 'light'
-                ? 'hover:bg-gray-300'
-                : 'hover:bg-gray-600'
-            }
-          `}
-        >
-          <LogOutIcon color='red' /> {openMenu && 'Sair'}
+
+      <div
+        className={`flex items-center justify-center mx-auto pt-8 px-2 border-t
+          ${resolvedTheme === 'light' ? 'border-gray-400' : 'border-gray-500'}
+          ${openMenu ? 'w-[90%]' : 'w-[80%]'}
+        `}
+      >
+        {openMenu && (
+          <div className='flex flex-col'>
+            <span
+              className={`block text-xs font-bold ${
+                resolvedTheme === 'light' ? 'text-gray-800' : 'text-gray-200'
+              }
+              `}
+            >
+              {session?.user.firstName as string}{' '}
+              {session?.user.lastName as string}
+            </span>
+            <span
+              className={`block text-xs
+              ${resolvedTheme === 'light' ? 'text-gray-800' : 'text-gray-200'}
+            `}
+            >
+              {session?.user.email}
+            </span>
+          </div>
+        )}
+        <button onClick={handleLogout}>
+          <LogOutIcon color='red' />
         </button>
       </div>
     </div>
