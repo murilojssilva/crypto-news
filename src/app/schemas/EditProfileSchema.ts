@@ -7,6 +7,20 @@ export const editProfileFormValidationsSchema = zod
     email: zod.string().email('Digite um endereço de e-mail válido'),
     role: zod.string().min(1, 'Selecione o seu cargo'),
     plan: zod.string().min(1, 'Selecione o seu plano'),
+    city: zod.string().min(1, 'Selecione sua cidade'),
+    state: zod.string().min(1, 'Selecione seu estado'),
+    experience_age: zod
+      .number({ required_error: 'Digite seu valor' })
+      .min(0.01, 'Digite um valor maior que zero'),
+    social_x: zod.string().min(1, 'Selecione sua cidade'),
+    social_discord: zod.string().min(1, 'Selecione sua cidade'),
+    social_telegram: zod.string().min(1, 'Selecione sua cidade'),
+    social_whatsapp: zod.string().min(1, 'Selecione sua cidade'),
+    day_birth: zod.string().min(1, 'Selecione sua cidade'),
+    month_birth: zod.string().min(1, 'Selecione sua cidade'),
+    gender: zod.string().min(1, 'Selecione sua cidade'),
+    year_birth: zod.string().min(1, 'Selecione sua cidade'),
+    investor_style: zod.string().min(1, 'Selecione sua cidade'),
     amount: zod
       .number({ required_error: 'Digite seu valor' })
       .min(0.01, 'Digite um valor maior que zero'),

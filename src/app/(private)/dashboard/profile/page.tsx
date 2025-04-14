@@ -105,6 +105,19 @@ export default function Profile() {
           setValue('role', data.role)
           setValue('plan', data.plan)
           setValue('amount', data.amount)
+          setValue('state', data.state)
+          setValue('city', data.city)
+          setValue('experience_age', data.experience_age)
+          setValue('social_x', data.social_x)
+          setValue('social_discord', data.social_discord)
+          setValue('social_telegram', data.social_telegram)
+          setValue('social_whatsapp', data.social_whatsapp)
+          setValue('day_birth', data.day_birth)
+          setValue('month_birth', data.month_birth)
+          setValue('gender', data.gender)
+
+          setValue('year_birth', data.year_birth)
+          setValue('investor_style', data.investor_style)
         } catch (error) {
           console.log(error)
           toast.error(
@@ -306,7 +319,7 @@ export default function Profile() {
                     value={useFormatAmount(amount)}
                     onChange={(e) => {
                       const raw = e.target.value.replace(/\D/g, '')
-                      setValue('amount', raw) // atualiza o valor bruto no form
+                      setValue('amount', Number(raw))
                     }}
                     disabled={loading}
                     readOnly={loading}
